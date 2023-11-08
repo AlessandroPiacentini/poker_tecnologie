@@ -32,9 +32,7 @@ def main():
 
     # Ascolta le connessioni in arrivo (massimo 1 connessione in coda)
     server_socket.listen(6)
-    while True:
-        
-
+    while True:        
         try:
             
 
