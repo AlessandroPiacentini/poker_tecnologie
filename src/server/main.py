@@ -5,6 +5,21 @@ import threading
 import time
 import sqlite3
 
+# Rimuovi la definizione di add_db dal contesto globale
+def add_db(nome, carta1, carta2, puntata, soldi, turno, blind, seduto, posto, ip, port):
+    # Connessione al database SQLite
+    conn = sqlite3.connect("db/giocatori_seduti_tavolo.db")
+    cursor = conn.cursor()
+    
+    # Inserimento del nuovo record nella tabella
+    cursor.execute("INSERT INTO giocatori (nome, carta1, carta2, puntata, soldi, turno, blind, seduto, posto, ip, port) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                (nome, carta1, carta2, puntata, soldi, turno, blind, seduto, posto, ip, port))
+    
+    # Commit delle modifiche e chiusura della connessione
+    conn.commit()
+    conn.close()
+
+
 def main():
     fase_di_gioco = "waiting"
     giocatori_seduti = []
@@ -41,10 +56,9 @@ def main():
                 # Ora puoi usare il metodo split sulla stringa
                 if data_str.split(";")[0] == "entry" and len(giocatori_seduti) < 6:
                     response = "ok;"
-                    g = Giocatore(data_str.split(";")[1], 0, 0, 0, int(data_str.split(";")[2]), "no", "no", True, count, client_ip, client_port)
+                    add_db(data_str.split(";")[1], 0, 0, 0, int(data_str.split(";")[2]), "no", "no", True, count, client_ip, client_port)
                     count += 1
                     clients.append((client_ip, client_port))
-                    giocatori_seduti.append(g)
                     print(count)
                 else:
                     response = "err"
