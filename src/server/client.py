@@ -4,7 +4,7 @@ import socket
 server_ip = '127.0.0.1'
 server_port = 12345  # Sostituisci con la porta del server
 client_ip=server_ip
-client_port=54322
+client_port=54321
 
 # Crea una connessione al server
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

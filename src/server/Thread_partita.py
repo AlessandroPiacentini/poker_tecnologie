@@ -38,20 +38,6 @@ def leggi_tabella_sqlite(nome_database, nome_tabella):
 
     return risultato
 
-# # Esempio di utilizzo della funzione
-# nome_database = "db/giocatori_seduti_tavolo.db"  # Sostituisci con il nome effettivo del tuo database
-# nome_tabella = "giocatori"  # Sostituisci con il nome effettivo della tua tabella
-# risultato_query = leggi_tabella_sqlite(nome_database, nome_tabella)
-
-# # # Stampa il risultato senza l'indice
-# # for riga in risultato_query:
-# #     print(riga[1:])
-# def prova():
-#     pass
-
-    
-    
-
 
 
 
@@ -77,19 +63,7 @@ def dict_to_xml(variables):
     xml_string = ET.tostring(root).decode("utf-8")
     return xml_string
 
-# # Esempio di utilizzo:
-# risultato_query = leggi_tabella_sqlite(nome_database, nome_tabella)
-# giocatori_seduti_al_tavolo = []
-# for riga in risultato_query:
-#     g = Giocatore(riga[1], riga[2], riga[3], riga[4], riga[5], riga[6], riga[7], riga[8], riga[9], riga[10], riga[11])
-#     giocatori_seduti_al_tavolo.append(g)
-# carte_uscite=[] #array di int 
-# carte_banco=[]#array di int
-# piatto=0
-# my_variables = {"piatto": piatto, "carte_banco": carte_banco,"carte_uscite": carte_uscite, "giocatori_seduti": giocatori_seduti_al_tavolo}
 
-# xml_result = dict_to_xml(my_variables)
-# print(xml_result)
 
 def invio_info(giocatori_seduti_al_tavolo, piatto, carte_banco, carte_uscite):
     for giocatore in giocatori_seduti_al_tavolo:
@@ -100,7 +74,7 @@ def invio_info(giocatori_seduti_al_tavolo, piatto, carte_banco, carte_uscite):
             my_variables = {"piatto": piatto, "carte_banco": carte_banco,"carte_uscite": carte_uscite, "giocatori_seduti": giocatori_seduti_al_tavolo}
 
             xml_result = dict_to_xml(my_variables)      
-            # giocatore_socket.send(socket_partita.encode('utf-8'))
+            giocatore_socket.send(xml_result.encode('utf-8'))
             giocatore_socket.close()
         except Exception as e:
             print(f"Errore durante la connessione al giocatore: {e}")
@@ -128,3 +102,30 @@ def partita(fase_di_gioco):
         fase_di_gioco="waiting"
         
     svuota_tabella(nome_database, nome_tabella)
+    
+    
+    
+# # Esempio di utilizzo della funzione
+# nome_database = "db/giocatori_seduti_tavolo.db"  # Sostituisci con il nome effettivo del tuo database
+# nome_tabella = "giocatori"  # Sostituisci con il nome effettivo della tua tabella
+# risultato_query = leggi_tabella_sqlite(nome_database, nome_tabella)
+
+# # # Stampa il risultato senza l'indice
+# # for riga in risultato_query:
+# #     print(riga[1:])
+# def prova():
+#     pass
+
+# # Esempio di utilizzo:
+# risultato_query = leggi_tabella_sqlite(nome_database, nome_tabella)
+# giocatori_seduti_al_tavolo = []
+# for riga in risultato_query:
+#     g = Giocatore(riga[1], riga[2], riga[3], riga[4], riga[5], riga[6], riga[7], riga[8], riga[9], riga[10], riga[11])
+#     giocatori_seduti_al_tavolo.append(g)
+# carte_uscite=[] #array di int 
+# carte_banco=[]#array di int
+# piatto=0
+# my_variables = {"piatto": piatto, "carte_banco": carte_banco,"carte_uscite": carte_uscite, "giocatori_seduti": giocatori_seduti_al_tavolo}
+
+# xml_result = dict_to_xml(my_variables)
+# print(xml_result)

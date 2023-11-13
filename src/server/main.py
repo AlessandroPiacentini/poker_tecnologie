@@ -54,8 +54,8 @@ def main():
 
                 # Ora puoi usare il metodo split sulla stringa
                 if data_str.split(";")[0] == "entry" and len(giocatori_seduti) < 6:
-                    response = "ok;"
                     count += 1
+                    response = f"ok;{count}"
                     add_db(data_str.split(";")[1], 0, 0, 0, int(data_str.split(";")[2]), "no", "no", True, count, client_ip, client_port)
                     clients.append((client_ip, client_port))
                     print(count)
@@ -80,8 +80,7 @@ def main():
 
         if count >= 2:
             print("Inizio partita...")
-            fase_di_gioco = "game"
-
+            fase_di_gioco="game"
             socket_partita = f"{server_host};888"
             for client_ip, client_port in clients:
                 print(f"ip: {client_ip}; port: {client_port}")
@@ -95,7 +94,8 @@ def main():
                     print(f"Errore durante la connessione al giocatore: {e}")
 
             # Crea un oggetto Thread
-            thread = threading.Thread(target=partita, args=(fase_di_gioco))
+            thread = threading.Thread(target=partita, args=(fase_di_gioco,))
+
             # thread = threading.Thread(target=partita)
 
             # Avvia il thread
@@ -104,7 +104,7 @@ def main():
             # Attendi che il thread termini prima di uscire
             thread.join()
             print("finto")
-            
+            clients=[]
             timeout = False
             count = 0
         
