@@ -1,6 +1,6 @@
 import socket
 from Giocatore import Giocatore
-from Thread_partita import partita
+from Thread_partita import prova
 import threading
 import time
 import sqlite3
@@ -31,12 +31,11 @@ def main():
     server_host = '127.0.0.1'
     server_port = 12345
 
-    # Crea un socket TCP/IP
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind((server_host, server_port))
-    server_socket.listen(6)
-    server_socket.settimeout(10)
     while True:
+        # Crea un socket TCP/IP
+        server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server_socket.bind((server_host, server_port))
+        server_socket.listen(6)
 
         while not timeout:
             try:
@@ -56,10 +55,12 @@ def main():
                 # Ora puoi usare il metodo split sulla stringa
                 if data_str.split(";")[0] == "entry" and len(giocatori_seduti) < 6:
                     response = "ok;"
-                    add_db(data_str.split(";")[1], 0, 0, 0, int(data_str.split(";")[2]), "no", "no", True, count, client_ip, client_port)
                     count += 1
+                    add_db(data_str.split(";")[1], 0, 0, 0, int(data_str.split(";")[2]), "no", "no", True, count, client_ip, client_port)
                     clients.append((client_ip, client_port))
                     print(count)
+                    if(count>=2):
+                        server_socket.settimeout(10)
                 else:
                     response = "err"
 
@@ -94,13 +95,16 @@ def main():
                     print(f"Errore durante la connessione al giocatore: {e}")
 
             # Crea un oggetto Thread
-            thread = threading.Thread(target=partita, args=(fase_di_gioco,))
+            # thread = threading.Thread(target=partita, args=(fase_di_gioco,))
+            thread = threading.Thread(target=prova)
 
             # Avvia il thread
             thread.start()
 
             # Attendi che il thread termini prima di uscire
             thread.join()
+            print("finto")
+            
             timeout = False
             count = 0
         
