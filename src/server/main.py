@@ -1,6 +1,6 @@
 import socket
 from Giocatore import Giocatore
-from Thread_partita import prova
+from Thread_partita import partita
 import threading
 import time
 import sqlite3
@@ -95,8 +95,8 @@ def main():
                     print(f"Errore durante la connessione al giocatore: {e}")
 
             # Crea un oggetto Thread
-            # thread = threading.Thread(target=partita, args=(fase_di_gioco,))
-            thread = threading.Thread(target=prova)
+            thread = threading.Thread(target=partita, args=(fase_di_gioco))
+            # thread = threading.Thread(target=partita)
 
             # Avvia il thread
             thread.start()

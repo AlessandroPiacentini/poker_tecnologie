@@ -28,20 +28,21 @@ print("Risposta dal server:", response_str)
 
 # Chiudi la connessione al server
 client_socket.close()
+conta=0
+while conta<2:
+    # Crea un socket TCP/IP
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # Associa il socket all'indirizzo e alla porta del server
+    server_socket.bind((client_ip, client_port))
 
+    # Ascolta le connessioni in arrivo (massimo 1 connessione in coda)
+    server_socket.listen(6)
+    server_socket.settimeout(30)
+    print(f"In attesa di connessioni su {client_ip}:{client_port}...")
+    client_socket, client_address = server_socket.accept()
+    print(f"Connessione da: {client_address}")
 
-# Crea un socket TCP/IP
-server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# Associa il socket all'indirizzo e alla porta del server
-server_socket.bind((client_ip, client_port))
-
-# Ascolta le connessioni in arrivo (massimo 1 connessione in coda)
-server_socket.listen(6)
-server_socket.settimeout(30)
-print(f"In attesa di connessioni su {client_ip}:{client_port}...")
-client_socket, client_address = server_socket.accept()
-print(f"Connessione da: {client_address}")
-
-# Ricevi i dati dal client
-data = client_socket.recv(1024)
-print(f"Dati ricevuti dal client: {data.decode('utf-8')}")
+    # Ricevi i dati dal client
+    data = client_socket.recv(1024)
+    print(f"Dati ricevuti dal client: {data.decode('utf-8')}")
+    conta+=1
