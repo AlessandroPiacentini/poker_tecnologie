@@ -36,6 +36,7 @@ def main():
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.bind((server_host, server_port))
         server_socket.listen(6)
+        giocatori_seduti=[]
 
         while not timeout:
             try:
@@ -56,8 +57,9 @@ def main():
                 if data_str.split(";")[0] == "entry" and len(giocatori_seduti) < 6:
                     count += 1
                     response = f"ok;{count}"
-                    add_db(data_str.split(";")[1], 0, 0, 0, int(data_str.split(";")[2]), "no", "no", True, count, client_ip, client_port)
+                    g=Giocatore(data_str.split(";")[1], 0, 0, 0, int(data_str.split(";")[2]), "no", "no", True, count, client_ip, client_port)
                     clients.append((client_ip, client_port))
+                    giocatori_seduti.append(g)
                     print(count)
                     if(count>=2):
                         server_socket.settimeout(10)
@@ -94,7 +96,7 @@ def main():
                     print(f"Errore durante la connessione al giocatore: {e}")
 
             # Crea un oggetto Thread
-            thread = threading.Thread(target=partita, args=(fase_di_gioco,))
+            thread = threading.Thread(target=partita, args=(fase_di_gioco,giocatori_seduti))
 
             # thread = threading.Thread(target=partita)
 
