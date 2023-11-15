@@ -80,19 +80,13 @@ def invio_info(giocatori_seduti_al_tavolo, piatto, carte_banco, carte_uscite):
             print(f"Errore durante la connessione al giocatore: {e}")
 
 
-
-def partita(fase_di_gioco):
-    nome_database = "db/giocatori_seduti_tavolo.db"  # Sostituisci con il nome effettivo del tuo database
-    nome_tabella = "giocatori"  # Sostituisci con il nome effettivo della tua tabella
-    risultato_query = leggi_tabella_sqlite(nome_database, nome_tabella)
+  
+def partita(fase_di_gioco, giocatori_seduti):
 
     # Stampa il risultato
-    giocatori_seduti_al_tavolo=[]
+    giocatori_seduti_al_tavolo=giocatori_seduti
     cout_turno=1
-    for riga in risultato_query:
-        g=Giocatore(riga[1],riga[2],riga[3],riga[4],riga[5],riga[6],riga[7],riga[8],riga[9],riga[10],riga[11])
-        cout_turno+=1
-        giocatori_seduti_al_tavolo.append(g)
+    
     carte_uscite=[]
     carte_banco=[]
     piatto=0
@@ -101,9 +95,10 @@ def partita(fase_di_gioco):
         invio_info(giocatori_seduti_al_tavolo, piatto, carte_banco, carte_uscite)
         fase_di_gioco="waiting"
         
-    svuota_tabella(nome_database, nome_tabella)
+    giocatori_seduti_al_tavolo=[]
     
-    
+
+
     
 # # Esempio di utilizzo della funzione
 # nome_database = "db/giocatori_seduti_tavolo.db"  # Sostituisci con il nome effettivo del tuo database
