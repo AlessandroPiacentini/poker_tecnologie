@@ -96,6 +96,7 @@ def main():
                     print(f"Errore durante la connessione al giocatore: {e}")
 
             # Crea un oggetto Thread
+            
             thread = threading.Thread(target=partita, args=(fase_di_gioco,giocatori_seduti))
 
             # thread = threading.Thread(target=partita)
