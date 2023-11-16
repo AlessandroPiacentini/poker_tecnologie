@@ -99,28 +99,31 @@ def partita(fase_di_gioco, giocatori_seduti):
         server_host = '127.0.0.1'
         server_port = 888
 
-        # Crea un socket TCP/IP
-        server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        server_socket.bind((server_host, server_port))
-        server_socket.listen(6)
-        server_socket.settimeout(15)
-        print(f"In attesa di connessioni su {server_host}:{server_port}...")
-        client_socket, client_address = server_socket.accept()
-        client_ip, client_port = client_address  # Estrai l'indirizzo IP e la porta
+        
 
-        print(f"Connessione da: {client_address}")
+        while cout_turno<2:
+            # Crea un socket TCP/IP
+            server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            server_socket.bind((server_host, server_port))
+            server_socket.listen(6)
+            server_socket.settimeout(15)
+            print(f"In attesa di connessioni su {server_host}:{server_port}...")
+            client_socket, client_address = server_socket.accept()
+            client_ip, client_port = client_address  # Estrai l'indirizzo IP e la porta
 
-        # Ricevi i dati dal client
-        data = client_socket.recv(1024)
-        data_str = data.decode('utf-8')
-        print(f"Dati ricevuti dal client: {data_str}")
+            print(f"Connessione da: {client_address}")
 
-        # Decodifica i dati da bytes a stringa
-        response = f"ok"
-        client_socket.send(response.encode('utf-8'))
-        server_socket.close()
+            # Ricevi i dati dal client
+            data = client_socket.recv(1024)
+            data_str = data.decode('utf-8')
+            print(f"Dati ricevuti dal client: {data_str}")
 
-        cout_turno+=1
+            # Decodifica i dati da bytes a stringa
+            response = f"ok"
+            client_socket.send(response.encode('utf-8'))
+            server_socket.close()
+
+            cout_turno+=1
         fase_di_gioco="waiting"
         
     giocatori_seduti_al_tavolo=[]
