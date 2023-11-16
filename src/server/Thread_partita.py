@@ -80,8 +80,53 @@ def invio_info(giocatori_seduti_al_tavolo, piatto, carte_banco, carte_uscite):
         except Exception as e:
             print(f"Errore durante la connessione al giocatore: {e}")
 
+def set_blind(turno, giocatori_seduti_al_tavolo):
+    i=0
+    for giocatore in giocatori_seduti_al_tavolo:
+        if giocatore.turno==turno+1:
+            giocatori_seduti_al_tavolo[i].blind="small"
+            giocatori_seduti_al_tavolo[i].puntata=5
+        if giocatore.turno==turno+2:
+            giocatori_seduti_al_tavolo[i].blind="big"
+            giocatori_seduti_al_tavolo[i].puntata=10
+            
+    return giocatori_seduti_al_tavolo
 
+def calcola_piatto(giocatori_seduti_al_tavolo) :
+    piatto=0
+    for giocatore in giocatori_seduti_al_tavolo:
+        piatto+= giocatore.puntata
+    return piatto 
   
+  
+def ricevi_mossa():
+    server_host = '127.0.0.1'
+    server_port = 888
+    # Crea un socket TCP/IP
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_socket.bind((server_host, server_port))
+    server_socket.listen(6)
+    server_socket.settimeout(15)
+    print(f"In attesa di connessioni su {server_host}:{server_port}...")
+    client_socket, client_address = server_socket.accept()
+    client_ip, client_port = client_address  # Estrai l'indirizzo IP e la porta
+
+    print(f"Connessione da: {client_address}")
+
+    # Ricevi i dati dal client
+    data = client_socket.recv(1024)
+    data_str = data.decode('utf-8')
+    print(f"Dati ricevuti dal client: {data_str}")
+
+    # Decodifica i dati da bytes a stringa
+    response = f"ok"
+    client_socket.send(response.encode('utf-8'))
+    server_socket.close() 
+    
+    return data_str
+
+
+
 def partita(fase_di_gioco, giocatori_seduti):
 
     # Stampa il risultato
@@ -92,38 +137,27 @@ def partita(fase_di_gioco, giocatori_seduti):
     carte_banco=[]
     piatto=0
     
+    
+    
     while fase_di_gioco=="game":
         if cout_turno==6:
             cout_turno=0
+        if len(giocatori_seduti_al_tavolo)>3:
+            giocatori_seduti_al_tavolo=set_blind(cout_turno, giocatori_seduti_al_tavolo)
+        
+        piatto=calcola_piatto(giocatori_seduti_al_tavolo)
         invio_info(giocatori_seduti_al_tavolo, piatto, carte_banco, carte_uscite)
-        server_host = '127.0.0.1'
-        server_port = 888
-
+        
+        
+        mossa=ricevi_mossa()
+        
         
 
-        while cout_turno<2:
-            # Crea un socket TCP/IP
-            server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            server_socket.bind((server_host, server_port))
-            server_socket.listen(6)
-            server_socket.settimeout(15)
-            print(f"In attesa di connessioni su {server_host}:{server_port}...")
-            client_socket, client_address = server_socket.accept()
-            client_ip, client_port = client_address  # Estrai l'indirizzo IP e la porta
-
-            print(f"Connessione da: {client_address}")
-
-            # Ricevi i dati dal client
-            data = client_socket.recv(1024)
-            data_str = data.decode('utf-8')
-            print(f"Dati ricevuti dal client: {data_str}")
-
-            # Decodifica i dati da bytes a stringa
-            response = f"ok"
-            client_socket.send(response.encode('utf-8'))
-            server_socket.close()
-
-            cout_turno+=1
+        cout_turno+=1
+        
+        
+        
+        
         fase_di_gioco="waiting"
         
     giocatori_seduti_al_tavolo=[]
