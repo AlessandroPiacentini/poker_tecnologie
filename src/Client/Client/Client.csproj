@@ -114,5 +114,66 @@
   <ItemGroup>
     <Resource Include="immagineHome.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="immagini\sfondoGioco.jpg" />
+    <Resource Include="immagini\sfondoHome.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="immagini\1.jpg" />
+    <Resource Include="immagini\10.jpg" />
+    <Resource Include="immagini\11.jpg" />
+    <Resource Include="immagini\12.jpg" />
+    <Resource Include="immagini\13.jpg" />
+    <Resource Include="immagini\14.jpg" />
+    <Resource Include="immagini\15.jpg" />
+    <Resource Include="immagini\16.jpg" />
+    <Resource Include="immagini\17.jpg" />
+    <Resource Include="immagini\18.jpg" />
+    <Resource Include="immagini\19.jpg" />
+    <Resource Include="immagini\2.jpg" />
+    <Resource Include="immagini\20.jpg" />
+    <Resource Include="immagini\21.jpg" />
+    <Resource Include="immagini\22.jpg" />
+    <Resource Include="immagini\23.jpg" />
+    <Resource Include="immagini\24.jpg" />
+    <Resource Include="immagini\25.jpg" />
+    <Resource Include="immagini\26.jpg" />
+    <Resource Include="immagini\27.jpg" />
+    <Resource Include="immagini\28.jpg" />
+    <Resource Include="immagini\29.jpg" />
+    <Resource Include="immagini\3.jpg" />
+    <Resource Include="immagini\30.jpg" />
+    <Resource Include="immagini\31.jpg" />
+    <Resource Include="immagini\32.jpg" />
+    <Resource Include="immagini\33.jpg" />
+    <Resource Include="immagini\34.jpg" />
+    <Resource Include="immagini\35.jpg" />
+    <Resource Include="immagini\36.jpg" />
+    <Resource Include="immagini\37.jpg" />
+    <Resource Include="immagini\38.jpg" />
+    <Resource Include="immagini\39.jpg" />
+    <Resource Include="immagini\4.jpg" />
+    <Resource Include="immagini\40.jpg" />
+    <Resource Include="immagini\41.jpg" />
+    <Resource Include="immagini\42.jpg" />
+    <Resource Include="immagini\43.jpg" />
+    <Resource Include="immagini\44.jpg" />
+    <Resource Include="immagini\45.jpg" />
+    <Resource Include="immagini\46.jpg" />
+    <Resource Include="immagini\47.jpg" />
+    <Resource Include="immagini\48.jpg" />
+    <Resource Include="immagini\49.jpg" />
+    <Resource Include="immagini\5.jpg" />
+    <Resource Include="immagini\50.jpg" />
+    <Resource Include="immagini\51.jpg" />
+    <Resource Include="immagini\52.jpg" />
+    <Resource Include="immagini\6.jpg" />
+    <Resource Include="immagini\7.jpg" />
+    <Resource Include="immagini\8.jpg" />
+    <Resource Include="immagini\9.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="sfondoHome.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
