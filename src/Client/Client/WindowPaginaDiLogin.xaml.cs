@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -9,6 +10,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -17,16 +19,18 @@ namespace Client
 {
     /// <summary>
     /// Logica di interazione per WindowPaginaDiLogin.xaml
+    /// Questa pagina invece ha 4 compiti: instaurare una connessione, prendere il nome del giocatore, i soldi e verificare se il tavolo è pieno o no.
     /// </summary>
     public partial class WindowPaginaDiLogin : Window
     {
-        private TcpClient client;
-        private NetworkStream stream;
-        private String messaggioRicevuto;
+        public TcpClient client;
+        public NetworkStream stream;
 
         public WindowPaginaDiLogin()
         {
             InitializeComponent();
+            client = new TcpClient("localhost", 666); // Connessione al server Java sulla porta 8080
+            stream = client.GetStream();
         }
 
         //Invio di un messaggio al Server
@@ -34,30 +38,12 @@ namespace Client
         {
             try
             {
-                client = new TcpClient("ServerIPAddress", 666); // Sostituisci "ServerIPAddress" con l'indirizzo IP del server e ServerPort con la porta del server
-                stream = client.GetStream();
-
+                byte[] message = Encoding.ASCII.GetBytes(messaggio+";");
+                stream.Write(message, 0, message.Length);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                MessageBox.Show($"Errore nella connessione al server: {ex.Message}");
-            }
-
-            try
-            {
-                if (client != null && client.Connected)
-                {
-                    byte[] data = Encoding.UTF8.GetBytes(messaggio+";");
-                    stream.Write(data, 0, data.Length);
-                }
-                else
-                {
-                    MessageBox.Show("Connessione non attiva.");
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Errore nell'invio dei dati al server: {ex.Message}");
+                Console.WriteLine("Errore: " + e);
             }
         }
 
@@ -66,37 +52,22 @@ namespace Client
         {
             try
             {
-                if (stream.DataAvailable)
-                {
-                    byte[] buffer = new byte[1024]; // Dimensione del buffer per memorizzare i dati ricevuti
-                    int bytesRead = stream.Read(buffer, 0, buffer.Length); // Leggi i dati ricevuti nella connessione TCP
-
-                    if (bytesRead > 0)
-                    {
-                        string receivedData = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-                        // Restituisci i dati ricevuti
-                        return receivedData;
-                    }
-                }
-                else
-                {
-                    // Nessun dato disponibile al momento, restituisci una stringa vuota o un valore nullo
-                    return string.Empty;
-                }
+                byte[] buffer = new byte[1024];
+                int bytesRead = stream.Read(buffer, 0, buffer.Length);
+                String response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+                return response.Trim(); // Rimuove eventuali spazi bianchi
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                // Gestisci l'eccezione
-                Console.WriteLine("Errore durante la ricezione dei dati: " + ex.Message);
+                Console.WriteLine("Errore nella ricezione dei dati: " + e);
+                return "err";
             }
-
-            // In caso di errori o dati non disponibili, restituisci una stringa vuota o un valore nullo
-            return string.Empty;
         }
 
         //Richiesta di entrare nel gioco al server
         private void buttonEntra_Click(object sender, RoutedEventArgs e)
         {
+
             InvioDati("entrare");
             if (RicezioneDati()=="connesso")
             {
@@ -112,7 +83,7 @@ namespace Client
         private void RichiestaSuccesso()
         {
             // Creazione di un'istanza della terza finestra (finestra di gioco)
-            WindowDiGioco WindowDiGioco = new WindowDiGioco();
+            WindowDiGioco WindowDiGioco = new WindowDiGioco(client, stream);
 
             // Mostra la nuova finestra
             WindowDiGioco.Show();
