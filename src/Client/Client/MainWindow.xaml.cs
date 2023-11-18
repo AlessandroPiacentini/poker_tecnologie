@@ -21,11 +21,11 @@ namespace Client
 {
     /// <summary>
     /// Logica di interazione per MainWindow.xaml
+    /// Questa Finesta è la schermata di gioco e se si vuole giocare basta soltanto che si schiacci gioca e si aprirà un altra finiestra
+    /// Quindi questa finestra è solo una finestra di "bellezza" (se vuoi la togliamo)
     /// </summary>
     public partial class MainWindow : Window
     {
-        private TcpClient client;
-        private NetworkStream stream;
         public MainWindow()
         {
             InitializeComponent();
@@ -37,6 +37,7 @@ namespace Client
 
             // Mostra la nuova finestra
             WindowLogin.Show();
+            //chiudi questa finestra
             this.Close();
         }
     }
