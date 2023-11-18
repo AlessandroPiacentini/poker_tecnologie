@@ -8,5 +8,22 @@
         Title="WindowDiGioco" Height="450" Width="800">
     <Grid>
         <Image Source="/sfondoGioco.jpg" Stretch="Fill"/>
+        <Image x:Name="img0" HorizontalAlignment="Left" Height="64" Margin="7,37,0,0" VerticalAlignment="Top" Width="45" Source="/1.jpg"/>
+        <Image x:Name="img1" HorizontalAlignment="Left" Height="64" Margin="7,106,0,0" VerticalAlignment="Top" Width="46" Source="/2.jpg"/>
+        <Image x:Name="img3" HorizontalAlignment="Left" Height="69" Margin="10,233,0,0" VerticalAlignment="Top" Width="50" Source="/3.jpg"/>
+        <Image x:Name="img4" HorizontalAlignment="Left" Height="69" Margin="65,233,0,0" VerticalAlignment="Top" Width="50" Source="/3.jpg"/>
+        <Image x:Name="img5" HorizontalAlignment="Left" Height="69" Margin="140,355,0,0" VerticalAlignment="Top" Width="50" Source="/3.jpg"/>
+        <Image x:Name="img6" HorizontalAlignment="Left" Height="69" Margin="195,355,0,0" VerticalAlignment="Top" Width="50" Source="/3.jpg"/>
+        <Image x:Name="img7" HorizontalAlignment="Left" Height="69" Margin="334,355,0,0" VerticalAlignment="Top" Width="50" Source="/3.jpg"/>
+        <Image x:Name="img8" HorizontalAlignment="Left" Height="69" Margin="426,355,0,0" VerticalAlignment="Top" Width="50" Source="/3.jpg"/>
+        <Image x:Name="img9" HorizontalAlignment="Left" Height="69" Margin="556,355,0,0" VerticalAlignment="Top" Width="50" Source="/3.jpg"/>
+        <Image x:Name="img10" HorizontalAlignment="Left" Height="69" Margin="626,355,0,0" VerticalAlignment="Top" Width="50" Source="/3.jpg"/>
+        <Image x:Name="img12" HorizontalAlignment="Left" Height="69" Margin="742,243,0,0" VerticalAlignment="Top" Width="50" Source="/3.jpg"/>
+        <Image x:Name="img11" HorizontalAlignment="Left" Height="70" Margin="687,243,0,0" VerticalAlignment="Top" Width="50" Source="/3.jpg"/>
+        <Image x:Name="img13" HorizontalAlignment="Left" Height="69" Margin="742,101,0,0" VerticalAlignment="Top" Width="50" Source="/3.jpg"/>
+        <Image x:Name="img14" HorizontalAlignment="Left" Height="69" Margin="740,19,0,0" VerticalAlignment="Top" Width="50" Source="/3.jpg"/>
+        <Image x:Name="img15" HorizontalAlignment="Left" Height="69" Margin="320,37,0,0" VerticalAlignment="Top" Width="50" Source="/3.jpg"/>
+        <Image x:Name="img16" HorizontalAlignment="Left" Height="69" Margin="383,37,0,0" VerticalAlignment="Top" Width="50" Source="/3.jpg"/>
+        <Image x:Name="img17" HorizontalAlignment="Left" Height="69" Margin="451,37,0,0" VerticalAlignment="Top" Width="50" Source="/3.jpg"/>
     </Grid>
 </Window>
