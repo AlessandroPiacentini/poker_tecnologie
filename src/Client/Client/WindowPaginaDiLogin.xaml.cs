@@ -82,6 +82,17 @@ namespace Client
         //Se la richiesta viene accettata
         private void RichiestaSuccesso()
         {
+            /*String dati;
+
+            dati = txtNome.Text + ";" + txtSoldi.Text + ";" + "localhost" + ";" + "666";    //invia: Nome,Soldi,Indirizzo IP,Porta (indirizzo IP e porta possono essere cambiati)
+            InvioDati("dati_giocatore");
+
+            //se il Server mi da l'ok nel inviare i dati del giocatore (è un controllo che si puo levare anche)
+            if (RicezioneDati() == "ok_dati_giocatore")
+            {
+                InvioDati(dati);
+            }*/
+
             // Creazione di un'istanza della terza finestra (finestra di gioco)
             WindowDiGioco WindowDiGioco = new WindowDiGioco(client, stream);
 
