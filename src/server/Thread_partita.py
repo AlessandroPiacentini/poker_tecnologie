@@ -3,6 +3,12 @@ from Giocatore import Giocatore
 import sqlite3
 import xml.etree.ElementTree as ET
 
+import threading
+from main import fase_di_gioco, lock
+
+import random
+
+
 
 
 def svuota_tabella(nome_database, nome_tabella):
@@ -38,6 +44,17 @@ def leggi_tabella_sqlite(nome_database, nome_tabella):
 
     return risultato
 
+def pesca_carta():
+    global carte_uscite
+    remake=True
+    while remake:
+        carta= random.randint(1, 52)
+    
+        if carta not in carte_uscite:
+            remake=False
+            
+    return carta
+
 
 
 
@@ -65,14 +82,14 @@ def dict_to_xml(variables):
 
 
 
-def invio_info(giocatori_seduti_al_tavolo, piatto, carte_banco, carte_uscite):
+def invio_info(giocatori_seduti_al_tavolo, piatto, carte_banco):
     for giocatore in giocatori_seduti_al_tavolo:
         try:
             # Crea un socket per la connessione al giocatore
             giocatore_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             print(f"connessione a {giocatore.ip}")
             giocatore_socket.connect((giocatore.ip, giocatore.port))
-            my_variables = {"piatto": piatto, "carte_banco": carte_banco,"carte_uscite": carte_uscite, "giocatori_seduti": giocatori_seduti_al_tavolo}
+            my_variables = {"piatto": piatto, "carte_banco": carte_banco, "giocatori_seduti": giocatori_seduti_al_tavolo}
 
             xml_result = dict_to_xml(my_variables)      
             giocatore_socket.send(xml_result.encode('utf-8'))
@@ -126,39 +143,86 @@ def ricevi_mossa():
     return data_str
 
 
+def dai_carte_giocatori():
+    global giocatori_seduti_al_tavolo
+    i=0
+    while i<2:
+        for giocatore in giocatori_seduti_al_tavolo:
+            if i==0:
+                giocatore.carta1=pesca_carta()
+            else:
+                giocatore.carta2=pesca_carta()
+        i+=1
+def prime_carte_banco():
+    i=0
+    while i<3:
+        carte_banco.append(pesca_carta())
+        i+=1 
 
-def partita(fase_di_gioco, giocatori_seduti):
+def controllo_puntate_uguali():
+    sentinella=True
+    for giocatore in giocatori_seduti_al_tavolo:
+        if giocatore.seduto: 
+            for giocatore2 in giocatori_seduti_al_tavolo:
+                if giocatore2.seduto: 
+                    if giocatore.puntata!=giocatore2.puntata:
+                        sentinella=False
+                        break
+    return sentinella
+carte_uscite=[]
+giocatori_seduti_al_tavolo=[]
+carte_banco=[]
+def partita(giocatori_seduti):
 
-    # Stampa il risultato
+    global giocatori_seduti_al_tavolo
     giocatori_seduti_al_tavolo=giocatori_seduti
     cout_turno=1
-    
-    carte_uscite=[]
-    carte_banco=[]
+    global fase_di_gioco
+    global carte_banco
     piatto=0
-    
+    cout_fasi_partita=0
+    global carte_uscite
+    puntate_uguali=True
+
     
     
     while fase_di_gioco=="game":
-        if cout_turno==6:
-            cout_turno=0
-        if len(giocatori_seduti_al_tavolo)>3:
-            giocatori_seduti_al_tavolo=set_blind(cout_turno, giocatori_seduti_al_tavolo)
         
-        piatto=calcola_piatto(giocatori_seduti_al_tavolo)
-        invio_info(giocatori_seduti_al_tavolo, piatto, carte_banco, carte_uscite)
-        
+        if puntate_uguali:
+            if len(giocatori_seduti_al_tavolo)>3:
+                giocatori_seduti_al_tavolo=set_blind(cout_turno, giocatori_seduti_al_tavolo)
+            if cout_fasi_partita==0:
+                dai_carte_giocatori()
+            elif cout_fasi_partita==1:
+                prime_carte_banco()
+            else:
+                carte_banco.append(pesca_carta())
+            
+            piatto=calcola_piatto(giocatori_seduti_al_tavolo)
+            invio_info(giocatori_seduti_al_tavolo, piatto, carte_banco, carte_uscite)
+            
         
         mossa=ricevi_mossa()
+        if mossa.split(";")[0]=="busso":
+            pass
+        elif mossa.split(";")[0]=="add":
+            giocatori_seduti_al_tavolo[cout_turno].puntata=mossa.split(";")[1]
+            invio_info(giocatori_seduti_al_tavolo, piatto, carte_banco)
         
         
-
+        
+        
         cout_turno+=1
-        
-        
-        
-        
-        fase_di_gioco="waiting"
+        if cout_turno==len(giocatori_seduti_al_tavolo):
+            cout_turno=1
+        if controllo_puntate_uguali():
+            puntate_uguali=True
+            cout_fasi_partita+=1
+        else:
+            puntate_uguali=False
+    
+        if cout_fasi_partita==3:
+            fase_di_gioco="waiting"
         
     giocatori_seduti_al_tavolo=[]
     

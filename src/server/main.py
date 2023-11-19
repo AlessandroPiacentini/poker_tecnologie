@@ -5,6 +5,13 @@ import threading
 import time
 import sqlite3
 
+
+# Definisci la variabile comune
+fase_di_gioco = "waiting"
+
+# Crea un oggetto Lock
+lock = threading.Lock()
+
 # Rimuovi la definizione di add_db dal contesto globale
 def add_db(nome, carta1, carta2, puntata, soldi, turno, blind, seduto, posto, ip, port):
     # Connessione al database SQLite
@@ -21,7 +28,6 @@ def add_db(nome, carta1, carta2, puntata, soldi, turno, blind, seduto, posto, ip
 
 
 def main():
-    fase_di_gioco = "waiting"
     giocatori_seduti = []
     count = 0
     clients = []
@@ -82,7 +88,7 @@ def main():
 
         if count >= 2:
             print("Inizio partita...")
-            fase_di_gioco="game"
+            global fase_di_gioco
             socket_partita = f"{server_host};888"
             for client_ip, client_port in clients:
                 print(f"ip: {client_ip}; port: {client_port}")
@@ -97,7 +103,7 @@ def main():
 
             # Crea un oggetto Thread
             
-            thread = threading.Thread(target=partita, args=(fase_di_gioco,giocatori_seduti))
+            thread = threading.Thread(target=partita, args=(giocatori_seduti))
 
             # thread = threading.Thread(target=partita)
 
