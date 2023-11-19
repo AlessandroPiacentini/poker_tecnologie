@@ -20,13 +20,17 @@ def handle_client(client_socket, shared_message, shutdown_event):
                 confirm_message = "connesso\r\n"
                 print(f"Invio: {confirm_message}")
                 client_socket.sendall(confirm_message.encode())
+            elif received_message.split(';')[0].strip() == "Inizio_Carte":
+                confirm_message = "12;12"
+                client_socket.sendall(confirm_message.encode())
             else:
                 other_message = "no"
                 client_socket.sendall(other_message.encode())
-                print(f"Errore durante la gestione del client: {received_message}")
+                print(f"Errore non funzica: {received_message}")
 
                 # Setta la variabile condivisa
                 shared_message.set(received_message)
+            
 
     except Exception as e:
         print(f"Errore durante la gestione del client: {e}")
