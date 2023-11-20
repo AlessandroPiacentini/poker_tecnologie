@@ -4,7 +4,7 @@ import sqlite3
 import xml.etree.ElementTree as ET
 
 import threading
-from main import fase_di_gioco, lock
+from main import fase_di_gioco, lock, giocatori_seduti, index_vincitore
 
 import random
 
@@ -82,14 +82,14 @@ def dict_to_xml(variables):
 
 
 
-def invio_info(giocatori_seduti_al_tavolo, piatto, carte_banco):
-    for giocatore in giocatori_seduti_al_tavolo:
+def invio_info(giocatori_seduti, piatto, carte_banco, cout_fasi_partita):
+    for giocatore in giocatori_seduti:
         try:
             # Crea un socket per la connessione al giocatore
             giocatore_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             print(f"connessione a {giocatore.ip}")
             giocatore_socket.connect((giocatore.ip, giocatore.port))
-            my_variables = {"piatto": piatto, "carte_banco": carte_banco, "giocatori_seduti": giocatori_seduti_al_tavolo}
+            my_variables = {"piatto": piatto, "carte_banco": carte_banco,"cout_fasi_partita":cout_fasi_partita, "giocatori_seduti": giocatori_seduti}
 
             xml_result = dict_to_xml(my_variables)      
             giocatore_socket.send(xml_result.encode('utf-8'))
@@ -97,21 +97,21 @@ def invio_info(giocatori_seduti_al_tavolo, piatto, carte_banco):
         except Exception as e:
             print(f"Errore durante la connessione al giocatore: {e}")
 
-def set_blind(turno, giocatori_seduti_al_tavolo):
+def set_blind(turno, giocatori_seduti):
     i=0
-    for giocatore in giocatori_seduti_al_tavolo:
+    for giocatore in giocatori_seduti:
         if giocatore.turno==turno+1:
-            giocatori_seduti_al_tavolo[i].blind="small"
-            giocatori_seduti_al_tavolo[i].puntata=5
+            giocatori_seduti[i].blind="small"
+            giocatori_seduti[i].puntata=5
         if giocatore.turno==turno+2:
-            giocatori_seduti_al_tavolo[i].blind="big"
-            giocatori_seduti_al_tavolo[i].puntata=10
+            giocatori_seduti[i].blind="big"
+            giocatori_seduti[i].puntata=10
             
-    return giocatori_seduti_al_tavolo
+    return giocatori_seduti
 
-def calcola_piatto(giocatori_seduti_al_tavolo) :
+def calcola_piatto(giocatori_seduti) :
     piatto=0
-    for giocatore in giocatori_seduti_al_tavolo:
+    for giocatore in giocatori_seduti:
         piatto+= giocatore.puntata
     return piatto 
   
@@ -144,10 +144,10 @@ def ricevi_mossa():
 
 
 def dai_carte_giocatori():
-    global giocatori_seduti_al_tavolo
+    global giocatori_seduti
     i=0
     while i<2:
-        for giocatore in giocatori_seduti_al_tavolo:
+        for giocatore in giocatori_seduti:
             if i==0:
                 giocatore.carta1=pesca_carta()
             else:
@@ -161,36 +161,98 @@ def prime_carte_banco():
 
 def controllo_puntate_uguali():
     sentinella=True
-    for giocatore in giocatori_seduti_al_tavolo:
+    for giocatore in giocatori_seduti:
         if giocatore.seduto: 
-            for giocatore2 in giocatori_seduti_al_tavolo:
+            for giocatore2 in giocatori_seduti:
                 if giocatore2.seduto: 
                     if giocatore.puntata!=giocatore2.puntata:
                         sentinella=False
                         break
     return sentinella
-carte_uscite=[]
-giocatori_seduti_al_tavolo=[]
-carte_banco=[]
-def partita(giocatori_seduti):
 
-    global giocatori_seduti_al_tavolo
-    giocatori_seduti_al_tavolo=giocatori_seduti
+
+def calcola_max_puntata():
+    max_puntata=0
+    for giocatore in giocatori_seduti:
+        if giocatore.puntata>max_puntata:
+            max_puntata=giocatore.puntata
+    return max_puntata
+
+def azzera_puntate():
+    for giocatore in giocatori_seduti:
+        giocatore.puntata=0
+ 
+ 
+def get_rank(card):
+    # Funzione per ottenere il valore della carta per il ranking
+    return (card - 1) % 13 + 1
+
+def is_flush(hand):
+    # Verifica se tutte le carte nella mano hanno lo stesso seme
+    return len(set(card // 13 for card in hand)) == 1
+
+def is_straight(hand):
+    # Verifica se le carte nella mano formano una scala
+    sorted_hand = sorted(get_rank(card) for card in hand)
+    return sorted_hand[-1] - sorted_hand[0] == 4 and len(set(sorted_hand)) == 5
+
+def evaluate_hand(hand, board):
+    # Valutazione della mano sommando il valore delle carte
+    return sum(get_rank(card) for card in hand + board)
+
+def find_winner():
+    global piatto
+    # Trova il vincitore tra i giocatori in base alle carte in mano e le carte sul tavolo
+    winner_index = 0
+    best_score = evaluate_hand((giocatori_seduti[0].carta1, giocatori_seduti[0].carta2), carte_banco)
+
+    for i in range(1, len(giocatori_seduti)):
+        score = evaluate_hand((giocatori_seduti[i].carta1, giocatori_seduti[i].carta2), carte_banco)
+        if score > best_score:
+            winner_index = i
+            best_score = score
+    giocatori_seduti[winner_index+1].soldi+=piatto
+    return winner_index+1       
+
+def comunica_vincitore():
+    global index_vincitore
+    for giocatore in giocatori_seduti:
+        try:
+            # Crea un socket per la connessione al giocatore
+            giocatore_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            print(f"connessione a {giocatore.ip}")
+            giocatore_socket.connect((giocatore.ip, giocatore.port))
+            
+            index_vincitore_str = str(index_vincitore)      
+            giocatore_socket.send(index_vincitore_str.encode('utf-8'))
+            giocatore_socket.close()
+        except Exception as e:
+            print(f"Errore durante la connessione al giocatore: {e}")
+    
+
+carte_uscite=[]
+giocatori_seduti=[]
+carte_banco=[]
+piatto=0
+
+def partita():
+
+    global giocatori_seduti
     cout_turno=1
     global fase_di_gioco
     global carte_banco
-    piatto=0
+    global piatto
     cout_fasi_partita=0
     global carte_uscite
     puntate_uguali=True
+    global index_vincitore
 
     
     
     while fase_di_gioco=="game":
-        
-        if puntate_uguali:
-            if len(giocatori_seduti_al_tavolo)>3:
-                giocatori_seduti_al_tavolo=set_blind(cout_turno, giocatori_seduti_al_tavolo)
+        if giocatori_seduti[cout_turno].seduto and puntate_uguali:
+            if len(giocatori_seduti)>3:
+                giocatori_seduti=set_blind(cout_turno, giocatori_seduti)
             if cout_fasi_partita==0:
                 dai_carte_giocatori()
             elif cout_fasi_partita==1:
@@ -198,34 +260,43 @@ def partita(giocatori_seduti):
             else:
                 carte_banco.append(pesca_carta())
             
-            piatto=calcola_piatto(giocatori_seduti_al_tavolo)
-            invio_info(giocatori_seduti_al_tavolo, piatto, carte_banco, carte_uscite)
+            
+            invio_info(giocatori_seduti, piatto, carte_banco, carte_uscite, cout_fasi_partita)
             
         
-        mossa=ricevi_mossa()
-        if mossa.split(";")[0]=="busso":
-            pass
-        elif mossa.split(";")[0]=="add":
-            giocatori_seduti_al_tavolo[cout_turno].puntata=mossa.split(";")[1]
-            invio_info(giocatori_seduti_al_tavolo, piatto, carte_banco)
-        
-        
-        
+            mossa=ricevi_mossa()
+            if mossa.split(";")[0]=="busso":
+                pass
+            elif mossa.split(";")[0]=="add":
+                giocatori_seduti[cout_turno].puntata=mossa.split(";")[1]
+            elif mossa.split(";")[0]=="vedi":
+                giocatori_seduti[cout_turno].puntata=calcola_max_puntata()
+            elif mossa.split(";")[0]=="lascia":
+                giocatori_seduti[cout_turno].seduto=False
+            
+            
+            
+            
         
         cout_turno+=1
-        if cout_turno==len(giocatori_seduti_al_tavolo):
+        if cout_turno==len(giocatori_seduti):
             cout_turno=1
-        if controllo_puntate_uguali():
-            puntate_uguali=True
-            cout_fasi_partita+=1
-        else:
-            puntate_uguali=False
+            if controllo_puntate_uguali():
+                puntate_uguali=True
+                cout_fasi_partita+=1
+                piatto=calcola_piatto(giocatori_seduti)
+                azzera_puntate()
+            else:
+                puntate_uguali=False
     
         if cout_fasi_partita==3:
             fase_di_gioco="waiting"
         
-    giocatori_seduti_al_tavolo=[]
     
+    index_vincitore= find_winner()
+    
+
+
 
 
     

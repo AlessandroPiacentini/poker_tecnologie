@@ -8,6 +8,9 @@ import sqlite3
 
 # Definisci la variabile comune
 fase_di_gioco = "waiting"
+giocatori_seduti=[]
+index_vincitore=0
+
 
 # Crea un oggetto Lock
 lock = threading.Lock()
@@ -28,7 +31,7 @@ def add_db(nome, carta1, carta2, puntata, soldi, turno, blind, seduto, posto, ip
 
 
 def main():
-    giocatori_seduti = []
+    global giocatori_seduti 
     count = 0
     clients = []
     timeout = False
@@ -103,7 +106,7 @@ def main():
 
             # Crea un oggetto Thread
             
-            thread = threading.Thread(target=partita, args=(giocatori_seduti))
+            thread = threading.Thread(target=partita)
 
             # thread = threading.Thread(target=partita)
 
