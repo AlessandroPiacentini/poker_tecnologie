@@ -1,91 +1,109 @@
 import socket
-from Giocatore import Giocatore
-from Thread_partita import partita
+from Player import Player
+from Thread_game import game
+from Thread_waiting import waiting
 import threading
 import time
+import sqlite3
 
+# Define common variable
+game_phase = "waiting"
+seated_players = []
+winner_index = 0
+
+# Create a Lock object
+lock = threading.Lock()
+
+
+count = 0
 def main():
-    fase_di_gioco = "waiting"
-    giocatori_seduti = []
-    count = 0
-    timer = 0
-
-    # Configura il server
+    global seated_players 
+    clients = []
+    timeout = False
+    global count
+    # Configure the server
     server_host = '127.0.0.1'
     server_port = 12345
 
-    # Crea un socket TCP/IP
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-    try:
-        # Associa il socket all'indirizzo e alla porta del server
+    while True:
+        # Create a TCP/IP socket
+        server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.bind((server_host, server_port))
-
-        # Ascolta le connessioni in arrivo (massimo 1 connessione in coda)
         server_socket.listen(6)
+        seated_players=[]
 
-        while True:
-            print(f"In attesa di connessioni su {server_host}:{server_port}...")
-            client_socket, client_address = server_socket.accept()
-            print(f"Connessione da: {client_address}")
-
+        while not timeout:
             try:
-                # Ricevi i dati dal client
-                data = client_socket.recv(1024)
-                print(f"Dati ricevuti dal client: {data.decode('utf-8')}")
+                print(f"Waiting for connections on {server_host}:{server_port}...")
+                client_socket, client_address = server_socket.accept()
+                client_ip, client_port = client_address  # Extract the IP address and port
 
-                # Decodifica i dati da bytes a stringa
+                print(f"Connection from: {client_address}")
+
+                # Receive data from the client
+                data = client_socket.recv(1024)
+                print(f"Data received from the client: {data.decode('utf-8')}")
+
+                # Decode data from bytes to string
                 data_str = data.decode('utf-8')
 
-                # Ora puoi usare il metodo split sulla stringa
-                if data_str.split(";")[0] == "entry" and len(giocatori_seduti) < 6:
-                    response = "ok;"
-                    g = Giocatore(data_str.split(";")[1], [], 0, int(data_str.split(";")[2]), "no", "no", True, count, client_socket)
+                # Now you can use the split method on the string
+                if data_str.split(";")[0] == "entry" and len(seated_players) < 6:
                     count += 1
-                    giocatori_seduti.append(g)
-
-                    if len(giocatori_seduti) >= 2:
-                        # Imposta il timeout sulla socket del server
+                    response = f"ok;{count}"
+                    player = Player(data_str.split(";")[1], 0, 0, 0, int(data_str.split(";")[2]), "no", "no", True, count, client_ip, client_port)
+                    clients.append((client_ip, client_port))
+                    seated_players.append(player)
+                    print(count)
+                    if(count>=2):
                         server_socket.settimeout(10)
                 else:
                     response = "err"
 
                 client_socket.send(response.encode('utf-8'))
 
-            except Exception as e:
-                print(f"Errore durante la gestione della connessione: {e}")
+            except socket.timeout:
+                timeout = True
+                server_socket.close()
 
             finally:
-                # Chiudi la connessione
-                client_socket.close()
+                try:
+                    # Close the connection
+                    if client_socket:
+                        client_socket.close()
+                except:
+                    print("Exception")
 
-            # Timer inizio partita
-            if timer == 10:
-                timer = 0
-                fase_di_gioco = "game"
+        if count >= 2:
+            print("Starting the game...")
+            global game_phase
+            socket_game = f"{server_host};888"
+            for client_ip, client_port in clients:
+                print(f"ip: {client_ip}; port: {client_port}")
+                try:
+                    # Create a socket for connecting to the player
+                    player_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    player_socket.connect((client_ip, client_port))
+                    player_socket.send(socket_game.encode('utf-8'))
+                    player_socket.close()
+                except Exception as e:
+                    print(f"Error connecting to the player: {e}")
 
-            # Inizio game
-            if fase_di_gioco == "game":
-                for giocatore in giocatori_seduti:
-                    socket_partita = f"{server_host};888"
-                    giocatore.socket.send(socket_partita.encode('utf-8'))
-                    giocatore.socket.close()
+            # Create a Thread object
+            thread_game = threading.Thread(target=game)
+            thread_waiting = threading.Thread(target=waiting)
 
-                # Crea un oggetto Thread
-                thread = threading.Thread(target=partita, args=(giocatori_seduti, fase_di_gioco))
+            # Start the thread
+            thread_game.start()
+            thread_waiting.start()
 
-                # Avvia il thread
-                thread.start()
-
-                # Attendi che il thread termini prima di uscire
-                thread.join()
-
-    except Exception as e:
-        print(f"Errore durante l'esecuzione del server: {e}")
-
-    finally:
-        # Chiudi il socket del server alla fine
-        server_socket.close()
+            # Wait for the thread to finish before exiting
+            thread_game.join()
+            thread_waiting.join()
+            print("Fake")
+            clients=[]
+            timeout = False
+            count = 0
 
 if __name__ == '__main__':
     main()
