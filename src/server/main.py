@@ -1,6 +1,7 @@
 import socket
 from Giocatore import Giocatore
 from Thread_partita import partita
+from Thread_waiting import waiting
 import threading
 import time
 import sqlite3
@@ -30,12 +31,12 @@ def add_db(nome, carta1, carta2, puntata, soldi, turno, blind, seduto, posto, ip
     conn.close()
 
 
+count = 0
 def main():
     global giocatori_seduti 
-    count = 0
     clients = []
     timeout = False
-
+    global count
     # Configura il server
     server_host = '127.0.0.1'
     server_port = 12345
@@ -106,15 +107,17 @@ def main():
 
             # Crea un oggetto Thread
             
-            thread = threading.Thread(target=partita)
+            thread_partita = threading.Thread(target=partita)
+            thread_waiting = threading.Thread(target=waiting)
 
-            # thread = threading.Thread(target=partita)
 
             # Avvia il thread
-            thread.start()
+            thread_partita.start()
+            thread_waiting.start()
 
             # Attendi che il thread termini prima di uscire
-            thread.join()
+            thread_partita.join()
+            thread_waiting.join()
             print("finto")
             clients=[]
             timeout = False
