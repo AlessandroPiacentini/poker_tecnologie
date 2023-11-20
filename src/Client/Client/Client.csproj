@@ -112,7 +112,6 @@
     <Resource Include="immagini\immagineHome.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="immagini\sfondoGioco.jpg" />
     <Resource Include="immagini\sfondoHome.jpg" />
   </ItemGroup>
   <ItemGroup>
@@ -170,9 +169,6 @@
     <Resource Include="immagini\9.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="sfondoGioco.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="1.jpg" />
   </ItemGroup>
   <ItemGroup>
@@ -186,6 +182,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="sfondoHome.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="immagini\53.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="campoDaGioco.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
