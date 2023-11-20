@@ -14,10 +14,5 @@ class Player:
         self.posto=posto
         self.ip=ip
         self.port=port
-        
-        
-    
-    # def ciao(self):
-    #     print("ciao")
 
     
