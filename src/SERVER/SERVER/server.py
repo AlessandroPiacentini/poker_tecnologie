@@ -21,7 +21,10 @@ def handle_client(client_socket, shared_message, shutdown_event):
                 print(f"Invio: {confirm_message}")
                 client_socket.sendall(confirm_message.encode())
             elif received_message.split(';')[0].strip() == "Inizio_Carte":
-                confirm_message = "12;12"
+                confirm_message = "giocatore6;13;12"
+                client_socket.sendall(confirm_message.encode())
+            elif received_message.split(';')[0].strip() == "Carte_Tavolo":
+                confirm_message = "7;3;1"
                 client_socket.sendall(confirm_message.encode())
             else:
                 other_message = "no"
