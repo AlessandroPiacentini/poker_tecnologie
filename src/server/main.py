@@ -1,75 +1,59 @@
 import socket
-from Giocatore import Giocatore
-from Thread_partita import partita
+from Player import Player
+from Thread_game import game
 from Thread_waiting import waiting
 import threading
 import time
 import sqlite3
 
+# Define common variable
+game_phase = "waiting"
+seated_players = []
+winner_index = 0
 
-# Definisci la variabile comune
-fase_di_gioco = "waiting"
-giocatori_seduti=[]
-index_vincitore=0
-
-
-# Crea un oggetto Lock
+# Create a Lock object
 lock = threading.Lock()
-
-# Rimuovi la definizione di add_db dal contesto globale
-def add_db(nome, carta1, carta2, puntata, soldi, turno, blind, seduto, posto, ip, port):
-    # Connessione al database SQLite
-    conn = sqlite3.connect("db/giocatori_seduti_tavolo.db")
-    cursor = conn.cursor()
-    
-    # Inserimento del nuovo record nella tabella
-    cursor.execute("INSERT INTO giocatori (nome, carta1, carta2, puntata, soldi, turno, blind, seduto, posto, ip, port) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                (nome, carta1, carta2, puntata, soldi, turno, blind, seduto, posto, ip, port))
-    
-    # Commit delle modifiche e chiusura della connessione
-    conn.commit()
-    conn.close()
 
 
 count = 0
 def main():
-    global giocatori_seduti 
+    global seated_players 
     clients = []
     timeout = False
     global count
-    # Configura il server
+    # Configure the server
     server_host = '127.0.0.1'
     server_port = 12345
 
     while True:
-        # Crea un socket TCP/IP
+        # Create a TCP/IP socket
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.bind((server_host, server_port))
         server_socket.listen(6)
-        giocatori_seduti=[]
+        seated_players=[]
 
         while not timeout:
             try:
-                print(f"In attesa di connessioni su {server_host}:{server_port}...")
+                print(f"Waiting for connections on {server_host}:{server_port}...")
                 client_socket, client_address = server_socket.accept()
-                client_ip, client_port = client_address  # Estrai l'indirizzo IP e la porta
+                client_ip, client_port = client_address  # Extract the IP address and port
 
-                print(f"Connessione da: {client_address}")
+                print(f"Connection from: {client_address}")
 
-                # Ricevi i dati dal client
+                # Receive data from the client
                 data = client_socket.recv(1024)
-                print(f"Dati ricevuti dal client: {data.decode('utf-8')}")
+                print(f"Data received from the client: {data.decode('utf-8')}")
 
-                # Decodifica i dati da bytes a stringa
+                # Decode data from bytes to string
                 data_str = data.decode('utf-8')
 
-                # Ora puoi usare il metodo split sulla stringa
-                if data_str.split(";")[0] == "entry" and len(giocatori_seduti) < 6:
+                # Now you can use the split method on the string
+                if data_str.split(";")[0] == "entry" and len(seated_players) < 6:
                     count += 1
                     response = f"ok;{count}"
-                    g=Giocatore(data_str.split(";")[1], 0, 0, 0, int(data_str.split(";")[2]), "no", "no", True, count, client_ip, client_port)
+                    player = Player(data_str.split(";")[1], 0, 0, 0, int(data_str.split(";")[2]), "no", "no", True, count, client_ip, client_port)
                     clients.append((client_ip, client_port))
-                    giocatori_seduti.append(g)
+                    seated_players.append(player)
                     print(count)
                     if(count>=2):
                         server_socket.settimeout(10)
@@ -84,45 +68,42 @@ def main():
 
             finally:
                 try:
-                    # Chiudi la connessione
+                    # Close the connection
                     if client_socket:
                         client_socket.close()
                 except:
-                    print("eccezione")
+                    print("Exception")
 
         if count >= 2:
-            print("Inizio partita...")
-            global fase_di_gioco
-            socket_partita = f"{server_host};888"
+            print("Starting the game...")
+            global game_phase
+            socket_game = f"{server_host};888"
             for client_ip, client_port in clients:
                 print(f"ip: {client_ip}; port: {client_port}")
                 try:
-                    # Crea un socket per la connessione al giocatore
-                    giocatore_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    giocatore_socket.connect((client_ip, client_port))
-                    giocatore_socket.send(socket_partita.encode('utf-8'))
-                    giocatore_socket.close()
+                    # Create a socket for connecting to the player
+                    player_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    player_socket.connect((client_ip, client_port))
+                    player_socket.send(socket_game.encode('utf-8'))
+                    player_socket.close()
                 except Exception as e:
-                    print(f"Errore durante la connessione al giocatore: {e}")
+                    print(f"Error connecting to the player: {e}")
 
-            # Crea un oggetto Thread
-            
-            thread_partita = threading.Thread(target=partita)
+            # Create a Thread object
+            thread_game = threading.Thread(target=game)
             thread_waiting = threading.Thread(target=waiting)
 
-
-            # Avvia il thread
-            thread_partita.start()
+            # Start the thread
+            thread_game.start()
             thread_waiting.start()
 
-            # Attendi che il thread termini prima di uscire
-            thread_partita.join()
+            # Wait for the thread to finish before exiting
+            thread_game.join()
             thread_waiting.join()
-            print("finto")
+            print("Fake")
             clients=[]
             timeout = False
             count = 0
-        
 
 if __name__ == '__main__':
     main()

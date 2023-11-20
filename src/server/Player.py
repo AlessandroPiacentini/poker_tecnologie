@@ -1,6 +1,6 @@
 import socket
 
-class Giocatore:
+class Player:
     # Costruttore della classe
     def __init__(self, nome, carta1, carta2, puntata, soldi, turno, blind, seduto, posto, ip, port):
         self.nome = nome

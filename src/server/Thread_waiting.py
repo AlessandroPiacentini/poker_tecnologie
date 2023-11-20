@@ -1,55 +1,52 @@
-from main import fase_di_gioco, lock, giocatori_seduti, count
-from Giocatore import Giocatore
+from main import game_phase, lock, seated_players, count
+from Player import Player
 import socket
 import threading
 
-# Inizializza il vettore per i messaggi
-giocatori_seduti = []
+# Initialize the vector for messages
+seated_players = []
 max_messages = 6
 
-# Funzione che gestisce la connessione di un client
+# Function that handles a client connection
 def handle_client(client_socket, address, client_ip, client_port):
-    global giocatori_seduti
+    global seated_players
 
-    print(f"Connessione accettata da {address}")
+    print(f"Connection accepted from {address}")
 
     while True:
-        # Ricevi dati dal client
+        # Receive data from the client
         data = client_socket.recv(1024)
         if not data:
-            break  # Se il client chiude la connessione, esci dal ciclo
+            break  # If the client closes the connection, exit the loop
 
-       
-        # Verifica se il vettore supera la lunghezza massima
-        if len(giocatori_seduti) >= max_messages:
-            response = "tavolo pieno"
+        # Check if the vector exceeds the maximum length
+        if len(seated_players) >= max_messages:
+            response = "table full"
             client_socket.send(response.encode("utf-8"))
             print(response)
             break
         else:
-            # Decodifica e salva il messaggio nel vettore
+            # Decode and save the message in the vector
             message = data.decode("utf-8")
-            g=Giocatore(message.split(";")[1], 0, 0, 0, int(message.split(";")[2]), "no", "no", True, count, client_ip, client_port)
-            giocatori_seduti.append(g)
+            player = Player(message.split(";")[1], 0, 0, 0, int(message.split(";")[2]), "no", "no", True, count, client_ip, client_port)
+            seated_players.append(player)
 
-        print(f"Ricevuto messaggio: {message}")
+        print(f"Received message: {message}")
 
-    # Chiudi la connessione con il client
+    # Close the connection with the client
     client_socket.close()
-    print(f"Connessione chiusa con {address}")
-
-
+    print(f"Connection closed with {address}")
 
 def waiting():
-    # Configura il server
+    # Configure the server
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind(("127.0.0.1", 12345))
     server.listen(5)
 
-    print("Server in ascolto su 127.0.0.1:12345")
+    print("Server listening on 127.0.0.1:12345")
 
-    # Accetta connessioni dai client
-    while fase_di_gioco=="game":
+    # Accept connections from clients
+    while game_phase == "game":
         client_socket, client_address = server.accept()
         client_ip, client_port = client_address
 
