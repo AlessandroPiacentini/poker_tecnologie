@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
-        Title="WindowDiGioco" Height="450" Width="800">
+        Title="WindowDiGioco" Height="450" Width="800" ResizeMode="NoResize">
     <Grid>
         <Image Source="/campoDaGioco.png" Stretch="Fill"/>
         <Grid x:Name="giocatore0">
@@ -44,5 +44,10 @@
             <Image x:Name="imgTavolo4" HorizontalAlignment="Left" Height="51" Margin="434,216,0,0" VerticalAlignment="Top" Width="40" Source="/3.jpg"/>
             <Image x:Name="imgTavolo5" HorizontalAlignment="Left" Height="50" Margin="479,217,0,0" VerticalAlignment="Top" Width="35" Source="/3.jpg"/>
         </Grid>
+        <Button x:Name="buttonFold" Content="FOLD" HorizontalAlignment="Left" Margin="595,404,0,0" VerticalAlignment="Top" Click="buttonFold_Click"/>
+        <Button x:Name="buttonCheck" Content="CHECK" HorizontalAlignment="Left" Margin="541,404,0,0" VerticalAlignment="Top" Click="buttonCheck_Click"/>
+        <Button x:Name="buttonPuntata" Content="RAISE" HorizontalAlignment="Left" Margin="645,404,0,0" VerticalAlignment="Top" Click="buttonPuntata_Click"/>
+        <TextBox x:Name="txtPuntata" HorizontalAlignment="Left" Margin="692,406,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="77"/>
+        <TextBox x:Name="txtSaldo" HorizontalAlignment="Left" Margin="10,404,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
     </Grid>
 </Window>
