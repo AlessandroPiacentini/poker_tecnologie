@@ -2,6 +2,8 @@ import socket
 import threading
 
 clients = 0
+money = 0
+namePlayer = ""
 
 def handle_client(client_socket, shared_message, shutdown_event):
     global clients
@@ -21,11 +23,19 @@ def handle_client(client_socket, shared_message, shutdown_event):
                 print(f"Invio: {confirm_message}")
                 client_socket.sendall(confirm_message.encode())
             elif received_message.split(';')[0].strip() == "Inizio_Carte":
-                confirm_message = "giocatore6;13;12"
+                confirm_message = "giocatore3;1;1"
                 client_socket.sendall(confirm_message.encode())
             elif received_message.split(';')[0].strip() == "Carte_Tavolo":
                 confirm_message = "7;3;1"
                 client_socket.sendall(confirm_message.encode())
+            elif received_message.split(';')[0].strip() == "dati_giocatore":
+                confirm_message = "ok_dati_giocatore"
+                client_socket.sendall(confirm_message.encode())
+                
+                namePlayer = received_message[0]
+                money = received_message[1]
+                print(f"Dati: {namePlayer + money}")
+                
             else:
                 other_message = "no"
                 client_socket.sendall(other_message.encode())
