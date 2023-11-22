@@ -13,17 +13,39 @@ winner_index = 0
 
 # Create a Lock object
 lock = threading.Lock()
-
+server_host = '127.0.0.1'
+server_port = 12345
+timeout = False
+clients = []
 
 count = 0
 def main():
+    """
+    The main function that runs the server and handles client connections.
+
+    This function creates a TCP/IP socket, binds it to a specific host and port,
+    and listens for incoming client connections. It receives data from the client,
+    processes it, and sends a response back. If the number of seated players is
+    less than 6, it allows the client to join the game. Once there are at least
+    2 players, it starts the game by connecting to each player and sending the
+    necessary game information. It also creates and starts two threads for handling
+    the game and waiting for players to join.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     global seated_players 
-    clients = []
-    timeout = False
+    global clients 
+    global timeout
     global count
     # Configure the server
-    server_host = '127.0.0.1'
-    server_port = 12345
+    global server_host
+    global server_port
+    
+    
 
     while True:
         # Create a TCP/IP socket

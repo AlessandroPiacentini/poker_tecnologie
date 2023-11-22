@@ -10,6 +10,18 @@ game_phase=""
 count=0
 # Function that handles a client connection
 def handle_client(client_socket, address, client_ip, client_port):
+    """
+    Handle the client connection.
+
+    Args:
+        client_socket (socket): The socket object representing the client connection.
+        address (tuple): The address of the client (IP address, port number).
+        client_ip (str): The IP address of the client.
+        client_port (int): The port number of the client.
+
+    Returns:
+        None
+    """
     global seated_players
 
     print(f"Connection accepted from {address}")
@@ -38,18 +50,29 @@ def handle_client(client_socket, address, client_ip, client_port):
     client_socket.close()
     print(f"Connection closed with {address}")
 
-def waiting(game_phase_s,seated_players_s,count_s):
+def waiting(game_phase_s, seated_players_s, count_s):
+    """
+    Function that configures the server and waits for connections from clients.
+
+    Args:
+        game_phase_s (str): The current game phase.
+        seated_players_s (int): The number of seated players.
+        count_s (int): The count value.
+
+    Returns:
+        None
+    """
     # Configure the server
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind(("127.0.0.1", 12345))
     server.listen(5)
     
     global seated_players
-    seated_players=seated_players_s
+    seated_players = seated_players_s
     global game_phase
-    game_phase=game_phase_s
+    game_phase = game_phase_s
     global count
-    count=count_s
+    count = count_s
 
     print("Server listening on 127.0.0.1:12345")
 
