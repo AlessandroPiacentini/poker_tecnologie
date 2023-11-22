@@ -19,7 +19,7 @@ Questo progetto implementa un'applicazione di Poker Texas Hold'em che consente a
 1. Clonare il repository del progetto:
 
     ```bash
-    git clone https://github.com/username/poker-texas-holdem.git
+    git clone https://github.com/AlessandroPiacentini/poker_tecnologie.git
     ```
 
 2. Avviare il server di gioco:
