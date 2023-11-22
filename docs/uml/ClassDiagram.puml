@@ -1,4 +1,4 @@
-@startuml
+@startuml ClassDiagramPoker
 
 class socket {
     + AF_INET: int

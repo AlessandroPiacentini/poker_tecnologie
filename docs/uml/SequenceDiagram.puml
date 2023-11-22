@@ -1,4 +1,4 @@
-@startuml
+@startuml SequenceDiagram Poker
 actor Player
 participant Client
 participant Server
