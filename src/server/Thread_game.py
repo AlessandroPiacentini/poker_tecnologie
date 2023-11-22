@@ -4,7 +4,7 @@ import sqlite3
 import xml.etree.ElementTree as ET
 
 import threading
-from main import game_phase, lock, seated_players, winner_index
+# from main import game_phase, lock, seated_players, winner_index
 
 import random
 
@@ -190,16 +190,19 @@ seated_players = []
 community_cards = []
 pot = 0
 
-def game():
+def game(game_phase_s, seated_players_s, winner_index_s):
     global seated_players
+    seated_players=seated_players_s
     turn_count = 1
     global game_phase
+    game_phase=game_phase_s
     global community_cards
     global pot
     game_phase_count = 0
     global used_cards
     equal_bets = True
     global winner_index
+    winner_index=winner_index_s
 
     while game_phase == "game":
         if seated_players[turn_count].seated and equal_bets:

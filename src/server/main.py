@@ -1,7 +1,7 @@
 import socket
 from Player import Player
-from Thread_partita import partita
-from Thread_waiting import waiting
+from Thread_game import game
+# from Thread_waiting import waiting
 import threading
 import time
 import sqlite3
@@ -91,7 +91,7 @@ def main():
 
             # Crea un oggetto Thread
             
-            thread_partita = threading.Thread(target=partita, args=(game_phase, seated_players, winner_index))
+            thread_partita = threading.Thread(target=game, args=(game_phase, seated_players, winner_index))
 
             # thread = threading.Thread(target=partita)
 
