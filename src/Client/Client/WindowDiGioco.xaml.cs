@@ -14,6 +14,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.Xml;
 
 namespace Client
 {
@@ -34,6 +35,12 @@ namespace Client
         private TcpClient client;
         private NetworkStream stream;
 
+        //Variabili utili
+        //Giocatore io = new Giocatore();
+        String[] carteTavolo;
+        String[] g;
+        String chi_sono = "";
+
         //Iniziallizzazione piccolo e grande buio
         int grande_buio = 0;
         int piccolo_buio = 0;
@@ -41,24 +48,29 @@ namespace Client
         //Contatore dei turni
         int conta = 0;
 
-        public WindowDiGioco(TcpClient tcpClient, NetworkStream tcpStream)
+        public WindowDiGioco()
         {
             InitializeComponent();
-            client = tcpClient;
-            stream = tcpStream;
+
+            //Ora deve avere la nuova porta del server a cui connettersi
+            String[] dati = RicezioneDati().Split(';');
+            client = new TcpClient(dati[0], int.Parse(dati[1]));
+            stream = client.GetStream();
 
             IniziaGioco();
         }
-    
+
         //INIZIO DEL GIOCO
         private void IniziaGioco()
         {
-            CarteIniziali();
-            CarteSulTavolo();
-            addBottoneAlGiocatore();
+            //Rimane in ascolto
+            _ = RimaniInAscolto();
 
-            if (conta == 4) aggiungiEVisualizzaCarta4();
-            if (conta == 5) aggiungiEVisualizzaCarta5();
+            //CarteSulTavolo();
+            //addBottoneAlGiocatore();
+
+            //if (conta == 4) aggiungiEVisualizzaCarta4();
+            //if (conta == 5) aggiungiEVisualizzaCarta5();
         }
 
 
@@ -78,12 +90,12 @@ namespace Client
 
                     //dice al server il nome del giocatore che Inizia per primo
                     InvioDati("giocatore_che_inizia");
-                    if(RicezioneDati()=="dammelo")
+                    if (RicezioneDati() == "dammelo")
                         InvioDati(nomeGiocatore);
                 }
             }
         }
-        
+
         //Calcola il piccolo buio
         private void piccoloBuio()
         {
@@ -105,7 +117,7 @@ namespace Client
         private void abbandonare()
         {
             InvioDati("abbandonare");
-    
+
             //DISATTIVA TUTTO
         }
 
@@ -145,7 +157,7 @@ namespace Client
 
             //invia i soldi della puntata
             InvioDati("puntata");
-            if(RicezioneDati() == "ok_puntata")
+            if (RicezioneDati() == "ok_puntata")
             {
                 String puntataMinima = grande_buio.ToString();
                 if (int.Parse(puntata) < int.Parse(puntataMinima))
@@ -158,10 +170,10 @@ namespace Client
                     //E infine aggiorna il saldo
                     txtSaldo.Text = (int.Parse(txtSaldo.Text) - int.Parse(txtPuntata.Text)).ToString();
                 }
-            }   
+            }
         }
-        
-       
+
+
 
         //CAMBIAMENTO SUL CAMPO
 
@@ -216,7 +228,7 @@ namespace Client
         //Ovvero dai a ciascun giocatore le carte che gli spettano decide dal server
         private void CarteIniziali()
         {
-            InvioDati("Inizio_Carte");
+            //InvioDati("Inizio_Carte");
             String[] carte = datiSplittati();
 
             // Trova la Grid con il nome gruppo1 all'interno del tuo controllo o finestra
@@ -230,11 +242,11 @@ namespace Client
             {
                 int x = 1;
                 foreach (var controllo in giocatore.Children)
-                { 
+                {
                     if (controllo is Image immagine)
                     {
                         // Verifica se si è raggiunto l'ultimo percorso nell'array
-                        if (x!=3)
+                        if (x != 3)
                         {
                             immagine.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/" + carte[x] + ".jpg"));
                             if (x == 1)
@@ -263,7 +275,7 @@ namespace Client
                     {
 
                         Image immagineCopertaAvversario1 = (Image)avversario.FindName("img" + j); // Sostituisci con la logica corretta per ottenere i nomi delle immagini dei giocatori avversari
-                        
+
                         if (immagineCopertaAvversario1 != immagine1 && immagineCopertaAvversario1 != immagine2)
                         {
                             if (immagineCopertaAvversario1 != null)
@@ -271,7 +283,7 @@ namespace Client
                                 immagineCopertaAvversario1.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/53.jpg"));
                             }
                         }
-                        
+
                         //aggiunta per la seconda carta
                         j++;
                         Image immagineCopertaAvversario2 = (Image)avversario.FindName("img" + j); // Sostituisci con la logica corretta per ottenere i nomi delle immagini dei giocatori avversari
@@ -283,7 +295,7 @@ namespace Client
                                 immagineCopertaAvversario2.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/53.jpg"));
                             }
                         }
-                      j++;
+                        j++;
                     }
                 }
 
@@ -353,18 +365,61 @@ namespace Client
             return carte = dati.Split(';'); // Dividi la stringa utilizzando il punto e virgola come separatoreuna virgola
         }
 
+        //Metodo Parse XML
+        private void parseXML(String stringa)
+        {
+            // XML come stringa
+            String xmlString = stringa;
+
+            // Creazione di un XmlDocument e caricamento dell'XML dalla stringa
+            var xmlDoc = new XmlDocument();
+            xmlDoc.LoadXml(xmlString);
+
+            // Ottieni il nodo radice
+            XmlNode root = xmlDoc.DocumentElement;
+
+            // Recupera i valori da root
+            string potValue = root.SelectSingleNode("pot").InnerText;
+            string gamePhaseCount = root.SelectSingleNode("game_phase_count").InnerText;
+
+            // Recupera i valori della community_cards
+            XmlNodeList communityCards = root.SelectNodes("community_cards/item");
+            int i = 0;
+            foreach (XmlNode cardNode in communityCards)
+            {
+                carteTavolo[i] = cardNode.InnerText;
+                i++;
+            }
+
+            int j = 0;
+            // Recupera i valori dei giocatori
+            XmlNodeList players = root.SelectNodes("players/Player");
+            foreach (XmlNode playerNode in players)
+            {
+                if (playerNode.SelectSingleNode("nome").InnerText == "chi_sono")
+                {
+                    foreach (XmlAttribute attribute in playerNode.Attributes)
+                    {
+                        g[i] = attribute.InnerText;
+                        j++;
+                    }
+                }
+            }
+        }
+
 
         //METODI ASCINCORNI PER LA COMUNICAZIONE CON IL SERVER
         //Creazione di un metodo asincrono per l'attesa del messaggio dal server:
         private async Task<String> AttendiTurno()
         {
-            string risposta = "";
+            String risposta = "";
 
             while (true)
             {
                 risposta = RicezioneDati();
                 if (risposta == "il_tuo_turno")
                 {
+
                     break; // Esci dal ciclo quando è di nuovo il tuo turno
                 }
 
@@ -374,6 +429,34 @@ namespace Client
 
             return risposta;
         }
+
+        //Rimani in ascolto
+        private async Task<String> RimaniInAscolto()
+        {
+            String risposta = "";
+
+            while (true)
+            {
+                risposta = RicezioneDati().Trim();
+
+                switch (risposta)
+                {
+                    case "dati":
+                        String dati = RicezioneDati();
+                        parseXML(dati);
+                        CarteIniziali();
+                        break;
+
+                    case "finito":
+                        break;
+                }
+
+                // Aggiungi un ritardo per evitare un ciclo troppo veloce
+                await Task.Delay(1000); // Ritardo di 1 secondo (1000 millisecondi)
+            }
+        }
+
+
 
         //METODI DEI BOTTONI
 

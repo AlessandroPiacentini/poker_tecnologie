@@ -29,7 +29,7 @@ namespace Client
         public WindowPaginaDiLogin()
         {
             InitializeComponent();
-            client = new TcpClient("localhost", 666); // Connessione al server Java sulla porta 8080
+            client = new TcpClient("127.0.0.1", 12345); // Connessione al server Java sulla porta 8080
             stream = client.GetStream();
         }
 
@@ -38,7 +38,7 @@ namespace Client
         {
             try
             {
-                byte[] message = Encoding.ASCII.GetBytes(messaggio+";");
+                byte[] message = Encoding.ASCII.GetBytes(messaggio + ";");
                 stream.Write(message, 0, message.Length);
             }
             catch (Exception e)
@@ -65,11 +65,17 @@ namespace Client
         }
 
         //Richiesta di entrare nel gioco al server
-        private void buttonEntra_Click(object sender, RoutedEventArgs e)
+        private async void buttonEntra_Click(object sender, RoutedEventArgs e)
         {
+            String dati = "";
 
-            InvioDati("entrare");                   //entry;nome;soldi
-            if (RicezioneDati()=="connesso")        //ok;posto_a_sedere
+            dati = txtNome.Text + ";" + txtSoldi.Text + ";" + "localhost" + ";" + "666";    //invia: (nome e soldi)
+            InvioDati("entry;" + dati);
+
+            // Aspetta fino a quando non è di nuovo il tuo turno
+            String messaggio = await AttendiRisposta();
+
+            if (messaggio == "ok")
             {
                 RichiestaSuccesso();
             }
@@ -82,19 +88,9 @@ namespace Client
         //Se la richiesta viene accettata
         private void RichiestaSuccesso()
         {
-            /*String dati;
-
-            dati = txtNome.Text + ";" + txtSoldi.Text + ";" + "localhost" + ";" + "666";    //invia: Nome,Soldi,Indirizzo IP,Porta (indirizzo IP e porta possono essere cambiati)
-            InvioDati("dati_giocatore");
-
-            //se il Server mi da l'ok nel inviare i dati del giocatore (è un controllo che si puo levare anche)
-            if (RicezioneDati() == "ok_dati_giocatore")
-            {
-                InvioDati(dati);
-            }*/
-
             // Creazione di un'istanza della terza finestra (finestra di gioco)
-            WindowDiGioco WindowDiGioco = new WindowDiGioco(client, stream);
+            WindowDiGioco WindowDiGioco = new WindowDiGioco();
+            //WindowDiGioco WindowDiGioco = new WindowDiGioco(client, stream);
 
             // Mostra la nuova finestra
             WindowDiGioco.Show();
@@ -110,5 +106,24 @@ namespace Client
             //OPZIONE 2 - alla fine del counter devi schiacciare entra
         }
 
+        private async Task<String> AttendiRisposta()
+        {
+            String[] risposta;
+
+            while (true)
+            {
+                risposta = RicezioneDati().Split(';'); // Dividi utilizzando il punto e virgola come separatore
+                if (risposta.Length > 0 && risposta[0] == "ok")
+                {
+                    break; // Esci dal ciclo quando la risposta è "ok"
+                }
+
+                // Aggiungi un ritardo per evitare un ciclo troppo veloce
+                await Task.Delay(1000); // Ritardo di 1 secondo (1000 millisecondi)
+            }
+
+
+            return risposta.Length > 0 ? risposta[0] : ""; // Restituisci il primo elemento se presente, altrimenti una stringa vuota
+        }
     }
 }
