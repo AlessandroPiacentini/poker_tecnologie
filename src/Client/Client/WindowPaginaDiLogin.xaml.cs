@@ -68,8 +68,8 @@ namespace Client
         private void buttonEntra_Click(object sender, RoutedEventArgs e)
         {
 
-            InvioDati("entrare");
-            if (RicezioneDati()=="connesso")
+            InvioDati("entrare");                   //entry;nome;soldi
+            if (RicezioneDati()=="connesso")        //ok;posto_a_sedere
             {
                 RichiestaSuccesso();
             }
