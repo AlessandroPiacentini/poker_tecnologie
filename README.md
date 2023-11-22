@@ -12,7 +12,7 @@ Questo progetto implementa un'applicazione di Poker Texas Hold'em che consente a
 ## Requisiti di installazione
 
 - Python 3.x
-- Libreria socket per la comunicazione TCP
+- Libreria socket per la comunicazione
 
 ## Istruzioni per l'uso
 
@@ -36,4 +36,8 @@ Questo progetto implementa un'applicazione di Poker Texas Hold'em che consente a
 
 4. Seguire le istruzioni visualizzate sull'applicazione client per partecipare alla partita.
 
+## Autori
+
+- Alessandro Piacentini
+- Alessandro Aguilar
 
