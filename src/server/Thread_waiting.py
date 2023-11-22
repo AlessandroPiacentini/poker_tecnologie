@@ -1,4 +1,4 @@
-from main import game_phase, lock, seated_players, count
+# from main import game_phase, lock, seated_players, count
 from Player import Player
 import socket
 import threading
@@ -6,7 +6,8 @@ import threading
 # Initialize the vector for messages
 seated_players = []
 max_messages = 6
-
+game_phase
+count
 # Function that handles a client connection
 def handle_client(client_socket, address, client_ip, client_port):
     global seated_players
@@ -37,11 +38,18 @@ def handle_client(client_socket, address, client_ip, client_port):
     client_socket.close()
     print(f"Connection closed with {address}")
 
-def waiting():
+def waiting(game_phase_s,seated_players_s,count_s):
     # Configure the server
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind(("127.0.0.1", 12345))
     server.listen(5)
+    
+    global seated_players
+    seated_players=seated_players_s
+    global game_phase
+    game_phase=game_phase_s
+    global count
+    count=count_s
 
     print("Server listening on 127.0.0.1:12345")
 

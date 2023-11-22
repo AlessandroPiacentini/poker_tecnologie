@@ -1,6 +1,22 @@
 @startuml UseCasePoker
 
-usecase (Server) as UCS
-usecase (Client) as UCC
+left to right direction
+
+actor Player as P
+actor Server as S
+
+rectangle "Texas Hold'em Poker" {
+    P -- (Join Game)
+    P -- (Place Bet)
+    P -- (Fold)
+    P -- (Exit Game)
+
+    (Start Game) -- S
+    (Deal Cards) -- S
+    (Receive Bets) -- S
+    (Distribute Pot) -- S
+    (Send Game Updates) -- S
+    (Handle Disconnections) -- S
+}
 
 @enduml

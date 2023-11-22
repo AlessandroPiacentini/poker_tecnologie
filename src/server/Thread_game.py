@@ -9,6 +9,12 @@ import threading
 import random
 
 def draw_card():
+    """
+    Function to draw a card from a deck of cards.
+
+    Returns:
+        int: The number representing the drawn card.
+    """
     global used_cards
     remake = True
     while remake:
@@ -20,6 +26,15 @@ def draw_card():
     return card
 
 def dict_to_xml(variables):
+    """
+    Convert a dictionary to an XML string.
+
+    Args:
+        variables (dict): The dictionary to be converted.
+
+    Returns:
+        str: The XML string representation of the dictionary.
+    """
     root = ET.Element("root") 
     for key, value in variables.items():
         element = ET.SubElement(root, key)
@@ -41,6 +56,18 @@ def dict_to_xml(variables):
     return xml_string
 
 def send_info(players, pot, board_cards, game_phase_count):
+    """
+    Sends game information to each player.
+
+    Args:
+        players (list): List of Player objects representing the players in the game.
+        pot (int): The current pot amount.
+        board_cards (list): List of cards on the board.
+        game_phase_count (int): The current game phase count.
+
+    Returns:
+        None
+    """
     for player in players:
         try:
             # Crea un socket per la connessione al giocatore
@@ -57,6 +84,16 @@ def send_info(players, pot, board_cards, game_phase_count):
             print(f"Errore durante la connessione al giocatore: {e}")
 
 def set_blind(turn, players):
+    """
+    Sets the blind and bet for the players based on the turn.
+
+    Parameters:
+    turn (int): The current turn.
+    players (list): The list of players.
+
+    Returns:
+    list: The updated list of players with the blind and bet set.
+    """
     i = 0
     for player in players:
         if player.turn == turn + 1:
@@ -69,12 +106,27 @@ def set_blind(turn, players):
     return players
 
 def calculate_pot(players):
+    """
+    Calculate the total pot amount based on the bets of all players.
+
+    Args:
+        players (list): A list of Player objects representing the players in the game.
+
+    Returns:
+        int: The total pot amount.
+    """
     pot = 0
     for player in players:
         pot += player.bet
     return pot
 
 def receive_move():
+    """
+    Receive move from the client.
+
+    Returns:
+        str: The move received from the client.
+    """
     server_host = '127.0.0.1'
     server_port = 888
     # Crea un socket TCP/IP
@@ -101,6 +153,9 @@ def receive_move():
     return data_str
 
 def deal_player_cards():
+    """
+    Deals two cards to each player in the seated_players list.
+    """
     global seated_players
     i = 0
     while i < 2:
@@ -112,12 +167,21 @@ def deal_player_cards():
         i += 1
 
 def deal_community_cards():
+    """
+    Deals three community cards by appending them to the `community_cards` list.
+    """
     i = 0
     while i < 3:
         community_cards.append(draw_card())
         i += 1
 
 def check_equal_bets():
+    """
+    Check if all seated players have equal bets.
+
+    Returns:
+        bool: True if all seated players have equal bets, False otherwise.
+    """
     sentinel = True
     for player in seated_players:
         if player.seated:
@@ -129,6 +193,12 @@ def check_equal_bets():
     return sentinel
 
 def calculate_max_bet():
+    """
+    Calculate the maximum bet among all seated players.
+
+    Returns:
+        int: The maximum bet value.
+    """
     max_bet = 0
     for player in seated_players:
         if player.bet > max_bet:
@@ -136,27 +206,70 @@ def calculate_max_bet():
     return max_bet
 
 def reset_bets():
+    """
+    Resets the bets of all seated players to zero.
+    """
     for player in seated_players:
         player.bet = 0
 
 def get_rank(card):
-    # Funzione per ottenere il valore della carta per il ranking
+    """
+    Get the rank value of a card for ranking purposes.
+
+    Parameters:
+    card (int): The numerical value of the card.
+
+    Returns:
+    int: The rank value of the card.
+    """
     return (card - 1) % 13 + 1
 
 def is_flush(hand):
-    # Verifica se tutte le carte nella mano hanno lo stesso seme
+    """
+    Check if all cards in the hand have the same suit.
+
+    Args:
+        hand (list): A list of integers representing the cards in the hand.
+
+    Returns:
+        bool: True if all cards have the same suit, False otherwise.
+    """
     return len(set(card // 13 for card in hand)) == 1
 
 def is_straight(hand):
-    # Verifica se le carte nella mano formano una scala
+    """
+    Check if the cards in the hand form a straight.
+
+    Args:
+        hand (list): A list of cards in the hand.
+
+    Returns:
+        bool: True if the hand forms a straight, False otherwise.
+    """
     sorted_hand = sorted(get_rank(card) for card in hand)
     return sorted_hand[-1] - sorted_hand[0] == 4 and len(set(sorted_hand)) == 5
 
 def evaluate_hand(hand, board):
-    # Valutazione della mano sommando il valore delle carte
+    """
+    Evaluate the strength of a poker hand by summing the values of the cards.
+
+    Parameters:
+    hand (list): A list of cards representing the player's hand.
+    board (list): A list of cards representing the community cards on the board.
+
+    Returns:
+    int: The total value of the hand.
+
+    """
     return sum(get_rank(card) for card in hand + board)
 
 def find_winner():
+    """
+    Finds the winner among the players based on their hand cards and the community cards.
+
+    Returns:
+        int: The index of the winner player.
+    """
     global pot
     # Trova il vincitore tra i giocatori in base alle carte in mano e le carte sul tavolo
     winner_index = 0
@@ -171,6 +284,18 @@ def find_winner():
     return winner_index + 1
 
 def communicate_winner():
+    """
+    Communicates the winner index to each seated player.
+
+    This function creates a socket connection to each player and sends the winner index.
+    If an error occurs during the connection, it prints the error message.
+
+    Parameters:
+    None
+
+    Returns:
+    None
+    """
     global winner_index
     for player in seated_players:
         try:
@@ -191,6 +316,17 @@ community_cards = []
 pot = 0
 
 def game(game_phase_s, seated_players_s, winner_index_s):
+    """
+    Main game loop that manages the flow of the poker game.
+
+    Args:
+        game_phase_s (str): The current game phase.
+        seated_players_s (list): List of seated players.
+        winner_index_s (int): Index of the winner.
+
+    Returns:
+        None
+    """
     global seated_players
     seated_players=seated_players_s
     turn_count = 1

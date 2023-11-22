@@ -1,7 +1,7 @@
 import socket
 from Player import Player
 from Thread_game import game
-# from Thread_waiting import waiting
+from Thread_waiting import waiting
 import threading
 import time
 import sqlite3
@@ -92,16 +92,16 @@ def main():
             # Crea un oggetto Thread
             
             thread_partita = threading.Thread(target=game, args=(game_phase, seated_players, winner_index))
-
-            # thread = threading.Thread(target=partita)
+            thread_waiting= threading.Thread(target=waiting, args=(game_phase, seated_players, count))
+       
 
             # Start the thread
             thread_partita.start()
-            # thread_waiting.start()
+            thread_waiting.start()
 
             # Wait for the thread to finish before exiting
             thread_partita.join()
-            # thread_waiting.join()
+            thread_waiting.join()
             print("Fake")
             clients=[]
             timeout = False
