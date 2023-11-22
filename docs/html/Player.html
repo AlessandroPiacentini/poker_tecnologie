@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module Player</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>Player</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cpiace%5Conedrive%5Cdesktop%5Cvscode%5Cpoker_tecnologie%5Csrc%5Cserver%5Cplayer.py">c:\users\piace\onedrive\desktop\vscode\poker_tecnologie\src\server\player.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="builtins.html#object">builtins.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="Player.html#Player">Player</a>
+</font></dt></dl>
+</dd>
+</dl>
+ <p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Player">class <strong>Player</strong></a>(<a href="builtins.html#object">builtins.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt><a href="#Player">Player</a>(nome,&nbsp;carta1,&nbsp;carta2,&nbsp;puntata,&nbsp;soldi,&nbsp;turno,&nbsp;blind,&nbsp;seduto,&nbsp;posto,&nbsp;ip,&nbsp;port)<br>
+&nbsp;<br>
+Represents&nbsp;a&nbsp;player&nbsp;in&nbsp;the&nbsp;poker&nbsp;game.<br>
+&nbsp;<br>
+Attributes:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nome&nbsp;(str):&nbsp;The&nbsp;name&nbsp;of&nbsp;the&nbsp;player.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;carta1&nbsp;(str):&nbsp;The&nbsp;first&nbsp;card&nbsp;of&nbsp;the&nbsp;player.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;carta2&nbsp;(str):&nbsp;The&nbsp;second&nbsp;card&nbsp;of&nbsp;the&nbsp;player.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;puntata&nbsp;(int):&nbsp;The&nbsp;amount&nbsp;of&nbsp;chips&nbsp;the&nbsp;player&nbsp;has&nbsp;bet.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;soldi&nbsp;(int):&nbsp;The&nbsp;amount&nbsp;of&nbsp;chips&nbsp;the&nbsp;player&nbsp;has.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;turno&nbsp;(bool):&nbsp;Indicates&nbsp;if&nbsp;it's&nbsp;the&nbsp;player's&nbsp;turn.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;blind&nbsp;(bool):&nbsp;Indicates&nbsp;if&nbsp;the&nbsp;player&nbsp;is&nbsp;a&nbsp;blind.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;seduto&nbsp;(bool):&nbsp;Indicates&nbsp;if&nbsp;the&nbsp;player&nbsp;is&nbsp;seated.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;posto&nbsp;(int):&nbsp;The&nbsp;position&nbsp;of&nbsp;the&nbsp;player&nbsp;at&nbsp;the&nbsp;table.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ip&nbsp;(str):&nbsp;The&nbsp;IP&nbsp;address&nbsp;of&nbsp;the&nbsp;player.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;port&nbsp;(int):&nbsp;The&nbsp;port&nbsp;number&nbsp;of&nbsp;the&nbsp;player's&nbsp;connection.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Player-__init__"><strong>__init__</strong></a>(self, nome, carta1, carta2, puntata, soldi, turno, blind, seduto, posto, ip, port)</dt><dd><tt>Initializes&nbsp;a&nbsp;<a href="#Player">Player</a>&nbsp;<a href="builtins.html#object">object</a>&nbsp;with&nbsp;the&nbsp;given&nbsp;attributes.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;nome&nbsp;(str):&nbsp;The&nbsp;name&nbsp;of&nbsp;the&nbsp;player.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;carta1&nbsp;(str):&nbsp;The&nbsp;first&nbsp;card&nbsp;of&nbsp;the&nbsp;player.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;carta2&nbsp;(str):&nbsp;The&nbsp;second&nbsp;card&nbsp;of&nbsp;the&nbsp;player.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;puntata&nbsp;(int):&nbsp;The&nbsp;amount&nbsp;of&nbsp;chips&nbsp;the&nbsp;player&nbsp;has&nbsp;bet.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;soldi&nbsp;(int):&nbsp;The&nbsp;amount&nbsp;of&nbsp;chips&nbsp;the&nbsp;player&nbsp;has.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;turno&nbsp;(bool):&nbsp;Indicates&nbsp;if&nbsp;it's&nbsp;the&nbsp;player's&nbsp;turn.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;blind&nbsp;(bool):&nbsp;Indicates&nbsp;if&nbsp;the&nbsp;player&nbsp;is&nbsp;a&nbsp;blind.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;seduto&nbsp;(bool):&nbsp;Indicates&nbsp;if&nbsp;the&nbsp;player&nbsp;is&nbsp;seated.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;posto&nbsp;(int):&nbsp;The&nbsp;position&nbsp;of&nbsp;the&nbsp;player&nbsp;at&nbsp;the&nbsp;table.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;ip&nbsp;(str):&nbsp;The&nbsp;IP&nbsp;address&nbsp;of&nbsp;the&nbsp;player.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;port&nbsp;(int):&nbsp;The&nbsp;port&nbsp;number&nbsp;of&nbsp;the&nbsp;player's&nbsp;connection.</tt></dd></dl>
+
+<hr>
+Data descriptors defined here:<br>
+<dl><dt><strong>__dict__</strong></dt>
+<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+<dl><dt><strong>__weakref__</strong></dt>
+<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;object&nbsp;(if&nbsp;defined)</tt></dd>
+</dl>
+</td></tr></table></td></tr></table>
+</body></html>

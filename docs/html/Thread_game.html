@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module Thread_game</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>Thread_game</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cpiace%5Conedrive%5Cdesktop%5Cvscode%5Cpoker_tecnologie%5Csrc%5Cserver%5Cthread_game.py">c:\users\piace\onedrive\desktop\vscode\poker_tecnologie\src\server\thread_game.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="xml.etree.ElementTree.html">xml.etree.ElementTree</a><br>
+<a href="random.html">random</a><br>
+</td><td width="25%" valign=top><a href="socket.html">socket</a><br>
+<a href="sqlite3.html">sqlite3</a><br>
+</td><td width="25%" valign=top><a href="threading.html">threading</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-calculate_max_bet"><strong>calculate_max_bet</strong></a>()</dt><dd><tt>Calculate&nbsp;the&nbsp;maximum&nbsp;bet&nbsp;among&nbsp;all&nbsp;seated&nbsp;players.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;int:&nbsp;The&nbsp;maximum&nbsp;bet&nbsp;value.</tt></dd></dl>
+ <dl><dt><a name="-calculate_pot"><strong>calculate_pot</strong></a>(players)</dt><dd><tt>Calculate&nbsp;the&nbsp;total&nbsp;pot&nbsp;amount&nbsp;based&nbsp;on&nbsp;the&nbsp;bets&nbsp;of&nbsp;all&nbsp;players.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;players&nbsp;(list):&nbsp;A&nbsp;list&nbsp;of&nbsp;Player&nbsp;objects&nbsp;representing&nbsp;the&nbsp;players&nbsp;in&nbsp;the&nbsp;game.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;int:&nbsp;The&nbsp;total&nbsp;pot&nbsp;amount.</tt></dd></dl>
+ <dl><dt><a name="-check_equal_bets"><strong>check_equal_bets</strong></a>()</dt><dd><tt>Check&nbsp;if&nbsp;all&nbsp;seated&nbsp;players&nbsp;have&nbsp;equal&nbsp;bets.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;bool:&nbsp;True&nbsp;if&nbsp;all&nbsp;seated&nbsp;players&nbsp;have&nbsp;equal&nbsp;bets,&nbsp;False&nbsp;otherwise.</tt></dd></dl>
+ <dl><dt><a name="-communicate_winner"><strong>communicate_winner</strong></a>()</dt><dd><tt>Communicates&nbsp;the&nbsp;winner&nbsp;index&nbsp;to&nbsp;each&nbsp;seated&nbsp;player.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;creates&nbsp;a&nbsp;socket&nbsp;connection&nbsp;to&nbsp;each&nbsp;player&nbsp;and&nbsp;sends&nbsp;the&nbsp;winner&nbsp;index.<br>
+If&nbsp;an&nbsp;error&nbsp;occurs&nbsp;during&nbsp;the&nbsp;connection,&nbsp;it&nbsp;prints&nbsp;the&nbsp;error&nbsp;message.<br>
+&nbsp;<br>
+Parameters:<br>
+None<br>
+&nbsp;<br>
+Returns:<br>
+None</tt></dd></dl>
+ <dl><dt><a name="-deal_community_cards"><strong>deal_community_cards</strong></a>()</dt><dd><tt>Deals&nbsp;three&nbsp;community&nbsp;cards&nbsp;by&nbsp;appending&nbsp;them&nbsp;to&nbsp;the&nbsp;`community_cards`&nbsp;list.</tt></dd></dl>
+ <dl><dt><a name="-deal_player_cards"><strong>deal_player_cards</strong></a>()</dt><dd><tt>Deals&nbsp;two&nbsp;cards&nbsp;to&nbsp;each&nbsp;player&nbsp;in&nbsp;the&nbsp;seated_players&nbsp;list.</tt></dd></dl>
+ <dl><dt><a name="-dict_to_xml"><strong>dict_to_xml</strong></a>(variables)</dt><dd><tt>Convert&nbsp;a&nbsp;dictionary&nbsp;to&nbsp;an&nbsp;XML&nbsp;string.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;variables&nbsp;(dict):&nbsp;The&nbsp;dictionary&nbsp;to&nbsp;be&nbsp;converted.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;str:&nbsp;The&nbsp;XML&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;dictionary.</tt></dd></dl>
+ <dl><dt><a name="-draw_card"><strong>draw_card</strong></a>()</dt><dd><tt>Function&nbsp;to&nbsp;draw&nbsp;a&nbsp;card&nbsp;from&nbsp;a&nbsp;deck&nbsp;of&nbsp;cards.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;int:&nbsp;The&nbsp;number&nbsp;representing&nbsp;the&nbsp;drawn&nbsp;card.</tt></dd></dl>
+ <dl><dt><a name="-evaluate_hand"><strong>evaluate_hand</strong></a>(hand, board)</dt><dd><tt>Evaluate&nbsp;the&nbsp;strength&nbsp;of&nbsp;a&nbsp;poker&nbsp;hand&nbsp;by&nbsp;summing&nbsp;the&nbsp;values&nbsp;of&nbsp;the&nbsp;cards.<br>
+&nbsp;<br>
+Parameters:<br>
+hand&nbsp;(list):&nbsp;A&nbsp;list&nbsp;of&nbsp;cards&nbsp;representing&nbsp;the&nbsp;player's&nbsp;hand.<br>
+board&nbsp;(list):&nbsp;A&nbsp;list&nbsp;of&nbsp;cards&nbsp;representing&nbsp;the&nbsp;community&nbsp;cards&nbsp;on&nbsp;the&nbsp;board.<br>
+&nbsp;<br>
+Returns:<br>
+int:&nbsp;The&nbsp;total&nbsp;value&nbsp;of&nbsp;the&nbsp;hand.</tt></dd></dl>
+ <dl><dt><a name="-find_winner"><strong>find_winner</strong></a>()</dt><dd><tt>Finds&nbsp;the&nbsp;winner&nbsp;among&nbsp;the&nbsp;players&nbsp;based&nbsp;on&nbsp;their&nbsp;hand&nbsp;cards&nbsp;and&nbsp;the&nbsp;community&nbsp;cards.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;int:&nbsp;The&nbsp;index&nbsp;of&nbsp;the&nbsp;winner&nbsp;player.</tt></dd></dl>
+ <dl><dt><a name="-game"><strong>game</strong></a>(game_phase_s, seated_players_s, winner_index_s)</dt><dd><tt>Main&nbsp;game&nbsp;loop&nbsp;that&nbsp;manages&nbsp;the&nbsp;flow&nbsp;of&nbsp;the&nbsp;poker&nbsp;game.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;game_phase_s&nbsp;(str):&nbsp;The&nbsp;current&nbsp;game&nbsp;phase.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;seated_players_s&nbsp;(list):&nbsp;List&nbsp;of&nbsp;seated&nbsp;players.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;winner_index_s&nbsp;(int):&nbsp;Index&nbsp;of&nbsp;the&nbsp;winner.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+ <dl><dt><a name="-get_rank"><strong>get_rank</strong></a>(card)</dt><dd><tt>Get&nbsp;the&nbsp;rank&nbsp;value&nbsp;of&nbsp;a&nbsp;card&nbsp;for&nbsp;ranking&nbsp;purposes.<br>
+&nbsp;<br>
+Parameters:<br>
+card&nbsp;(int):&nbsp;The&nbsp;numerical&nbsp;value&nbsp;of&nbsp;the&nbsp;card.<br>
+&nbsp;<br>
+Returns:<br>
+int:&nbsp;The&nbsp;rank&nbsp;value&nbsp;of&nbsp;the&nbsp;card.</tt></dd></dl>
+ <dl><dt><a name="-is_flush"><strong>is_flush</strong></a>(hand)</dt><dd><tt>Check&nbsp;if&nbsp;all&nbsp;cards&nbsp;in&nbsp;the&nbsp;hand&nbsp;have&nbsp;the&nbsp;same&nbsp;suit.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;hand&nbsp;(list):&nbsp;A&nbsp;list&nbsp;of&nbsp;integers&nbsp;representing&nbsp;the&nbsp;cards&nbsp;in&nbsp;the&nbsp;hand.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;bool:&nbsp;True&nbsp;if&nbsp;all&nbsp;cards&nbsp;have&nbsp;the&nbsp;same&nbsp;suit,&nbsp;False&nbsp;otherwise.</tt></dd></dl>
+ <dl><dt><a name="-is_straight"><strong>is_straight</strong></a>(hand)</dt><dd><tt>Check&nbsp;if&nbsp;the&nbsp;cards&nbsp;in&nbsp;the&nbsp;hand&nbsp;form&nbsp;a&nbsp;straight.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;hand&nbsp;(list):&nbsp;A&nbsp;list&nbsp;of&nbsp;cards&nbsp;in&nbsp;the&nbsp;hand.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;bool:&nbsp;True&nbsp;if&nbsp;the&nbsp;hand&nbsp;forms&nbsp;a&nbsp;straight,&nbsp;False&nbsp;otherwise.</tt></dd></dl>
+ <dl><dt><a name="-receive_move"><strong>receive_move</strong></a>()</dt><dd><tt>Receive&nbsp;move&nbsp;from&nbsp;the&nbsp;client.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;str:&nbsp;The&nbsp;move&nbsp;received&nbsp;from&nbsp;the&nbsp;client.</tt></dd></dl>
+ <dl><dt><a name="-reset_bets"><strong>reset_bets</strong></a>()</dt><dd><tt>Resets&nbsp;the&nbsp;bets&nbsp;of&nbsp;all&nbsp;seated&nbsp;players&nbsp;to&nbsp;zero.</tt></dd></dl>
+ <dl><dt><a name="-send_info"><strong>send_info</strong></a>(players, pot, board_cards, game_phase_count)</dt><dd><tt>Sends&nbsp;game&nbsp;information&nbsp;to&nbsp;each&nbsp;player.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;players&nbsp;(list):&nbsp;List&nbsp;of&nbsp;Player&nbsp;objects&nbsp;representing&nbsp;the&nbsp;players&nbsp;in&nbsp;the&nbsp;game.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;pot&nbsp;(int):&nbsp;The&nbsp;current&nbsp;pot&nbsp;amount.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;board_cards&nbsp;(list):&nbsp;List&nbsp;of&nbsp;cards&nbsp;on&nbsp;the&nbsp;board.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;game_phase_count&nbsp;(int):&nbsp;The&nbsp;current&nbsp;game&nbsp;phase&nbsp;count.<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+ <dl><dt><a name="-set_blind"><strong>set_blind</strong></a>(turn, players)</dt><dd><tt>Sets&nbsp;the&nbsp;blind&nbsp;and&nbsp;bet&nbsp;for&nbsp;the&nbsp;players&nbsp;based&nbsp;on&nbsp;the&nbsp;turn.<br>
+&nbsp;<br>
+Parameters:<br>
+turn&nbsp;(int):&nbsp;The&nbsp;current&nbsp;turn.<br>
+players&nbsp;(list):&nbsp;The&nbsp;list&nbsp;of&nbsp;players.<br>
+&nbsp;<br>
+Returns:<br>
+list:&nbsp;The&nbsp;updated&nbsp;list&nbsp;of&nbsp;players&nbsp;with&nbsp;the&nbsp;blind&nbsp;and&nbsp;bet&nbsp;set.</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>community_cards</strong> = []<br>
+<strong>pot</strong> = 0<br>
+<strong>seated_players</strong> = []<br>
+<strong>used_cards</strong> = []</td></tr></table>
+</body></html>
