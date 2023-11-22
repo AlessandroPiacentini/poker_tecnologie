@@ -106,7 +106,7 @@ def main():
 
             # Crea un oggetto Thread
             
-            thread = threading.Thread(target=partita)
+            thread = threading.Thread(target=partita, args=(fase_di_gioco, giocatori_seduti, index_vincitore))
 
             # thread = threading.Thread(target=partita)
 

@@ -4,7 +4,7 @@ import sqlite3
 import xml.etree.ElementTree as ET
 
 import threading
-from main import fase_di_gioco, lock, giocatori_seduti, index_vincitore
+# from main import fase_di_gioco, lock, giocatori_seduti, index_vincitore
 
 import random
 
@@ -235,17 +235,20 @@ giocatori_seduti=[]
 carte_banco=[]
 piatto=0
 
-def partita():
+def partita(fase_di_gioco_s, giocatori_seduti_s, index_vincitore_s):
 
     global giocatori_seduti
+    giocatori_seduti=giocatori_seduti_s
     cout_turno=1
     global fase_di_gioco
+    fase_di_gioco=fase_di_gioco_s
     global carte_banco
     global piatto
     cout_fasi_partita=0
     global carte_uscite
     puntate_uguali=True
     global index_vincitore
+    index_vincitore=index_vincitore_s
 
     
     
