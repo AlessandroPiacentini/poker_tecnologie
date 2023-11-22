@@ -6,8 +6,8 @@ import threading
 # Initialize the vector for messages
 seated_players = []
 max_messages = 6
-game_phase
-count
+game_phase=""
+count=0
 # Function that handles a client connection
 def handle_client(client_socket, address, client_ip, client_port):
     global seated_players
