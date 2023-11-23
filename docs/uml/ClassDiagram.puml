@@ -40,20 +40,8 @@ class threading {
     + Lock(): void
 }
 
-class sqlite3 {
-    + connect(database: str): Connection
-}
 
-class Connection {
-    + cursor(): Cursor
-    + commit(): void
-    + close(): void
-}
 
-class Cursor {
-    + execute(sql: str): void
-    + fetchall(): list
-}
 
 socket --> Player
 Player --> Thread_game
@@ -65,8 +53,5 @@ main --> Player
 main --> Thread_game
 main --> Thread_waiting
 main --> threading
-main --> sqlite3
-main --> Connection
-main --> Cursor
 
 @enduml

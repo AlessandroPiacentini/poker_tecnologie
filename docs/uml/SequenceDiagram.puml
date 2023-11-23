@@ -2,44 +2,31 @@
 actor Player
 participant Client
 participant Server
-participant Database
 
 Player -> Client: Effettua accesso
 Client -> Server: Richiesta connessione TCP
 Server -> Client: Conferma connessione TCP
 Client -> Server: Richiesta partita
-Server -> Database: Verifica disponibilità partita
-Database --> Server: Risposta disponibilità partita
 Server -> Client: Conferma partita
 Client -> Server: Effettua puntata
 Server -> Client: Conferma puntata
 Client -> Server: Richiesta carte
-Server -> Database: Estrazione carte
-Database --> Server: Carte estratte
 Server -> Client: Consegna carte
 Client -> Server: Richiesta azione
 Server -> Client: Conferma azione
 Client -> Server: Effettua azione
 Server -> Client: Conferma azione
 Client -> Server: Richiesta carte aggiuntive
-Server -> Database: Estrazione carte aggiuntive
-Database --> Server: Carte aggiuntive estratte
 Server -> Client: Consegna carte aggiuntive
 Client -> Server: Richiesta azione
 Server -> Client: Conferma azione
 Client -> Server: Effettua azione
 Server -> Client: Conferma azione
 Client -> Server: Richiesta carte finali
-Server -> Database: Estrazione carte finali
-Database --> Server: Carte finali estratte
 Server -> Client: Consegna carte finali
 Client -> Server: Richiesta vincitore
-Server -> Database: Calcolo vincitore
-Database --> Server: Vincitore calcolato
 Server -> Client: Consegna vincitore
 Client -> Server: Richiesta nuova partita
-Server -> Database: Verifica disponibilità nuova partita
-Database --> Server: Risposta disponibilità nuova partita
 Server -> Client: Conferma nuova partita
 Client -> Server: Richiesta disconnessione
 Server -> Client: Conferma disconnessione
