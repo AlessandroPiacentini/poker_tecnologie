@@ -89,8 +89,7 @@ namespace Client
         private void RichiestaSuccesso()
         {
             // Creazione di un'istanza della terza finestra (finestra di gioco)
-            WindowDiGioco WindowDiGioco = new WindowDiGioco();
-            //WindowDiGioco WindowDiGioco = new WindowDiGioco(client, stream);
+            WindowDiGioco WindowDiGioco = new WindowDiGioco(client, stream);
 
             // Mostra la nuova finestra
             WindowDiGioco.Show();

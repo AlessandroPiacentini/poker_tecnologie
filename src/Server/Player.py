@@ -2,7 +2,7 @@ import socket
 
 class Player:
     # Costruttore della classe
-    def __init__(self, nome, carta1, carta2, puntata, soldi, turno, blind, seduto, posto, ip, port):
+    def __init__(self, nome, carta1, carta2, puntata, soldi, turno, blind, seduto, posto, ip, port , client_socket):
         self.nome = nome
         self.carta1 = carta1
         self.carta2 = carta2
@@ -14,5 +14,6 @@ class Player:
         self.posto=posto
         self.ip=ip
         self.port=port
+        self.client_socket=client_socket
 
     

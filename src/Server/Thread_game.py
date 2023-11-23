@@ -22,45 +22,72 @@ def draw_card():
 
 #Creazione xml
 def dict_to_xml(variables):
-    root = ET.Element("root") 
+    root = ET.Element("root")
+
     for key, value in variables.items():
         element = ET.SubElement(root, key)
-        if isinstance(value, list):
-            # Se il valore è una lista, itera sugli elementi della lista
-            for item in value:
-                if isinstance(item, Player):
-                    sub_element = ET.SubElement(element, "Player")
-                    for attrib_name, attrib_value in item.__dict__.items():
-                        attrib_element = ET.SubElement(sub_element, attrib_name)
+
+        if key == 'players' and isinstance(value, list):
+            players_element = ET.SubElement(element, "players")
+            for player in value:
+                if isinstance(player, Player):
+                    player_element = ET.SubElement(players_element, "Player")
+                    for attrib_name, attrib_value in player.__dict__.items():
+                        attrib_element = ET.SubElement(player_element, attrib_name)
                         attrib_element.text = str(attrib_value)
-                elif isinstance(item, int):
-                    item_element = ET.SubElement(element, "item")
-                    item_element.text = str(item)
+        elif isinstance(value, list):
+            items_element = ET.SubElement(element, key)
+            for item in value:
+                item_element = ET.SubElement(items_element, "item")
+                item_element.text = str(item)
+        elif isinstance(value, dict):
+            for sub_key, sub_value in value.items():
+                sub_element = ET.SubElement(element, sub_key)
+                sub_element.text = str(sub_value)
         else:
             element.text = str(value)
 
     xml_string = ET.tostring(root).decode("utf-8")
     return xml_string
+    # root = ET.Element("root") 
+    # for key, value in variables.items():
+    #     element = ET.SubElement(root, key)
+    #     if isinstance(value, list):
+    #         # Se il valore è una lista, itera sugli elementi della lista
+    #         for item in value:
+    #             if isinstance(item, Player):
+    #                 sub_element = ET.SubElement(element, "Player")
+    #                 for attrib_name, attrib_value in item.__dict__.items():
+    #                     attrib_element = ET.SubElement(sub_element, attrib_name)
+    #                     attrib_element.text = str(attrib_value)
+    #             elif isinstance(item, int):
+    #                 item_element = ET.SubElement(element, "item")
+    #                 item_element.text = str(item)
+    #     else:
+    #         element.text = str(value)
+
+    # xml_string = ET.tostring(root).decode("utf-8")
+    # return xml_string
 
 #Invia le informazioni ai giocatori
 def send_info(players, pot, board_cards, game_phase_count):
     for player in players:
         try:
-            # Crea un socket per la connessione al giocatore
-            player_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             print(f"Connessione a {player.ip}")
-            player_socket.connect((player.ip, player.port))
-            my_variables = {"pot": pot, "board_cards": board_cards, "game_phase_count": game_phase_count,
-                            "players": players}
+
+            my_variables = {
+                "pot": pot,
+                "board_cards": board_cards,
+                "game_phase_count": game_phase_count,
+                "players": players
+            }
 
             xml_result = dict_to_xml(my_variables)
-            che_cose = "dati"
-            
-            player_socket.send(che_cose.encode('utf-8'))
-            player_socket.send(xml_result.encode('utf-8'))
-            player_socket.close()
+
+            # Invio dei dati al client tramite il socket del giocatore
+            player.client_socket.sendall(("inizio;" + xml_result).encode('utf-8'))
         except Exception as e:
-            print(f"Errore durante la connessione al giocatore: {e}")
+            print(f"Errore durante l'invio di informazioni al giocatore: {e}")
 
 #Small blind e big blind
 def set_blind(turn, players):
@@ -111,7 +138,7 @@ def receive_move():
 
 #Distribuisce le carte ai giocatori seduti nel gioco.
 def deal_player_cards():
-    global seated_players
+    #global seated_players
     i = 0
     while i < 2:
         for player in seated_players:
@@ -205,59 +232,64 @@ def communicate_winner():
 used_cards = []
 seated_players = []
 community_cards = []
-pot = 0
+pot = 0                                 #Invia questo
 
 #E il run del thread
 def game(game_phase_s, seated_players_s, winner_index_s):
-    global seated_players
-    seated_players=seated_players_s
-    turn_count = 1
+    global seated_players                #Invia questo
+    seated_players=seated_players_s      #L'array dei giocatori
+    turn_count = 1                       #In che turno ci troviamo
     global game_phase
     game_phase=game_phase_s
-    global community_cards
+    global community_cards                #Invia questo
     global pot
-    game_phase_count = 0
+    game_phase_count = 0                  #Invia questo
     global used_cards
     equal_bets = True
     global winner_index
     winner_index=winner_index_s
-
-    while game_phase == "game":
-        if seated_players[turn_count].seated and equal_bets:
-            if len(seated_players) > 3:                                     #Se il numero di giocatori seduti è maggiore di 3 Imposta il BLIND
-                seated_players = set_blind(turn_count, seated_players)
-            if game_phase_count == 0:
-                deal_player_cards()                                         #Distribuisce le carte ai giocatori seduti nel gioco.
-            elif game_phase_count == 1:
-                deal_community_cards()                                      #Distribuisce le carte al tavolo
-            else:
-                community_cards.append(draw_card())                         #Al terzo turno inizia a pescare
+    
+    deal_player_cards()
+    deal_community_cards()
+    send_info(seated_players, pot, community_cards, game_phase_count)
+    
+    print(f"VAFFANCULO")
+    # while game_phase == "game":
+    #     if seated_players[turn_count].seated and equal_bets:
+    #         if len(seated_players) > 3:                                     #Se il numero di giocatori seduti è maggiore di 3 Imposta il BLIND
+    #             seated_players = set_blind(turn_count, seated_players)
+    #         if game_phase_count == 0:
+    #             deal_player_cards()                                         #Distribuisce le carte ai giocatori seduti nel gioco.
+    #         elif game_phase_count == 1:
+    #             deal_community_cards()                                      #Distribuisce le carte al tavolo
+    #         else:
+    #             community_cards.append(draw_card())                         #Al terzo turno inizia a pescare
             
-            #seated_players = array di giocatori con su le info
-            send_info(seated_players, pot, community_cards, used_cards, game_phase_count)       #Invia i cambiamenti fatti nel server al Client
+    #         #seated_players = array di giocatori con su le info
+    #         send_info(seated_players, pot, community_cards, used_cards, game_phase_count)       #Invia i cambiamenti fatti nel server al Client
 
-            move = receive_move()
-            if move.split(";")[0] == "knock":
-                pass
-            elif move.split(";")[0] == "add":
-                seated_players[turn_count].bet = move.split(";")[1]
-            elif move.split(";")[0] == "see":
-                seated_players[turn_count].bet = calculate_max_bet()
-            elif move.split(";")[0] == "leave":
-                seated_players[turn_count].seated = False
+    #         move = receive_move()
+    #         if move.split(";")[0] == "knock":
+    #             pass
+    #         elif move.split(";")[0] == "add":
+    #             seated_players[turn_count].bet = move.split(";")[1]
+    #         elif move.split(";")[0] == "see":
+    #             seated_players[turn_count].bet = calculate_max_bet()
+    #         elif move.split(";")[0] == "leave":
+    #             seated_players[turn_count].seated = False
 
-        turn_count += 1
-        if turn_count == len(seated_players):
-            turn_count = 1
-            if check_equal_bets():
-                equal_bets = True
-                game_phase_count += 1
-                pot = calculate_pot(seated_players)
-                reset_bets()
-            else:
-                equal_bets = False
+    #     turn_count += 1
+    #     if turn_count == len(seated_players):
+    #         turn_count = 1
+    #         if check_equal_bets():
+    #             equal_bets = True
+    #             game_phase_count += 1
+    #             pot = calculate_pot(seated_players)
+    #             reset_bets()
+    #         else:
+    #             equal_bets = False
 
-        if game_phase_count == 3:
-            game_phase = "waiting"
+    #     if game_phase_count == 3:
+    #         game_phase = "waiting"
 
-    winner_index = find_winner()
+    # winner_index = find_winner()

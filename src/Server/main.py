@@ -15,7 +15,7 @@ winner_index = 0
 lock = threading.Lock()
 
 
-count = 0
+count = 1
 def main():
     global seated_players 
     clients = []
@@ -35,7 +35,7 @@ def main():
         while not timeout:
             try:
                 print(f"Waiting for connections on {server_host}:{server_port}...")
-                client_socket, client_address = server_socket.accept()
+                client_socket, client_address = server_socket.accept()      #Accetta la richiesta di connessione (client_socket, client_address)
                 client_ip, client_port = client_address                     # Extract the IP address and port
 
                 print(f"Connection from: {client_address}")
@@ -51,57 +51,52 @@ def main():
                 if data_str.split(";")[0] == "entry" and len(seated_players) < 6:
                     count += 1
                     response = f"ok;{count}"
-                    player = Player(data_str.split(";")[1], 0, 0, 0, int(data_str.split(";")[2]), "no", "no", True, count, client_ip, client_port)
-                    clients.append((client_ip, client_port))
+                    player = Player(data_str.split(";")[1], 0, 0, 0, int(data_str.split(";")[2]), "no", "no", True, count, client_ip, client_port, client_socket)
+                    #clients.append((client_ip, client_port))
                     seated_players.append(player)
                     print(count)
                     if(count>=2):
-                        server_socket.settimeout(10)
+                        server_socket.settimeout(2)                           #Da il tempo a altri giocatori di entrare
                 else:
                     response = "err"
 
-                client_socket.send(response.encode('utf-8'))                   # Rimane in attesa di altre connessioni
+                client_socket.send(response.encode('utf-8'))                   #Invia al Client una risposta
 
             except socket.timeout:
                 timeout = True
-                server_socket.close()
+                #server_socket.close()
 
-            finally:
-                try:
-                    # Close the connection
-                    if client_socket:
-                        client_socket.close()
-                except:
-                    print("Exception")
+            # finally:
+            #     try:
+            #         # Close the connection
+            #         if client_socket:
+            #             client_socket.close()
+            #     except:
+            #         print("Exception")
 
         if count >= 2:
             print("Starting the game...")
             global game_phase
-            socket_game = f"{server_host};888"
-            for client_ip, client_port in clients:                  #itera attraverso una lista clients, contenente gli indirizzi IP e le porte dei client connessi al server.
-                print(f"ip: {client_ip}; port: {client_port}")      #Stampa l'indirizzo IP e la porta di ciascun client nella lista clients
-                try:
-                    # Create a socket for connecting to the player
-                    player_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)       #tentativo di connettersi a ciascun client utilizzando un socket TCP 
-                    player_socket.connect((client_ip, client_port))                         #Prova a stabilire una connessione al client utilizzando l'indirizzo IP e la porta del client attualmente iterato.
-                    player_socket.send(socket_game.encode('utf-8'))                         #Una volta connesso al client, invia la stringa socket_game convertita in byte usando l'encoding UTF-8.
-                    player_socket.close()                                                   #Chiude la connessione con il client dopo aver inviato i dati.
-                except Exception as e:
-                    print(f"Error connecting to the player: {e}")
+            # socket_game = f"{server_host};888"
+            # for client_ip, client_port in clients:                  #itera attraverso una lista clients, contenente gli indirizzi IP e le porte dei client connessi al server.
+            #     print(f"ip: {client_ip}; port: {client_port}")      #Stampa l'indirizzo IP e la porta di ciascun client nella lista clients
+            #     try:
+            #         # Create a socket for connecting to the player
+            #         player_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)       #tentativo di connettersi a ciascun client utilizzando un socket TCP 
+            #         player_socket.connect((client_ip, client_port))                         #Prova a stabilire una connessione al client utilizzando l'indirizzo IP e la porta del client attualmente iterato.
+            #         player_socket.send(socket_game.encode('utf-8'))                         #Una volta connesso al client, invia la stringa socket_game convertita in byte usando l'encoding UTF-8.
+            #         player_socket.close()                                                   #Chiude la connessione con il client dopo aver inviato i dati.
+            #     except Exception as e:
+            #         print(f"Error connecting to the player: {e}")
 
             # Crea un oggetto Thread
             
             thread_partita = threading.Thread(target=game, args=(game_phase, seated_players, winner_index))
-
-            # thread = threading.Thread(target=partita)
-
-            # Start the thread
+            
             thread_partita.start()
-            # thread_waiting.start()
 
-            # Wait for the thread to finish before exiting
             thread_partita.join()
-            # thread_waiting.join()
+
             print("Fake")
             clients=[]
             timeout = False

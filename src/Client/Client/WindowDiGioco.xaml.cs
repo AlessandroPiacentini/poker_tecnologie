@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Net;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -45,32 +48,32 @@ namespace Client
         int grande_buio = 0;
         int piccolo_buio = 0;
 
+        //IP e Porta Server
+        String IP = "";
+        int porta = 0;
+        
         //Contatore dei turni
         int conta = 0;
 
-        public WindowDiGioco()
+        public WindowDiGioco(TcpClient tcpClient, NetworkStream tcpStream)
         {
             InitializeComponent();
 
-            //Ora deve avere la nuova porta del server a cui connettersi
-            String[] dati = RicezioneDati().Split(';');
-            client = new TcpClient(dati[0], int.Parse(dati[1]));
-            stream = client.GetStream();
+            client = tcpClient;
+            stream = tcpStream;
 
-            IniziaGioco();
+            // Avvia un thread per rimanere in ascolto dei messaggi dal server
+            Thread receiveThread = new Thread(RimaniInAscolto);
+            receiveThread.IsBackground = true;
+            receiveThread.Start();
         }
+
+
 
         //INIZIO DEL GIOCO
         private void IniziaGioco()
         {
-            //Rimane in ascolto
-            _ = RimaniInAscolto();
 
-            //CarteSulTavolo();
-            //addBottoneAlGiocatore();
-
-            //if (conta == 4) aggiungiEVisualizzaCarta4();
-            //if (conta == 5) aggiungiEVisualizzaCarta5();
         }
 
 
@@ -228,17 +231,65 @@ namespace Client
         //Ovvero dai a ciascun giocatore le carte che gli spettano decide dal server
         private void CarteIniziali()
         {
-            //InvioDati("Inizio_Carte");
-            String[] carte = datiSplittati();
-
             // Trova la Grid con il nome gruppo1 all'interno del tuo controllo o finestra
-            Grid giocatore = (Grid)FindName(carte[0]);
+            Grid giocatore = (Grid)FindName(g[0]);
 
             //Variabili utili
             Image immagine1 = null;
             Image immagine2 = null;
 
+            //Cambiamenti
             if (giocatore != null)
+            {
+                //int x = 0;
+                foreach (var controllo in giocatore.Children)
+                {
+                    if (controllo is Image immagine)
+                    {
+                        immagine.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/" + g[1] + ".jpg"));
+                    }
+                }
+
+                // Chiudi le altre carte dei giocatori avversari
+                int j = 0;
+
+                for (int i = 0; i < 13; i++)
+                {
+                    String nomeGridAvversario = "giocatore" + i; // Sostituisci con la logica corretta per ottenere i nomi delle Grid dei giocatori avversari
+                    Grid avversario = (Grid)FindName(nomeGridAvversario);
+
+                    if (avversario != null)
+                    {
+
+                        Image immagineCopertaAvversario1 = (Image)avversario.FindName("img" + j); // Sostituisci con la logica corretta per ottenere i nomi delle immagini dei giocatori avversari
+
+                        if (immagineCopertaAvversario1 != immagine1 && immagineCopertaAvversario1 != immagine2)
+                        {
+                            if (immagineCopertaAvversario1 != null)
+                            {
+                                immagineCopertaAvversario1.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/53.jpg"));
+                            }
+                        }
+
+                        //aggiunta per la seconda carta
+                        j++;
+                        Image immagineCopertaAvversario2 = (Image)avversario.FindName("img" + j); // Sostituisci con la logica corretta per ottenere i nomi delle immagini dei giocatori avversari
+
+                        if (immagineCopertaAvversario2 != immagine1 && immagineCopertaAvversario2 != immagine2)
+                        {
+                            if (immagineCopertaAvversario2 != null)
+                            {
+                                immagineCopertaAvversario2.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/53.jpg"));
+                            }
+                        }
+                        j++;
+                    }
+                }
+
+                //Carte al tavolo trasparenti
+            }
+
+            /*if (giocatore != null)
             {
                 int x = 1;
                 foreach (var controllo in giocatore.Children)
@@ -300,7 +351,7 @@ namespace Client
                 }
 
                 //Carte al tavolo trasparenti
-            }
+            }*/
 
         }
 
@@ -408,6 +459,7 @@ namespace Client
         }
 
 
+
         //METODI ASCINCORNI PER LA COMUNICAZIONE CON IL SERVER
         //Creazione di un metodo asincrono per l'attesa del messaggio dal server:
         private async Task<String> AttendiTurno()
@@ -431,28 +483,104 @@ namespace Client
         }
 
         //Rimani in ascolto
-        private async Task<String> RimaniInAscolto()
+        /*private async Task<String> SIUUMMM()
         {
-            String risposta = "";
-
             while (true)
             {
-                risposta = RicezioneDati().Trim();
+                String[] risposta = RicezioneDati().Split(';');
 
-                switch (risposta)
+                switch (risposta[0])
                 {
-                    case "dati":
-                        String dati = RicezioneDati();
+                    case "inizio":
+                        String dati = risposta[1];
                         parseXML(dati);
                         CarteIniziali();
                         break;
 
-                    case "finito":
+                    case "connessione":
+                        porta = int.Parse(risposta[2]);
+                        IP = risposta[1];
                         break;
                 }
 
                 // Aggiungi un ritardo per evitare un ciclo troppo veloce
                 await Task.Delay(1000); // Ritardo di 1 secondo (1000 millisecondi)
+            }
+        }*/
+
+        //Metodo del thread che continua ad ascoltare
+        private void RimaniInAscolto()
+        {
+            try
+            {
+                while (true)
+                {
+                    byte[] data = new byte[1024];
+                    int bytesRead = stream.Read(data, 0, data.Length);
+                    String responseData = Encoding.ASCII.GetString(data, 0, bytesRead);
+                    String[] risposta = responseData.Trim().Split(';');
+
+                    // Analizza la risposta dal server
+                    // In base ai dati ricevuti, imposta exitGame a true o false
+                    switch (risposta[0])
+                    {
+                        case "inizio":
+                            parseXML(risposta[1]);
+                            CarteIniziali();
+                            break;
+                        case "finito":
+                            parseXML(risposta[1]);
+                            CarteIniziali();
+                            break;
+                        default:
+                            Console.WriteLine("Il valore di input non corrisponde a 1, 2 o 3");
+                            // Fai qualcosa se input non corrisponde a nessun caso specificato sopra
+                            break;
+                    }
+                }
+                //client.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Errore: " + e.Message);
+            }
+        }
+
+        //Metodo delle prove
+        private void ConnessioneApriEChiudi()
+        {
+            try
+            {
+                // Creazione del socket client
+                TcpClient client = new TcpClient();
+
+                // IP e porta del server a cui connettersi
+                string serverIp = "127.0.0.1"; // Esempio di indirizzo IP del server
+                int serverPort = 888; // Esempio di porta del server
+
+                // Connessione al server
+                client.Connect(serverIp, serverPort);
+
+                // Ottieni il flusso di rete per inviare e ricevere dati
+                NetworkStream stream = client.GetStream();
+
+                // Esempio di invio di dati al server
+                string message = "Ciao, server!";
+                byte[] data = Encoding.ASCII.GetBytes(message);
+                stream.Write(data, 0, data.Length);
+
+                // Esempio di ricezione di dati dal server
+                data = new byte[1024];
+                int bytesRead = stream.Read(data, 0, data.Length);
+                string responseData = Encoding.ASCII.GetString(data, 0, bytesRead);
+                Console.WriteLine("Ricevuto dal server: " + responseData);
+
+                // Chiudi la connessione
+                client.Close();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Errore: " + e.Message);
             }
         }
 
