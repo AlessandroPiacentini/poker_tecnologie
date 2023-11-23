@@ -53,7 +53,28 @@ def dict_to_xml(variables):
             element.text = str(value)
 
     xml_string = ET.tostring(root).decode("utf-8")
+    
+    print(xml_string)
+    write_to_file("log.txt",xml_string)
+    
     return xml_string
+def write_to_file(file_path, content):
+    """
+    Write content to a text file.
+
+    Args:
+        file_path (str): The path of the file to write to.
+        content (str): The content to write to the file.
+
+    Returns:
+        None
+    """
+    try:
+        with open(file_path, 'w') as file:
+            file.write(content)
+        print("File written successfully.")
+    except Exception as e:
+        print(f"Error writing to file: {e}")
 
 def send_info(players, pot, board_cards, game_phase_count):
     """
@@ -76,8 +97,9 @@ def send_info(players, pot, board_cards, game_phase_count):
             player_socket.connect((player.ip, player.port))
             my_variables = {"pot": pot, "board_cards": board_cards, "game_phase_count": game_phase_count,
                             "players": players}
-
+            print(pot)
             xml_result = dict_to_xml(my_variables)
+            print("fatto xml")
             player_socket.send(xml_result.encode('utf-8'))
             player_socket.close()
         except Exception as e:
@@ -377,4 +399,4 @@ def game(game_phase_s, seated_players_s, winner_index_s):
         if game_phase_count == 3:
             game_phase = "waiting"
 
-    winner_index = find_winner()
+    # winner_index = find_winner()

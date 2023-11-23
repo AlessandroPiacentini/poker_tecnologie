@@ -18,7 +18,7 @@ server_port = 12345
 timeout = False
 clients = []
 
-count = 0
+count = 1
 def main():
     """
     The main function that runs the server and handles client connections.
@@ -72,13 +72,13 @@ def main():
                 # Now you can use the split method on the string
                 if data_str.split(";")[0] == "entry" and len(seated_players) < 6:
                     count += 1
-                    response = f"ok;{count}"
+                    response = f"ok;{count};{client_ip};{ client_port}"
                     player = Player(data_str.split(";")[1], 0, 0, 0, int(data_str.split(";")[2]), "no", "no", True, count, client_ip, client_port)
                     clients.append((client_ip, client_port))
                     seated_players.append(player)
                     print(count)
                     if(count>=2):
-                        server_socket.settimeout(10)
+                        server_socket.settimeout(1)
                 else:
                     response = "err"
 
@@ -127,7 +127,7 @@ def main():
             print("Fake")
             clients=[]
             timeout = False
-            count = 0
+            count = 1
 
 if __name__ == '__main__':
     main()
