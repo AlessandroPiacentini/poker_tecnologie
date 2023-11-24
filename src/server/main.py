@@ -99,6 +99,7 @@ def main():
         if count >= 2:
             print("Starting the game...")
             global game_phase
+            game_phase="game"
             socket_game = f"{server_host};888"
             for client_ip, client_port in clients:
                 print(f"ip: {client_ip}; port: {client_port}")
@@ -128,6 +129,7 @@ def main():
             clients=[]
             timeout = False
             count = 1
+            
 
 if __name__ == '__main__':
     main()

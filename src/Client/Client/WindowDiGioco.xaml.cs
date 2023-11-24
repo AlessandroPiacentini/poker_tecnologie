@@ -78,6 +78,7 @@ namespace Client
 
         static string info_del_server = string.Empty;
         int posto;
+        int turn;
 
 
 
@@ -99,16 +100,20 @@ namespace Client
 
             //inizio_gioco();
             set_socket_server();
-            
+
+
+            inizio_gioco();
 
         }
 
+
         int carta1;
         int carta2;
+        bool is_my_turn=false;
 
         public async void inizio_gioco()
         {
-            while (GamePhaseCount < 4)
+            while (!is_my_turn)
             {
                 Attendi_info_server();
                 foreach(Player p in Players)
@@ -117,14 +122,17 @@ namespace Client
                     {
                         carta1= p.carta1;
                         carta2= p.carta2;
+                        if(p.turno == turn)
+                        {
+                            is_my_turn = true;
+                        }
                     }
                 }
 
                 disegnaCarteGiocatori(posto, carta1,carta2);
                 CarteSulTavolo();
-
-
             }
+            
         }
 
         private void set_socket_server()
@@ -207,7 +215,7 @@ namespace Client
 
             tcpClient.Close();
         }
-
+        
         //Metodo Parse XML
         private void parseXML(String stringa)
         {
@@ -217,6 +225,7 @@ namespace Client
 
             int Pot = int.Parse(xmlDoc.Element("root").Element("pot").Value);
             GamePhaseCount = int.Parse(xmlDoc.Element("root").Element("game_phase_count").Value);
+            turn = int.Parse(xmlDoc.Element("root").Element("turn").Value);
             BoardCards = xmlDoc.Element("root")
                 .Element("board_cards")
                 .Elements("item")

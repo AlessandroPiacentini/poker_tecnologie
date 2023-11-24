@@ -96,7 +96,7 @@ def send_info(players, pot, board_cards, game_phase_count):
             print(f"Connessione a {player.ip}")
             player_socket.connect((player.ip, player.port))
             my_variables = {"pot": pot, "board_cards": board_cards, "game_phase_count": game_phase_count,
-                            "players": players}
+                            "players": players, "turn": turn_count}
             print(pot)
             xml_result = dict_to_xml(my_variables)
             print("fatto xml")
@@ -336,6 +336,7 @@ used_cards = []
 seated_players = []
 community_cards = []
 pot = 0
+turn_count=0
 
 def game(game_phase_s, seated_players_s, winner_index_s):
     """
@@ -350,8 +351,9 @@ def game(game_phase_s, seated_players_s, winner_index_s):
         None
     """
     global seated_players
+    global turn_count
     seated_players=seated_players_s
-    turn_count = 1
+    turn_count = 0
     global game_phase
     game_phase=game_phase_s
     global community_cards
@@ -373,7 +375,7 @@ def game(game_phase_s, seated_players_s, winner_index_s):
             else:
                 community_cards.append(draw_card())
 
-            send_info(seated_players, pot, community_cards, used_cards, game_phase_count)
+            send_info(seated_players, pot, community_cards, game_phase_count)
 
             move = receive_move()
             if move.split(";")[0] == "knock":
@@ -399,4 +401,4 @@ def game(game_phase_s, seated_players_s, winner_index_s):
         if game_phase_count == 3:
             game_phase = "waiting"
 
-    # winner_index = find_winner()
+    winner_index = find_winner()
