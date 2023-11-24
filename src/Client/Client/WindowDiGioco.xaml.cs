@@ -83,7 +83,7 @@ namespace Client
 
 
 
-        public WindowDiGioco(TcpClient tcpClient, NetworkStream tcpStream, string ipclient, int portclient, int _posto)
+        public WindowDiGioco(TcpClient tcpClient, int _posto)
         {
             InitializeComponent();
 

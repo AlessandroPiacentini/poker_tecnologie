@@ -32,8 +32,6 @@ namespace Client
         public WindowPaginaDiLogin()
         {
             InitializeComponent();
-            
-            
         }
 
         //Invio di un messaggio al Server
@@ -96,7 +94,7 @@ namespace Client
         {
             // Creazione di un'istanza della terza finestra (finestra di gioco)
 
-            WindowDiGioco WindowDiGioco = new WindowDiGioco(client, stream, ipclient, portclient, posto);
+            WindowDiGioco WindowDiGioco = new WindowDiGioco(client, posto);
 
             // Mostra la nuova finestra
             WindowDiGioco.Show();
