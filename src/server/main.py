@@ -1,6 +1,6 @@
 import socket
 from Player import Player
-from condivisa import set_info
+from condivisa import set_info,SingletonClass
 from Thread_game import game
 from Thread_waiting import waiting
 
@@ -143,6 +143,7 @@ def main():
             print("socket inviata")
             attendi_nuove_connessioni()
             
+
 
             # Crea un oggetto Thread
             set_info(seated_players, game_phase, winner_index, count_player, server_socket)

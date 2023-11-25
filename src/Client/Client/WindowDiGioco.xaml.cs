@@ -90,7 +90,7 @@ namespace Client
 
 
 
-            //inizio_gioco();
+            inizio_gioco();
 
         }
 
@@ -106,14 +106,13 @@ namespace Client
                 Attendi_info_server();
                 foreach(Player p in Players)
                 {
-                    if(p.posto == posto)
+                    if(p.posto == turn)
                     {
                         carta1= p.carta1;
                         carta2= p.carta2;
-                        if(p.turno == turn)
-                        {
-                            is_my_turn = true;
-                        }
+                        
+                        is_my_turn = true;
+                        
                     }
                 }
 
@@ -166,7 +165,7 @@ namespace Client
                 stream.Flush();
             }
 
-            parseXML(info_del_server.Split(';')[1]);
+            parseXML(info_del_server);
 
         }
 
@@ -188,7 +187,7 @@ namespace Client
             Players = xmlDoc.Element("root")
                 .Element("players")
                 .Elements("Player")
-                .Select(player => new Player(player.Element("nome").Value, int.Parse(player.Element("carta1").Value), int.Parse(player.Element("carta2").Value), int.Parse(player.Element("puntata").Value), int.Parse(player.Element("soldi").Value), int.Parse(player.Element("turno").Value), player.Element("blind").Value, bool.Parse(player.Element("seduto").Value), int.Parse(player.Element("posto").Value), int.Parse(player.Element("port").Value), player.Element("ip").Value)).ToList();
+                .Select(player => new Player(player.Element("name").Value, int.Parse(player.Element("card1").Value), int.Parse(player.Element("card2").Value), int.Parse(player.Element("bet").Value), int.Parse(player.Element("chips").Value), player.Element("turn").Value, player.Element("blind").Value,Boolean.Parse(player.Element("seated").Value), int.Parse(player.Element("position").Value))).ToList();
 
 
         }

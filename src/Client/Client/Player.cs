@@ -13,14 +13,14 @@ namespace Client
         public int carta2;
         public float puntata;
         public int soldi;
-        public int turno;
+        public string turno;
         public string blind;
         public bool seduto;
         public int posto;
         public int port;
         public string ip;
 
-        public Player(string name, int carta1, int carta2, float puntata, int soldi, int turno, string blind, bool seduto, int posto, int port, string ip)
+        public Player(string name, int carta1, int carta2, float puntata, int soldi, string turno, string blind, bool seduto, int posto)
         {
             this.name = name;
             this.carta1 = carta1;
@@ -31,8 +31,6 @@ namespace Client
             this.blind = blind;
             this.seduto = seduto;
             this.posto = posto;
-            this.port = port;
-            this.ip = ip;
         }
     }
 }
