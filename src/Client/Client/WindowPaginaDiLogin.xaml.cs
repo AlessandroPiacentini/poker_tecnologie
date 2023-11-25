@@ -90,13 +90,77 @@ namespace Client
                 RichiestaFallita();
             }
         }
+        private async void set_socket_server()
+        {
+            string receivedMessage = "";
+
+
+            // Accettare una connessione client
+
+
+            byte[] message = new byte[4096];
+            int bytesRead;
+
+
+            bytesRead = 0;
+
+            try
+            {
+                bytesRead = stream.Read(message, 0, 4096);
+            }
+            catch
+            {
+
+            }
+
+            if (bytesRead != 0)
+            {
+
+                // Decodificare il messaggio ricevuto
+                receivedMessage = Encoding.ASCII.GetString(message, 0, bytesRead);
+                Console.WriteLine($"Messaggio ricevuto: {receivedMessage}");
+
+                stream.Flush();
+            }
+
+            Console.Write(receivedMessage);
+            connessione_a_nuova_socket_server(receivedMessage);
+
+        }
+
+
+
+
+
+        public void connessione_a_nuova_socket_server(string receivedMessage)
+        {
+
+
+            string ip = receivedMessage.Split(';')[0];
+            int port = int.Parse(receivedMessage.Split(';')[1]);
+            client = new TcpClient(ip, port); // Connessione al server Java sulla porta 8080
+            stream = client.GetStream();
+            try
+            {
+                byte[] message = Encoding.ASCII.GetBytes("connesso");
+                stream.Write(message, 0, message.Length);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Errore: " + e);
+            }
+        }
+
+
 
         //Se la richiesta viene accettata
         private void RichiestaSuccesso()
         {
             // Creazione di un'istanza della terza finestra (finestra di gioco)
 
-            WindowDiGioco WindowDiGioco = new WindowDiGioco(client, stream, ipclient, portclient, posto);
+            set_socket_server();
+
+            WindowDiGioco WindowDiGioco = new WindowDiGioco(client, posto);
 
             // Mostra la nuova finestra
             WindowDiGioco.Show();
@@ -121,8 +185,6 @@ namespace Client
                 risposta = RicezioneDati().Split(';'); // Dividi utilizzando il punto e virgola come separatore
                 if (risposta.Length > 0 && risposta[0] == "ok")
                 {
-                    ipclient = risposta[2];
-                    portclient =int.Parse(risposta[3]);
                     posto= int.Parse(risposta[1]);
                     break; // Esci dal ciclo quando la risposta è "ok"
                 }

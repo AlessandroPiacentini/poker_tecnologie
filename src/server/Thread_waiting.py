@@ -1,13 +1,9 @@
-# from main import game_phase, lock, seated_players, count
+from condivisa import game_phase, seated_players, count_player
 from Player import Player
 import socket
 import threading
 
-# Initialize the vector for messages
-seated_players = []
-max_messages = 6
-game_phase=""
-count=0
+
 # Function that handles a client connection
 def handle_client(client_socket, address, client_ip, client_port):
     """
@@ -41,7 +37,7 @@ def handle_client(client_socket, address, client_ip, client_port):
         else:
             # Decode and save the message in the vector
             message = data.decode("utf-8")
-            player = Player(message.split(";")[1], 0, 0, 0, int(message.split(";")[2]), "no", "no", True, count, client_ip, client_port)
+            player = Player(message.split(";")[1], 0, 0, 0, int(message.split(";")[2]), "no", "no", True, count_player, client_ip, client_port)
             seated_players.append(player)
 
         print(f"Received message: {message}")
@@ -50,14 +46,14 @@ def handle_client(client_socket, address, client_ip, client_port):
     client_socket.close()
     print(f"Connection closed with {address}")
 
-def waiting(game_phase_s, seated_players_s, count_s):
+def waiting():
     """
     Function that configures the server and waits for connections from clients.
 
     Args:
         game_phase_s (str): The current game phase.
         seated_players_s (int): The number of seated players.
-        count_s (int): The count value.
+        count_player_s (int): The count_player value.
 
     Returns:
         None
@@ -68,11 +64,8 @@ def waiting(game_phase_s, seated_players_s, count_s):
     server.listen(5)
     
     global seated_players
-    seated_players = seated_players_s
     global game_phase
-    game_phase = game_phase_s
-    global count
-    count = count_s
+    global count_player
 
     print("Server listening on 127.0.0.1:12345")
 

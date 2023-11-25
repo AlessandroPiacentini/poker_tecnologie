@@ -16,7 +16,7 @@ class Player:
         port (int): The port number of the player's connection.
     """
 
-    def __init__(self, name, card1, card2, bet, chips, turn, blind, seated, position, ip, port):
+    def __init__(self, name, card1, card2, bet, chips, turn, blind, seated, position, client_socket):
         """
         Initializes a Player object with the given attributes.
 
@@ -42,8 +42,7 @@ class Player:
         self.blind = blind        
         self.seated = seated  
         self.position = position
-        self.ip = ip
-        self.port = port
+        self.client_socket=client_socket
 
 
     

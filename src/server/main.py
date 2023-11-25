@@ -1,7 +1,9 @@
 import socket
 from Player import Player
+from condivisa import set_info
 from Thread_game import game
 from Thread_waiting import waiting
+
 import threading
 import time
 import sqlite3
@@ -18,7 +20,40 @@ server_port = 12345
 timeout = False
 clients = []
 
-count = 1
+server_socket=None
+
+
+count_player = 0
+
+
+          
+def attendi_nuove_connessioni():
+    global server_host
+    global server_port
+    global server_socket
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    server_port=888
+    server_socket.bind((server_host, server_port))
+    server_socket.listen(6)
+    i=0
+    print (len(seated_players))
+    while i<len(seated_players):
+        print(f"Waiting for connections on secoda volta{server_host}:{server_port}...")
+        client_socket, client_address = server_socket.accept()
+
+        print(f"Connection from: {client_address}")
+
+        # Receive data from the client
+        data = client_socket.recv(1024)
+        print(f"Data received from the client: {data.decode('utf-8')}")
+
+        # Decode data from bytes to string
+        data_str = data.decode('utf-8')
+        
+        if(data_str=="connesso"):
+            seated_players[i].client_socket=client_socket
+            
+            i+=1
 def main():
     """
     The main function that runs the server and handles client connections.
@@ -40,14 +75,15 @@ def main():
     global seated_players 
     global clients 
     global timeout
-    global count
+    global count_player
     # Configure the server
     global server_host
     global server_port
     
-    
 
     while True:
+        
+        global server_socket
         # Create a TCP/IP socket
         server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server_socket.bind((server_host, server_port))
@@ -58,7 +94,6 @@ def main():
             try:
                 print(f"Waiting for connections on {server_host}:{server_port}...")
                 client_socket, client_address = server_socket.accept()
-                client_ip, client_port = client_address  # Extract the IP address and port
 
                 print(f"Connection from: {client_address}")
 
@@ -71,13 +106,13 @@ def main():
 
                 # Now you can use the split method on the string
                 if data_str.split(";")[0] == "entry" and len(seated_players) < 6:
-                    count += 1
-                    response = f"ok;{count};{client_ip};{ client_port}"
-                    player = Player(data_str.split(";")[1], 0, 0, 0, int(data_str.split(";")[2]), "no", "no", True, count, client_ip, client_port)
-                    clients.append((client_ip, client_port))
+                    count_player += 1
+                    response = f"ok;{count_player}"
+                    player = Player(data_str.split(";")[1], 0, 0, 0, int(data_str.split(";")[2]), "no", "no", True, count_player, client_socket)
+                    clients.append(client_socket)
                     seated_players.append(player)
-                    print(count)
-                    if(count>=2):
+                    print(count_player)
+                    if(count_player>=2):
                         server_socket.settimeout(1)
                 else:
                     response = "err"
@@ -86,50 +121,54 @@ def main():
 
             except socket.timeout:
                 timeout = True
-                server_socket.close()
+                # server_socket.close()
 
-            finally:
-                try:
-                    # Close the connection
-                    if client_socket:
-                        client_socket.close()
-                except:
-                    print("Exception")
+            
 
-        if count >= 2:
+        if count_player >= 2:
             print("Starting the game...")
             global game_phase
             game_phase="game"
             socket_game = f"{server_host};888"
-            for client_ip, client_port in clients:
-                print(f"ip: {client_ip}; port: {client_port}")
+            for client_socket_ in clients:
+                print(" Connecting to the player...")
                 try:
                     # Create a socket for connecting to the player
-                    player_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                    player_socket.connect((client_ip, client_port))
-                    player_socket.send(socket_game.encode('utf-8'))
-                    player_socket.close()
+                    # player_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                    # player_socket.connect(client_address)
+                    client_socket_.sendall(socket_game.encode('utf-8'))
                 except Exception as e:
                     print(f"Error connecting to the player: {e}")
+                    
+            print("socket inviata")
+            attendi_nuove_connessioni()
+            
 
             # Crea un oggetto Thread
+            set_info(seated_players, game_phase, winner_index, count_player, server_socket)
             
-            thread_partita = threading.Thread(target=game, args=(game_phase, seated_players, winner_index))
-            thread_waiting= threading.Thread(target=waiting, args=(game_phase, seated_players, count))
+            
+            thread_partita = threading.Thread(target=game)
+            thread_waiting= threading.Thread(target=waiting)
        
 
             # Start the thread
             thread_partita.start()
-            thread_waiting.start()
+            # thread_waiting.start()
 
             # Wait for the thread to finish before exiting
             thread_partita.join()
-            thread_waiting.join()
+            # thread_waiting.join()
             print("Fake")
             clients=[]
             timeout = False
-            count = 1
+            count_player = 1
+            
+        server_socket.close()
             
 
 if __name__ == '__main__':
     main()
+
+
+  

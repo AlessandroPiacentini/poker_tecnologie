@@ -4,9 +4,10 @@ import sqlite3
 import xml.etree.ElementTree as ET
 
 import threading
-# from main import game_phase, lock, seated_players, winner_index
+from condivisa import game_phase, seated_players, winner_index, server_socket
 
 import random
+
 
 def draw_card():
     """
@@ -152,10 +153,7 @@ def receive_move():
     server_host = '127.0.0.1'
     server_port = 888
     # Crea un socket TCP/IP
-    server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_socket.bind((server_host, server_port))
-    server_socket.listen(6)
-    server_socket.settimeout(15)
+    global server_socket
     print(f"In attesa di connessioni su {server_host}:{server_port}...")
     client_socket, client_address = server_socket.accept()
     client_ip, client_port = client_address  # Estrai l'indirizzo IP e la porta
@@ -170,7 +168,7 @@ def receive_move():
     # Decodifica i dati da bytes a stringa
     response = f"ok"
     client_socket.send(response.encode('utf-8'))
-    server_socket.close()
+    
 
     return data_str
 
@@ -332,13 +330,8 @@ def communicate_winner():
         except Exception as e:
             print(f"Errore durante la connessione al giocatore: {e}")
 
-used_cards = []
-seated_players = []
-community_cards = []
-pot = 0
-turn_count=0
 
-def game(game_phase_s, seated_players_s, winner_index_s):
+def game():
     """
     Main game loop that manages the flow of the poker game.
 
@@ -350,20 +343,20 @@ def game(game_phase_s, seated_players_s, winner_index_s):
     Returns:
         None
     """
+    
     global seated_players
     global turn_count
-    seated_players=seated_players_s
     turn_count = 0
     global game_phase
-    game_phase=game_phase_s
     global community_cards
     global pot
     game_phase_count = 0
     global used_cards
     equal_bets = True
     global winner_index
-    winner_index=winner_index_s
-
+    global server_socket
+    game_phase = "game"
+    print(game_phase)
     while game_phase == "game":
         if seated_players[turn_count].seated and equal_bets:
             if len(seated_players) > 3:
@@ -400,5 +393,5 @@ def game(game_phase_s, seated_players_s, winner_index_s):
 
         if game_phase_count == 3:
             game_phase = "waiting"
-
+    # server_socket.close()
     winner_index = find_winner()

@@ -40,7 +40,6 @@ namespace Client
     {
         //Connessioni TCP Client e Server
         private TcpClient client;
-        private NetworkStream stream;
 
         //Variabili utili
         //Giocatore io = new Giocatore();
@@ -68,41 +67,30 @@ namespace Client
 
 
 
-        public string ipclient;
-        public int portclient;
-        public string ipserver;
-        public int portserver;
-
-        TcpListener tcpListener;
-
 
         static string info_del_server = string.Empty;
         int posto;
         int turn;
+        public NetworkStream stream;
 
 
 
 
-        public WindowDiGioco(TcpClient tcpClient, NetworkStream tcpStream, string ipclient, int portclient, int _posto)
+        public WindowDiGioco(TcpClient tcpClient, int _posto)
         {
             InitializeComponent();
 
             client = tcpClient;
-            stream = tcpStream;
 
             posto = _posto;
 
-            IPAddress ipAddress = IPAddress.Parse(ipclient);
             
 
-            // Creare un oggetto TcpListener
-            tcpListener = new TcpListener(ipAddress, portclient);
+            stream = client.GetStream();
+
+
 
             //inizio_gioco();
-            set_socket_server();
-
-
-            inizio_gioco();
 
         }
 
@@ -132,72 +120,37 @@ namespace Client
                 disegnaCarteGiocatori(posto, carta1,carta2);
                 CarteSulTavolo();
             }
+
             
         }
 
-        private void set_socket_server()
-        {
-            tcpListener.Start();
-            //Console.WriteLine($"Il server è in ascolto su {ipAddress}:{port}");
+       
 
 
-            // Accettare una connessione client
-            TcpClient client = tcpListener.AcceptTcpClient();
-            Console.WriteLine("Client connesso!");
 
-            // Creare un thread per gestire la connessione del client
-            Thread clientThread = new Thread(new ParameterizedThreadStart(HandleClientComm));
-            clientThread.Start(client);
-
-
-            clientThread.Join();
-
-            tcpListener.Stop();
-            ipserver = info_del_server.Split(';')[0];
-            portserver = int.Parse(info_del_server.Split(';')[1]);
-            Console.Write(info_del_server);
-        }
         private void Attendi_info_server()
         {
-            tcpListener.Start();
             //Console.WriteLine($"Il server è in ascolto su {ipAddress}:{port}");
 
 
             // Accettare una connessione client
-            TcpClient client = tcpListener.AcceptTcpClient();
+           
             Console.WriteLine("Client connesso!");
 
-            // Creare un thread per gestire la connessione del client
-            Thread clientThread = new Thread(new ParameterizedThreadStart(HandleClientComm));
-            clientThread.Start(client);
-
-
-            clientThread.Join();
-
-
-            parseXML(info_del_server.Split(';')[1]);
-            tcpListener.Stop();
-
-        }
-
-        static void HandleClientComm(object clientObj)
-        {
-            TcpClient tcpClient = (TcpClient)clientObj;
-            NetworkStream clientStream = tcpClient.GetStream();
 
             byte[] message = new byte[4096];
             int bytesRead;
 
-           
+
             bytesRead = 0;
 
             try
             {
-                bytesRead = clientStream.Read(message, 0, 4096);
+                bytesRead = stream.Read(message, 0, 4096);
             }
             catch
             {
-                
+
             }
 
             if (bytesRead != 0)
@@ -210,12 +163,13 @@ namespace Client
                 Console.WriteLine($"Messaggio ricevuto: {receivedMessage}");
 
 
-                clientStream.Flush();
+                stream.Flush();
             }
 
-            tcpClient.Close();
+            parseXML(info_del_server.Split(';')[1]);
+
         }
-        
+
         //Metodo Parse XML
         private void parseXML(String stringa)
         {
