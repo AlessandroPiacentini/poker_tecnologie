@@ -1,0 +1,27 @@
+﻿<Window x:Class="Client.WindowPaginaDiLogin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Client"
+        mc:Ignorable="d"
+        Title="WindowPaginaDiLogin" Height="450" Width="800">
+    <Grid>
+        <Image Source="/sfondoHome.jpg" Stretch="Fill"/>
+        <Label Content="Inserisci il nome:" HorizontalAlignment="Left" Margin="55,298,0,0" VerticalAlignment="Top" Foreground="White" FontSize="30"/>
+        <TextBox x:Name="txtNome" HorizontalAlignment="Left" Margin="400,298,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" Height="37"/>
+        <Label Content="Inserisci quantità di soldi" HorizontalAlignment="Left" Margin="55,353,0,0" VerticalAlignment="Top" Foreground="White" FontSize="30"/>
+        <TextBox x:Name="txtSoldi" HorizontalAlignment="Left" Margin="410,361,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="185" RenderTransformOrigin="0.5,0.5" Height="40">
+            <TextBox.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="0.644"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </TextBox.RenderTransform>
+        </TextBox>
+        <Button x:Name="buttonEntra" Content="ENTRA" HorizontalAlignment="Left" Height="38" Margin="624,342,0,0" VerticalAlignment="Top" Width="107" Click="buttonEntra_Click"/>
+
+    </Grid>
+</Window>

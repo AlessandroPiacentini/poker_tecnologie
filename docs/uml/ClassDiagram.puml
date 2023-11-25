@@ -1,0 +1,57 @@
+@startuml ClassDiagramPoker
+
+class socket {
+    + AF_INET: int
+    + SOCK_STREAM: int
+    + socket(): void
+    + bind(address: tuple): void
+    + listen(backlog: int): void
+    + accept(): tuple
+    + recv(buffer_size: int): bytes
+    + send(data: bytes): void
+    + close(): void
+}
+
+class Player {
+    - name: str
+    - attribute1: int
+    - attribute2: int
+    - attribute3: int
+    - attribute4: int
+    - attribute5: str
+    - attribute6: str
+    - attribute7: bool
+    - attribute8: int
+    - attribute9: str
+    - attribute10: int
+    + __init__(name: str, attribute1: int, attribute2: int, attribute3: int, attribute4: int, attribute5: str, attribute6: str, attribute7: bool, attribute8: int, attribute9: str, attribute10: int): void
+}
+
+class Thread_game {
+    + game(game_phase: str, seated_players: list, winner_index: int): void
+}
+
+class Thread_waiting {
+    + waiting(game_phase: str, seated_players: list, count: int): void
+}
+
+class threading {
+    + Thread(target: function, args: tuple): void
+    + Lock(): void
+}
+
+
+
+
+socket --> Player
+Player --> Thread_game
+Player --> Thread_waiting
+Thread_game --> threading
+Thread_waiting --> threading
+main --> socket
+main --> Player
+main --> Thread_game
+main --> Thread_waiting
+main --> threading
+
+@enduml

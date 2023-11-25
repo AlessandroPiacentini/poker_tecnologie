@@ -1,14 +1,23 @@
-from main import game_phase, lock, seated_players, count
+from condivisa import game_phase, seated_players, count_player
 from Player import Player
 import socket
 import threading
 
-# Initialize the vector for messages
-seated_players = []
-max_messages = 6
 
 # Function that handles a client connection
 def handle_client(client_socket, address, client_ip, client_port):
+    """
+    Handle the client connection.
+
+    Args:
+        client_socket (socket): The socket object representing the client connection.
+        address (tuple): The address of the client (IP address, port number).
+        client_ip (str): The IP address of the client.
+        client_port (int): The port number of the client.
+
+    Returns:
+        None
+    """
     global seated_players
 
     print(f"Connection accepted from {address}")
@@ -28,7 +37,7 @@ def handle_client(client_socket, address, client_ip, client_port):
         else:
             # Decode and save the message in the vector
             message = data.decode("utf-8")
-            player = Player(message.split(";")[1], 0, 0, 0, int(message.split(";")[2]), "no", "no", True, count, client_ip, client_port)
+            player = Player(message.split(";")[1], 0, 0, 0, int(message.split(";")[2]), "no", "no", True, count_player, client_ip, client_port)
             seated_players.append(player)
 
         print(f"Received message: {message}")
@@ -38,10 +47,25 @@ def handle_client(client_socket, address, client_ip, client_port):
     print(f"Connection closed with {address}")
 
 def waiting():
+    """
+    Function that configures the server and waits for connections from clients.
+
+    Args:
+        game_phase_s (str): The current game phase.
+        seated_players_s (int): The number of seated players.
+        count_player_s (int): The count_player value.
+
+    Returns:
+        None
+    """
     # Configure the server
     server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server.bind(("127.0.0.1", 12345))
     server.listen(5)
+    
+    global seated_players
+    global game_phase
+    global count_player
 
     print("Server listening on 127.0.0.1:12345")
 

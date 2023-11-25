@@ -1,0 +1,35 @@
+@startuml SequenceDiagram Poker
+actor Player
+participant Client
+participant Server
+
+Player -> Client: Effettua accesso
+Client -> Server: Richiesta connessione TCP
+Server -> Client: Conferma connessione TCP
+Client -> Server: Richiesta partita
+Server -> Client: Conferma partita
+Client -> Server: Effettua puntata
+Server -> Client: Conferma puntata
+Client -> Server: Richiesta carte
+Server -> Client: Consegna carte
+Client -> Server: Richiesta azione
+Server -> Client: Conferma azione
+Client -> Server: Effettua azione
+Server -> Client: Conferma azione
+Client -> Server: Richiesta carte aggiuntive
+Server -> Client: Consegna carte aggiuntive
+Client -> Server: Richiesta azione
+Server -> Client: Conferma azione
+Client -> Server: Effettua azione
+Server -> Client: Conferma azione
+Client -> Server: Richiesta carte finali
+Server -> Client: Consegna carte finali
+Client -> Server: Richiesta vincitore
+Server -> Client: Consegna vincitore
+Client -> Server: Richiesta nuova partita
+Server -> Client: Conferma nuova partita
+Client -> Server: Richiesta disconnessione
+Server -> Client: Conferma disconnessione
+Client -> Server: Chiude connessione TCP
+Server -> Client: Conferma chiusura connessione TCP
+@enduml
