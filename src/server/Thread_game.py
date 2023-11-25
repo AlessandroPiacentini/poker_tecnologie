@@ -174,14 +174,14 @@ def deal_player_cards():
     Deals two cards to each player in the seated_players list.
     """
     global singleton
-    i = 0
-    while i < 2:
-        for player in singleton.seated_players:
+    for player in singleton.seated_players:
+        i = 0
+        while i < 2:
             if i == 0:
                 player.card1 = draw_card()
             else:
                 player.card2 = draw_card()
-        i += 1
+            i += 1
 
 def deal_community_cards():
     """

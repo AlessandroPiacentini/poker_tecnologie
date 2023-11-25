@@ -8,37 +8,37 @@
     <Grid>
         <Image Source="/campoDaGioco.png" Stretch="Fill"/>
         <Grid x:Name="giocatore0">
-            <Image x:Name="img0" HorizontalAlignment="Left" Height="53" Margin="481,47,0,0" VerticalAlignment="Top" Width="35" Source="/1.jpg"/>
-            <Image x:Name="img1" HorizontalAlignment="Left" Height="48" Margin="526,47,0,0" VerticalAlignment="Top" Width="35" Source="/2.jpg"/>
+            <Image x:Name="img0" HorizontalAlignment="Left" Height="53" Margin="481,47,0,0" VerticalAlignment="Top" Width="35" Source=""/>
+            <Image x:Name="img1" HorizontalAlignment="Left" Height="48" Margin="526,47,0,0" VerticalAlignment="Top" Width="35" Source=""/>
             <!-- Aggiungi altre immagini come necessario -->
         </Grid>
         <Grid x:Name="giocatore1">
-            <Image x:Name="img2" HorizontalAlignment="Left" Height="48" Margin="231,46,0,0" VerticalAlignment="Top" Width="34" Source="/3.jpg"/>
-            <Image x:Name="img3" HorizontalAlignment="Left" Height="51" Margin="275,45,0,0" VerticalAlignment="Top" Width="35" Source="/3.jpg"/>
+            <Image x:Name="img2" HorizontalAlignment="Left" Height="48" Margin="231,46,0,0" VerticalAlignment="Top" Width="34" Source=""/>
+            <Image x:Name="img3" HorizontalAlignment="Left" Height="51" Margin="275,45,0,0" VerticalAlignment="Top" Width="35" Source=""/>
         </Grid>
         <Grid x:Name="giocatore2">
-            <Image x:Name="img4" HorizontalAlignment="Left" Height="50" Margin="52,0,0,0" VerticalAlignment="Center" Width="35" Source="/3.jpg"/>
-            <Image x:Name="img5" HorizontalAlignment="Left" Height="49" Margin="96,0,0,0" VerticalAlignment="Center" Width="36" Source="/3.jpg"/>
+            <Image x:Name="img4" HorizontalAlignment="Left" Height="50" Margin="52,0,0,0" VerticalAlignment="Center" Width="35" Source=""/>
+            <Image x:Name="img5" HorizontalAlignment="Left" Height="49" Margin="96,0,0,0" VerticalAlignment="Center" Width="36" Source=""/>
         </Grid>
         <Grid x:Name="giocatore3">
-            <Image x:Name="img6" HorizontalAlignment="Left" Height="50" Margin="235,342,0,0" VerticalAlignment="Top" Width="37" Source="/3.jpg"/>
-            <Image x:Name="img7" HorizontalAlignment="Left" Height="53" Margin="280,342,0,0" VerticalAlignment="Top" Width="35" Source="/3.jpg"/>
+            <Image x:Name="img6" HorizontalAlignment="Left" Height="50" Margin="235,342,0,0" VerticalAlignment="Top" Width="37" Source=""/>
+            <Image x:Name="img7" HorizontalAlignment="Left" Height="53" Margin="280,342,0,0" VerticalAlignment="Top" Width="35" Source=""/>
         </Grid>
         <Grid x:Name="giocatore4">
-            <Image x:Name="img8" HorizontalAlignment="Left" Height="50" Margin="482,343,0,0" VerticalAlignment="Top" Width="36" Source="/3.jpg"/>
-            <Image x:Name="img9" HorizontalAlignment="Left" Height="54" Margin="526,343,0,0" VerticalAlignment="Top" Width="35" Source="/3.jpg"/>
+            <Image x:Name="img8" HorizontalAlignment="Left" Height="50" Margin="482,343,0,0" VerticalAlignment="Top" Width="36" Source=""/>
+            <Image x:Name="img9" HorizontalAlignment="Left" Height="54" Margin="526,343,0,0" VerticalAlignment="Top" Width="35" Source=""/>
         </Grid>
         <Grid x:Name="giocatore5">
-            <Image x:Name="img11" HorizontalAlignment="Left" Height="50" Margin="696,222,0,0" VerticalAlignment="Top" Width="50" Source="/3.jpg"/>
-            <Image x:Name="img10" HorizontalAlignment="Left" Height="54" Margin="696,163,0,0" VerticalAlignment="Top" Width="50" Source="/3.jpg"/>
+            <Image x:Name="img11" HorizontalAlignment="Left" Height="50" Margin="696,222,0,0" VerticalAlignment="Top" Width="50" Source=""/>
+            <Image x:Name="img10" HorizontalAlignment="Left" Height="54" Margin="696,163,0,0" VerticalAlignment="Top" Width="50" Source=""/>
         </Grid>
 
         <Grid x:Name="tavolo">
-            <Image x:Name="imgTavolo1" HorizontalAlignment="Left" Height="49" Margin="288,216,0,0" VerticalAlignment="Top" Width="36" Source="/3.jpg"/>
-            <Image x:Name="imgTavolo2" HorizontalAlignment="Left" Height="51" Margin="332,216,0,0" VerticalAlignment="Top" Width="36" Source="/3.jpg"/>
-            <Image x:Name="imgTavolo3" HorizontalAlignment="Left" Height="48" Margin="378,217,0,0" VerticalAlignment="Top" Width="35" Source="/3.jpg"/>
-            <Image x:Name="imgTavolo4" HorizontalAlignment="Left" Height="51" Margin="434,216,0,0" VerticalAlignment="Top" Width="40" Source="/3.jpg"/>
-            <Image x:Name="imgTavolo5" HorizontalAlignment="Left" Height="50" Margin="479,217,0,0" VerticalAlignment="Top" Width="35" Source="/3.jpg"/>
+            <Image x:Name="imgTavolo1" HorizontalAlignment="Left" Height="49" Margin="288,216,0,0" VerticalAlignment="Top" Width="36" Source=""/>
+            <Image x:Name="imgTavolo2" HorizontalAlignment="Left" Height="51" Margin="332,216,0,0" VerticalAlignment="Top" Width="36" Source=""/>
+            <Image x:Name="imgTavolo3" HorizontalAlignment="Left" Height="48" Margin="378,217,0,0" VerticalAlignment="Top" Width="35" Source=""/>
+            <Image x:Name="imgTavolo4" HorizontalAlignment="Left" Height="51" Margin="434,216,0,0" VerticalAlignment="Top" Width="40" Source=""/>
+            <Image x:Name="imgTavolo5" HorizontalAlignment="Left" Height="50" Margin="479,217,0,0" VerticalAlignment="Top" Width="35" Source=""/>
         </Grid>
         <Button x:Name="buttonFold" Content="FOLD" HorizontalAlignment="Left" Margin="595,404,0,0" VerticalAlignment="Top" Click="buttonFold_Click"/>
         <Button x:Name="buttonCheck" Content="CHECK" HorizontalAlignment="Left" Margin="541,404,0,0" VerticalAlignment="Top" Click="buttonCheck_Click"/>

@@ -54,7 +54,7 @@ namespace Client
         //IP e Porta Server
         String IP = "";
         int porta = 0;
-        
+
         //Contatore dei turni
         int conta = 0;
 
@@ -84,46 +84,63 @@ namespace Client
 
             posto = _posto;
 
-            
+
 
             stream = client.GetStream();
 
+            // Aggiungi un gestore per l'evento Loaded
+            Loaded += WindowDiGioco_Loaded;
+            ContentRendered += WindowDiGioco_ContentRendered;
 
-
+        }
+        private void WindowDiGioco_ContentRendered(object sender, EventArgs e)
+        {
+            // Questo evento viene chiamato quando il contenuto della finestra è stato reso e tutti i componenti sono pronti
             inizio_gioco();
+        }
 
+        private void WindowDiGioco_Loaded(object sender, RoutedEventArgs e)
+        {
+            // La funzione che vuoi chiamare quando la finestra è caricata
         }
 
 
         int carta1;
         int carta2;
-        bool is_my_turn=false;
+        bool is_my_turn = false;
 
         public async void inizio_gioco()
         {
-            while (!is_my_turn)
+            while (is_my_turn==false)
             {
+                
                 Attendi_info_server();
-                foreach(Player p in Players)
+                foreach (Player p in Players)
                 {
-                    if(p.posto == turn)
+                    if (posto == p.posto)
                     {
-                        carta1= p.carta1;
-                        carta2= p.carta2;
-                        
-                        is_my_turn = true;
-                        
+                        Console.Write(carta1 + " " + carta2);
+                        carta1 = p.carta1;
+                        carta2 = p.carta2;
                     }
+
+
+                    if (posto == turn + 1)
+                    {
+                        is_my_turn = true;
+
+                    }
+                    
                 }
 
-                disegnaCarteGiocatori(posto, carta1,carta2);
+                disegnaCarteGiocatori(posto, carta1, carta2);
                 CarteSulTavolo();
             }
 
-            
+
         }
 
-       
+
 
 
 
@@ -133,7 +150,7 @@ namespace Client
 
 
             // Accettare una connessione client
-           
+
             Console.WriteLine("Client connesso!");
 
 
@@ -187,7 +204,7 @@ namespace Client
             Players = xmlDoc.Element("root")
                 .Element("players")
                 .Elements("Player")
-                .Select(player => new Player(player.Element("name").Value, int.Parse(player.Element("card1").Value), int.Parse(player.Element("card2").Value), int.Parse(player.Element("bet").Value), int.Parse(player.Element("chips").Value), player.Element("turn").Value, player.Element("blind").Value,Boolean.Parse(player.Element("seated").Value), int.Parse(player.Element("position").Value))).ToList();
+                .Select(player => new Player(player.Element("name").Value, int.Parse(player.Element("card1").Value), int.Parse(player.Element("card2").Value), int.Parse(player.Element("bet").Value), int.Parse(player.Element("chips").Value), player.Element("turn").Value, player.Element("blind").Value, Boolean.Parse(player.Element("seated").Value), int.Parse(player.Element("position").Value))).ToList();
 
 
         }
@@ -224,45 +241,45 @@ namespace Client
                         x++;
                     }
                 }
+            }
+            // Chiudi le altre carte dei giocatori avversari
 
-                // Chiudi le altre carte dei giocatori avversari
-                int j = 0;
-
-                for (int i = 0; i < 13; i++)
+            for (int i = 1; i < Players.Count + 1; i++)
+            {
+                if (i != posto)
                 {
-                    String nomeGridAvversario = "giocatore" + i; // Sostituisci con la logica corretta per ottenere i nomi delle Grid dei giocatori avversari
-                    Grid avversario = (Grid)FindName(nomeGridAvversario);
+                    g = "giocatore" + i;
+                    // Trova la Grid con il nome gruppo1 all'interno del tuo controllo o finestra
+                    Grid giocatoreAvversario = (Grid)FindName(g);
 
-                    if (avversario != null)
+
+
+                    //Cambiamenti
+                    if (giocatore != null)
                     {
-
-                        Image immagineCopertaAvversario1 = (Image)avversario.FindName("img" + j); // Sostituisci con la logica corretta per ottenere i nomi delle immagini dei giocatori avversari
-
-                        if (immagineCopertaAvversario1 != immagine1 && immagineCopertaAvversario1 != immagine2)
+                        int x = 0;
+                        foreach (var controllo in giocatoreAvversario.Children)
                         {
-                            if (immagineCopertaAvversario1 != null)
+                            if (controllo is Image immagine)
                             {
-                                immagineCopertaAvversario1.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/53.jpg"));
+                                if (x == 0)
+                                {
+                                    immagine.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/53.jpg"));
+
+                                }
+                                else
+                                {
+
+                                    immagine.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/53.jpg"));
+                                }
+                                x++;
                             }
                         }
-
-                        //aggiunta per la seconda carta
-                        j++;
-                        Image immagineCopertaAvversario2 = (Image)avversario.FindName("img" + j); // Sostituisci con la logica corretta per ottenere i nomi delle immagini dei giocatori avversari
-
-                        if (immagineCopertaAvversario2 != immagine1 && immagineCopertaAvversario2 != immagine2)
-                        {
-                            if (immagineCopertaAvversario2 != null)
-                            {
-                                immagineCopertaAvversario2.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/53.jpg"));
-                            }
-                        }
-                        j++;
                     }
                 }
-
-                //Carte al tavolo trasparenti
             }
+
+
         }
 
 
@@ -270,12 +287,21 @@ namespace Client
         //Carte sul tavolo
         private void CarteSulTavolo()
         {
-           
+
 
             // Trova la Grid con il nome carte del tavolo
             Grid giocatore = (Grid)FindName("tavolo");
+            if (BoardCards.Count > 0)
+            {
+                imgTavolo1.Opacity = 0;
+                imgTavolo2.Opacity = 0;
+                imgTavolo3.Opacity = 0;
+                imgTavolo4.Opacity = 0;
+                imgTavolo5.Opacity = 0;
 
-            if (BoardCards.Count>0)
+            }
+
+            if (BoardCards.Count > 0)
             {
                 imgTavolo1.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/" + BoardCards[0] + ".jpg"));
                 imgTavolo2.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/" + BoardCards[1] + ".jpg"));
@@ -419,9 +445,9 @@ namespace Client
 
         //METODI PER IL SETUP DEL GIOCO
 
-        
 
-       
+
+
 
         //Assegnazione dei bottoni al giocatore
         private void addBottoneAlGiocatore()
@@ -483,8 +509,8 @@ namespace Client
             String dati = RicezioneDati().ToString(); // Ottieni i dati come stringa
             return carte = dati.Split(';'); // Dividi la stringa utilizzando il punto e virgola come separatoreuna virgola
         }
-        
-       
+
+
 
 
 
