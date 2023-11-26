@@ -154,7 +154,6 @@ def receive_move():
     server_port = 888
     # Crea un socket TCP/IP
     global singleton
-    
     print(f"In attesa di connessioni su {server_host}:{server_port}...")
     client_socket, client_address = singleton.server_socket.accept()
     
@@ -374,11 +373,11 @@ def game():
 
             move = receive_move()
             if move.split(";")[0] == "add":
-                singleton.seated_players[turn_count].bet = move.split(";")[1]
                 singleton.seated_players[turn_count].chips -= move.split(";")[1]
+                singleton.seated_players[turn_count].bet = move.split(";")[1]
             elif move.split(";")[0] == "see":
+                singleton.seated_players[turn_count].chips -= calculate_max_bet()
                 singleton.seated_players[turn_count].bet = calculate_max_bet()
-                singleton.seated_players[turn_count].chips = calculate_max_bet()
                 
             elif move.split(";")[0] == "fold":
                 singleton.seated_players[turn_count].seated = False

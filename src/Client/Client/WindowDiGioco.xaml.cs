@@ -339,7 +339,8 @@ namespace Client
             {
                 Console.WriteLine("Errore: " + a);
             }
-
+            is_my_turn = false;
+            
             inizio_gioco();
 
         }
@@ -354,6 +355,7 @@ namespace Client
             {
                 Console.WriteLine("Errore: " + a);
             }
+            is_my_turn = false;
 
             inizio_gioco();
         }
@@ -368,7 +370,7 @@ namespace Client
             {
                 Console.WriteLine("Errore: " + a);
             }
-
+            is_my_turn = false;
             inizio_gioco();
         }
 
