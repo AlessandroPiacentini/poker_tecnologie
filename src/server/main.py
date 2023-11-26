@@ -144,7 +144,7 @@ def main():
             attendi_nuove_connessioni()
             
 
-
+            
             # Crea un oggetto Thread
             set_info(seated_players, game_phase, winner_index, count_player, server_socket)
             

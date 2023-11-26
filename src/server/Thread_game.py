@@ -140,6 +140,7 @@ def calculate_pot(players):
     pot = 0
     for player in players:
         pot += player.bet
+        player.bet = 0
     return pot
 
 def receive_move():
@@ -372,13 +373,14 @@ def game():
             send_info(singleton.seated_players, pot, community_cards, game_phase_count)
 
             move = receive_move()
-            if move.split(";")[0] == "knock":
-                pass
-            elif move.split(";")[0] == "add":
+            if move.split(";")[0] == "add":
                 singleton.seated_players[turn_count].bet = move.split(";")[1]
+                singleton.seated_players[turn_count].chips -= move.split(";")[1]
             elif move.split(";")[0] == "see":
                 singleton.seated_players[turn_count].bet = calculate_max_bet()
-            elif move.split(";")[0] == "leave":
+                singleton.seated_players[turn_count].chips = calculate_max_bet()
+                
+            elif move.split(";")[0] == "fold":
                 singleton.seated_players[turn_count].seated = False
 
         turn_count += 1
@@ -394,5 +396,5 @@ def game():
 
         if game_phase_count == 3:
             singleton.game_phase = "waiting"
-    # server_socket.close()
+    singleton.server_socket.close()
     singleton.winner_index = find_winner()

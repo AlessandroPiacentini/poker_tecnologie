@@ -160,7 +160,7 @@ namespace Client
 
             set_socket_server();
 
-            WindowDiGioco WindowDiGioco = new WindowDiGioco(client, posto);
+            WindowDiGioco WindowDiGioco = new WindowDiGioco(client, posto,stream);
 
             // Mostra la nuova finestra
             WindowDiGioco.Show();
