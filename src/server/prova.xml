@@ -1,0 +1,32 @@
+<root>
+    <pot>0</pot>
+    <board_cards />
+    <game_phase_count>0</game_phase_count>
+    <players>
+        <Player>
+            <name>ale</name>
+            <card1>9</card1>
+            <card2>11</card2>
+            <bet>0</bet>
+            <chips>100</chips>
+            <turn>no</turn>
+            <blind>no</blind>
+            <seated>True</seated>
+            <position>1</position>
+            <client_socket>&lt;socket.socket fd=620, family=2, type=1, proto=0, laddr=('127.0.0.1', 888), raddr=('127.0.0.1', 62938)&gt;</client_socket>
+        </Player>
+        <Player>
+            <name>gemma</name>
+            <card1>23</card1>
+            <card2>26</card2>
+            <bet>0</bet>
+            <chips>50</chips>
+            <turn>no</turn>
+            <blind>no</blind>
+            <seated>True</seated>
+            <position>2</position>
+            <client_socket>&lt;socket.socket fd=1080, family=2, type=1, proto=0, laddr=('127.0.0.1', 888), raddr=('127.0.0.1', 62939)&gt;</client_socket>
+        </Player>
+    </players>
+    <turn>0</turn>
+</root>

@@ -30,7 +30,7 @@ namespace Client
     /// Qua si svolgono tutte le operazioni di visualizzazione di gioco e l'invio delle scelte di gioco al server
     /// 
     /// REGOLE GIOCO:
-    /// Devi soppravvivere in 4 tunri
+    /// Devi sopravvivere in 4 turni
     /// e alla fine di questi 4 turni devi avere la mano piu forte degli altri giocatori
     /// per rimanere in vita devi puntare
     /// se non lo fai devi lasciare il tavolo
@@ -38,24 +38,16 @@ namespace Client
     /// </summary>
     public partial class WindowDiGioco : Window
     {
-
-
-
-
         List<Player> Players;
         int GamePhaseCount;
         List<int> BoardCards;
 
-
-
-
         static string info_del_server = string.Empty;
         int posto;
         int turn;
+
+        private TcpClient client;
         public NetworkStream stream;
-
-
-
 
         public WindowDiGioco(TcpClient tcpClient, int _posto, NetworkStream _stream)
         {
@@ -65,7 +57,7 @@ namespace Client
             posto = _posto;
 
 
-
+            client = tcpClient;
             stream = _stream;
 
             // Aggiungi un gestore per l'evento Loaded
@@ -104,6 +96,7 @@ namespace Client
                         carta2 = p.carta2;
                     }
 
+                    //Dato che se questo client è il giocatore 2 non uscirà mai dal ciclo e quindi non si vedra niente in finestra
 
                     if (posto == turn + 1)
                     {
@@ -123,7 +116,7 @@ namespace Client
 
 
 
-
+        //Metodo Attendi Info
 
         private void Attendi_info_server()
         {
@@ -189,6 +182,9 @@ namespace Client
 
 
         }
+        
+
+        //Metodi Disegno
         private void disegna_puntate()
         {
             foreach (Player p in Players)
@@ -287,9 +283,6 @@ namespace Client
 
         }
 
-
-
-        //Carte sul tavolo
         private void CarteSulTavolo()
         {
 
@@ -326,7 +319,7 @@ namespace Client
         }
 
 
-
+        //Metodi bottone
         private void buttonPuntata_Click(object sender, RoutedEventArgs e)
         {
             string puntata = txtPuntata.Text;
@@ -339,9 +332,8 @@ namespace Client
             {
                 Console.WriteLine("Errore: " + a);
             }
+
             is_my_turn = false;
-            
-            inizio_gioco();
 
         }
         private void buttonFold_Click(object sender, RoutedEventArgs e)
@@ -373,8 +365,5 @@ namespace Client
             is_my_turn = false;
             inizio_gioco();
         }
-
-
-
     }
 }
