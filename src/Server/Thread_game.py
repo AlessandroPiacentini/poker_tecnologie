@@ -138,7 +138,7 @@ def receive_move():
 
 #Distribuisce le carte ai giocatori seduti nel gioco.
 def deal_player_cards():
-    #global seated_players
+    global seated_players
     i = 0
     while i < 2:
         for player in seated_players:

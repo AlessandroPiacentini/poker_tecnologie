@@ -56,7 +56,7 @@ def main():
                     seated_players.append(player)
                     print(count)
                     if(count>=2):
-                        server_socket.settimeout(2)                           #Da il tempo a altri giocatori di entrare
+                        server_socket.settimeout(15)                           #Da il tempo a altri giocatori di entrare
                 else:
                     response = "err"
 
