@@ -157,8 +157,21 @@ namespace Client
 
                 stream.Flush();
             }
-
-            parseXML(info_del_server);
+            if (GamePhaseCount == 3)
+            {
+                if (info_del_server == posto.ToString())
+                {
+                    MessageBox.Show("hai vinto");
+                }
+                else
+                {
+                    MessageBox.Show("hai perso");
+                }
+            }
+            else
+            {
+                parseXML(info_del_server);
+            }
 
         }
         //Metodo Parse XML
@@ -306,8 +319,6 @@ namespace Client
                 imgTavolo2.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/" + BoardCards[1] + ".jpg"));
                 imgTavolo3.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/" + BoardCards[2] + ".jpg"));
                 //Le altre carte le rendo trasparenti
-                imgTavolo4.Opacity = 0;
-                imgTavolo5.Opacity = 0;
             }
             if (BoardCards.Count > 3)
             {
