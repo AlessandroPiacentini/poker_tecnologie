@@ -9,6 +9,9 @@ from condivisa import SingletonClass
 import random
 
 
+import time
+
+
 def draw_card():
     """
     Function to draw a card from a deck of cards.
@@ -155,13 +158,12 @@ def receive_move():
     # Crea un socket TCP/IP
     global singleton
     print(f"In attesa di connessioni su {server_host}:{server_port}...")
-    client_socket, client_address = singleton.server_socket.accept()
     
 
-    print(f"Connessione da: {client_address}")
 
     # Ricevi i dati dal client
-    data = client_socket.recv(1024)
+    data = singleton.seated_players[turn_count].client_socket.recv(1024)
+    time.sleep(1)
     data_str = data.decode('utf-8')
     print(f"Dati ricevuti dal client: {data_str}")
 
@@ -373,8 +375,8 @@ def game():
 
             move = receive_move()
             if move.split(";")[0] == "add":
-                singleton.seated_players[turn_count].chips -= move.split(";")[1]
-                singleton.seated_players[turn_count].bet = move.split(";")[1]
+                singleton.seated_players[turn_count].chips -= int( move.split(";")[1])
+                singleton.seated_players[turn_count].bet = int( move.split(";")[1])
             elif move.split(";")[0] == "see":
                 singleton.seated_players[turn_count].chips -= calculate_max_bet()
                 singleton.seated_players[turn_count].bet = calculate_max_bet()
