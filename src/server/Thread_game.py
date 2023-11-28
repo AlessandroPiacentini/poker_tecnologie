@@ -301,10 +301,11 @@ def find_winner():
     best_score = evaluate_hand((singleton.seated_players[0].card1, singleton.seated_players[0].card2), community_cards)
 
     for i in range(1, len(singleton.seated_players)):
-        score = evaluate_hand((singleton.seated_players[i].card1, singleton.seated_players[i].card2), community_cards)
-        if score > best_score:
-            winner_index = i
-            best_score = score
+        if(singleton.seated_players[i].seated==True):
+            score = evaluate_hand((singleton.seated_players[i].card1, singleton.seated_players[i].card2), community_cards)
+            if score > best_score:
+                winner_index = i
+                best_score = score
     singleton.seated_players[winner_index + 1].chips += pot
     return winner_index + 1
 
@@ -333,6 +334,25 @@ def communicate_winner():
             player.client_socket.send(winner_index_str.encode('utf-8'))
         except Exception as e:
             print(f"Errore durante la connessione al giocatore: {e}")
+            
+def send_all_winner():
+    global singleton
+    for player in singleton.seated_players:
+        try:
+            # Crea un socket per la connessione al giocatore
+            winner_str=str(singleton.winner_index)
+            player.client_socket.send(winner_str.encode('utf-8'))
+        except Exception as e:
+            print(f"Errore durante la connessione al giocatore: {e}")
+
+
+def cout_player_alive():
+    global singleton
+    count=0
+    for player in singleton.seated_players:
+        if player.seated:
+            count+=1
+    return count       
 
 singleton = SingletonClass()
 used_cards=[]
@@ -385,6 +405,10 @@ def game():
                 
             elif move.split(";")[0] == "fold":
                 singleton.seated_players[turn_count].seated = False
+                if(cout_player_alive()==1):
+                    singleton.game_phase="waiting"
+                    break
+                
 
         turn_count += 1
         if turn_count == len(singleton.seated_players):
@@ -399,5 +423,7 @@ def game():
 
         if game_phase_count == 3:
             singleton.game_phase = "waiting"
-    singleton.server_socket.close()
     singleton.winner_index = find_winner()
+    send_all_winner()
+    singleton.server_socket.close()
+    
