@@ -77,6 +77,7 @@ namespace Client
         }
 
 
+        int pot;
         int carta1;
         int carta2;
         bool is_my_turn = false;
@@ -109,6 +110,7 @@ namespace Client
                 disegnaCarteGiocatori(posto, carta1, carta2);
                 disegna_puntate();
                 CarteSulTavolo();
+                label_pot.Content = pot;
             }
 
 
@@ -159,7 +161,6 @@ namespace Client
             parseXML(info_del_server);
 
         }
-
         //Metodo Parse XML
         private void parseXML(String stringa)
         {
@@ -167,7 +168,7 @@ namespace Client
 
 
 
-            int Pot = int.Parse(xmlDoc.Element("root").Element("pot").Value);
+            pot = int.Parse(xmlDoc.Element("root").Element("pot").Value);
             GamePhaseCount = int.Parse(xmlDoc.Element("root").Element("game_phase_count").Value);
             turn = int.Parse(xmlDoc.Element("root").Element("turn").Value);
             BoardCards = xmlDoc.Element("root")
@@ -289,15 +290,15 @@ namespace Client
 
             // Trova la Grid con il nome carte del tavolo
             Grid giocatore = (Grid)FindName("tavolo");
-            if (BoardCards.Count > 0)
-            {
-                imgTavolo1.Opacity = 0;
-                imgTavolo2.Opacity = 0;
-                imgTavolo3.Opacity = 0;
-                imgTavolo4.Opacity = 0;
-                imgTavolo5.Opacity = 0;
+            //if (BoardCards.Count > 0)
+            //{
+            //    imgTavolo1.Opacity = 0;
+            //    imgTavolo2.Opacity = 0;
+            //    imgTavolo3.Opacity = 0;
+            //    imgTavolo4.Opacity = 0;
+            //    imgTavolo5.Opacity = 0;
 
-            }
+            //}
 
             if (BoardCards.Count > 0)
             {

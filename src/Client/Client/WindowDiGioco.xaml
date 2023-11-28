@@ -53,6 +53,7 @@
         <Button x:Name="buttonCheck" Content="CHECK" HorizontalAlignment="Left" Margin="714,370,0,0" VerticalAlignment="Top" Click="buttonCheck_Click"/>
         <Button x:Name="buttonPuntata" Content="PUNTATA" HorizontalAlignment="Left" Margin="714,415,0,0" VerticalAlignment="Top" Click="buttonPuntata_Click"/>
         <TextBox x:Name="txtPuntata" HorizontalAlignment="Left" Margin="632,417,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="77"/>
-        <Label x:Name="soldi_giocatore" Content="Label" HorizontalAlignment="Left" Margin="27,448,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="soldi_giocatore" Content="Label" HorizontalAlignment="Left" Margin="27,400,0,0" VerticalAlignment="Top" Height="48" Width="183" FontSize="22"/>
+        <Label x:Name="label_pot" Content="Label" HorizontalAlignment="Left" Height="14" Margin="332,342,0,0" VerticalAlignment="Top" Width="145"/>
     </Grid>
 </Window>
