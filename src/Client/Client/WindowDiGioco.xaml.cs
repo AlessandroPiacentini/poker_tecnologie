@@ -30,7 +30,7 @@ namespace Client
     /// Qua si svolgono tutte le operazioni di visualizzazione di gioco e l'invio delle scelte di gioco al server
     /// 
     /// REGOLE GIOCO:
-    /// Devi soppravvivere in 4 tunri
+    /// Devi sopravvivere in 4 turni
     /// e alla fine di questi 4 turni devi avere la mano piu forte degli altri giocatori
     /// per rimanere in vita devi puntare
     /// se non lo fai devi lasciare il tavolo
@@ -38,95 +38,87 @@ namespace Client
     /// </summary>
     public partial class WindowDiGioco : Window
     {
-        //Connessioni TCP Client e Server
-        private TcpClient client;
-
-        //Variabili utili
-        //Giocatore io = new Giocatore();
-        String[] carteTavolo;
-        String[] g;
-        String chi_sono = "";
-
-        //Iniziallizzazione piccolo e grande buio
-        int grande_buio = 0;
-        int piccolo_buio = 0;
-
-        //IP e Porta Server
-        String IP = "";
-        int porta = 0;
-        
-        //Contatore dei turni
-        int conta = 0;
-
-
-
-
         List<Player> Players;
         int GamePhaseCount;
         List<int> BoardCards;
 
-
-
-
         static string info_del_server = string.Empty;
         int posto;
         int turn;
+
+        private TcpClient client;
         public NetworkStream stream;
 
-
-
-
-        public WindowDiGioco(TcpClient tcpClient, int _posto)
+        public WindowDiGioco(TcpClient tcpClient, int _posto, NetworkStream _stream)
         {
             InitializeComponent();
 
-            client = tcpClient;
 
             posto = _posto;
 
-            
 
-            stream = client.GetStream();
+            client = tcpClient;
+            stream = _stream;
 
+            // Aggiungi un gestore per l'evento Loaded
+            Loaded += WindowDiGioco_Loaded;
+            ContentRendered += WindowDiGioco_ContentRendered;
 
+        }
+        private void WindowDiGioco_ContentRendered(object sender, EventArgs e)
+        {
+            // Questo evento viene chiamato quando il contenuto della finestra è stato reso e tutti i componenti sono pronti
+            inizio_gioco();
+        }
 
-            //inizio_gioco();
-
+        private void WindowDiGioco_Loaded(object sender, RoutedEventArgs e)
+        {
+            // La funzione che vuoi chiamare quando la finestra è caricata
         }
 
 
+        int pot;
         int carta1;
         int carta2;
-        bool is_my_turn=false;
+        bool is_my_turn = false;
 
-        public async void inizio_gioco()
+        public  void inizio_gioco()
         {
-            while (!is_my_turn)
+            while (is_my_turn == false)
             {
+
                 Attendi_info_server();
-                foreach(Player p in Players)
+                foreach (Player p in Players)
                 {
-                    if(p.posto == posto)
+                    if (posto == p.posto)
                     {
-                        carta1= p.carta1;
-                        carta2= p.carta2;
-                        if(p.turno == turn)
-                        {
-                            is_my_turn = true;
-                        }
+                        Console.Write(carta1 + " " + carta2);
+                        carta1 = p.carta1;
+                        carta2 = p.carta2;
                     }
+
+                    //Dato che se questo client è il giocatore 2 non uscirà mai dal ciclo e quindi non si vedra niente in finestra
+
+                    if (posto == turn + 1)
+                    {
+                        is_my_turn = true;
+
+                    }
+
                 }
 
-                disegnaCarteGiocatori(posto, carta1,carta2);
+                disegnaCarteGiocatori(posto, carta1, carta2);
+                disegna_puntate();
                 CarteSulTavolo();
+                label_pot.Content = pot;
             }
 
-            
+
         }
 
-       
 
 
+        //Metodo Attendi Info
 
         private void Attendi_info_server()
         {
@@ -134,7 +126,7 @@ namespace Client
 
 
             // Accettare una connessione client
-           
+
             Console.WriteLine("Client connesso!");
 
 
@@ -166,10 +158,9 @@ namespace Client
                 stream.Flush();
             }
 
-            parseXML(info_del_server.Split(';')[1]);
+            parseXML(info_del_server);
 
         }
-
         //Metodo Parse XML
         private void parseXML(String stringa)
         {
@@ -177,7 +168,7 @@ namespace Client
 
 
 
-            int Pot = int.Parse(xmlDoc.Element("root").Element("pot").Value);
+            pot = int.Parse(xmlDoc.Element("root").Element("pot").Value);
             GamePhaseCount = int.Parse(xmlDoc.Element("root").Element("game_phase_count").Value);
             turn = int.Parse(xmlDoc.Element("root").Element("turn").Value);
             BoardCards = xmlDoc.Element("root")
@@ -188,8 +179,35 @@ namespace Client
             Players = xmlDoc.Element("root")
                 .Element("players")
                 .Elements("Player")
-                .Select(player => new Player(player.Element("nome").Value, int.Parse(player.Element("carta1").Value), int.Parse(player.Element("carta2").Value), int.Parse(player.Element("puntata").Value), int.Parse(player.Element("soldi").Value), int.Parse(player.Element("turno").Value), player.Element("blind").Value, bool.Parse(player.Element("seduto").Value), int.Parse(player.Element("posto").Value), int.Parse(player.Element("port").Value), player.Element("ip").Value)).ToList();
+                .Select(player => new Player(player.Element("name").Value, int.Parse(player.Element("card1").Value), int.Parse(player.Element("card2").Value), int.Parse(player.Element("bet").Value), int.Parse(player.Element("chips").Value), player.Element("turn").Value, player.Element("blind").Value, Boolean.Parse(player.Element("seated").Value), int.Parse(player.Element("position").Value))).ToList();
 
+
+        }
+        
+
+        //Metodi Disegno
+        private void disegna_puntate()
+        {
+            foreach (Player p in Players)
+            {
+                string g = "giocatore" + p.posto.ToString();
+                // Trova la Grid con il nome gruppo1 all'interno del tuo controllo o finestra
+                Grid giocatore = (Grid)FindName(g);
+                if (giocatore != null)
+                {
+                    foreach (var controllo in giocatore.Children)
+                    {
+                        if (controllo is Label l)
+                        {
+                            l.Content = p.puntata;
+                        }
+                    }
+                }
+                if (p.posto == posto)
+                {
+                    soldi_giocatore.Content = "Hai: " + p.soldi.ToString();
+                }
+            }
 
         }
 
@@ -225,58 +243,64 @@ namespace Client
                         x++;
                     }
                 }
+            }
+            // Chiudi le altre carte dei giocatori avversari
 
-                // Chiudi le altre carte dei giocatori avversari
-                int j = 0;
-
-                for (int i = 0; i < 13; i++)
+            for (int i = 1; i < Players.Count + 1; i++)
+            {
+                if (i != posto)
                 {
-                    String nomeGridAvversario = "giocatore" + i; // Sostituisci con la logica corretta per ottenere i nomi delle Grid dei giocatori avversari
-                    Grid avversario = (Grid)FindName(nomeGridAvversario);
+                    g = "giocatore" + i;
+                    // Trova la Grid con il nome gruppo1 all'interno del tuo controllo o finestra
+                    Grid giocatoreAvversario = (Grid)FindName(g);
 
-                    if (avversario != null)
+
+
+                    //Cambiamenti
+                    if (giocatore != null)
                     {
-
-                        Image immagineCopertaAvversario1 = (Image)avversario.FindName("img" + j); // Sostituisci con la logica corretta per ottenere i nomi delle immagini dei giocatori avversari
-
-                        if (immagineCopertaAvversario1 != immagine1 && immagineCopertaAvversario1 != immagine2)
+                        int x = 0;
+                        foreach (var controllo in giocatoreAvversario.Children)
                         {
-                            if (immagineCopertaAvversario1 != null)
+                            if (controllo is Image immagine)
                             {
-                                immagineCopertaAvversario1.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/53.jpg"));
+                                if (x == 0)
+                                {
+                                    immagine.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/53.jpg"));
+
+                                }
+                                else
+                                {
+
+                                    immagine.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/53.jpg"));
+                                }
+                                x++;
                             }
                         }
-
-                        //aggiunta per la seconda carta
-                        j++;
-                        Image immagineCopertaAvversario2 = (Image)avversario.FindName("img" + j); // Sostituisci con la logica corretta per ottenere i nomi delle immagini dei giocatori avversari
-
-                        if (immagineCopertaAvversario2 != immagine1 && immagineCopertaAvversario2 != immagine2)
-                        {
-                            if (immagineCopertaAvversario2 != null)
-                            {
-                                immagineCopertaAvversario2.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/53.jpg"));
-                            }
-                        }
-                        j++;
                     }
                 }
-
-                //Carte al tavolo trasparenti
             }
+
+
         }
 
-
-
-        //Carte sul tavolo
         private void CarteSulTavolo()
         {
-           
+
 
             // Trova la Grid con il nome carte del tavolo
             Grid giocatore = (Grid)FindName("tavolo");
+            //if (BoardCards.Count > 0)
+            //{
+            //    imgTavolo1.Opacity = 0;
+            //    imgTavolo2.Opacity = 0;
+            //    imgTavolo3.Opacity = 0;
+            //    imgTavolo4.Opacity = 0;
+            //    imgTavolo5.Opacity = 0;
 
-            if (BoardCards.Count>0)
+            //}
+
+            if (BoardCards.Count > 0)
             {
                 imgTavolo1.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/" + BoardCards[0] + ".jpg"));
                 imgTavolo2.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/" + BoardCards[1] + ".jpg"));
@@ -296,383 +320,51 @@ namespace Client
         }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //Metodo che dice che lascia il tavolo
-        private void abbandonare()
+        //Metodi bottone
+        private void buttonPuntata_Click(object sender, RoutedEventArgs e)
         {
-            InvioDati("abbandonare");
-
-            //DISATTIVA TUTTO
-        }
-
-        //Passo il turno
-        private void check()
-        {
-            InvioDati("Check");
-            if (RicezioneDati() == "ok_fermo")
-            {
-                //disattiva i bottoni
-                buttonFold.IsEnabled = false;
-                buttonCheck.IsEnabled = false;
-                buttonPuntata.IsEnabled = false;
-            }
-        }
-
-        //Disabilita tutto perchè hai finito il turno
-        private void turnoFinito()
-        {
-            InvioDati("turno_finito");
-            if (RicezioneDati() == "ok_fermo")
-            {
-                //disattiva i bottoni
-                buttonFold.IsEnabled = false;
-                buttonCheck.IsEnabled = false;
-                buttonPuntata.IsEnabled = false;
-            }
-        }
-
-        //Metodo della puntata che invia al Server
-        private void puntata()
-        {
-            String puntata = "";
-
-            //Metti in una variabile la puntata
-            puntata = txtPuntata.Text;
-
-            //invia i soldi della puntata
-            InvioDati("puntata");
-            if (RicezioneDati() == "ok_puntata")
-            {
-                String puntataMinima = grande_buio.ToString();
-                if (int.Parse(puntata) < int.Parse(puntataMinima))
-                {
-                    //PUNTATA NON VALIDA MINIMO Di: puntata
-                }
-                else
-                {
-                    InvioDati(puntata);
-                    //E infine aggiorna il saldo
-                    txtSaldo.Text = (int.Parse(txtSaldo.Text) - int.Parse(txtPuntata.Text)).ToString();
-                }
-            }
-        }
-
-
-
-        //CAMBIAMENTO SUL CAMPO
-
-        //Fa vedere la nuova carta sul tavolo (carta 4)
-        private void aggiungiEVisualizzaCarta4()
-        {
-            InvioDati("pesca");
-            String[] carte = datiSplittati();
-
-            //Rendo la immagine di nuovo visibile
-            imgTavolo4.Opacity = 0.5;
-
-            //E cambio percorso
-            imgTavolo4.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/" + carte[1] + ".jpg"));
-        }
-
-        //Fai vedere la nuova e quinta carta sul tavolo
-        private void aggiungiEVisualizzaCarta5()
-        {
-            InvioDati("pesca");
-            String[] carte = datiSplittati();
-
-            //Rendo la immagine di nuovo visibile
-            imgTavolo4.Opacity = 0.5;
-
-            //E cambio percorso
-            imgTavolo5.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/" + carte[1] + ".jpg"));
-        }
-
-
-
-        //METODI PER IL SETUP DEL GIOCO
-
-        
-
-       
-
-        //Assegnazione dei bottoni al giocatore
-        private void addBottoneAlGiocatore()
-        {
-            InvioDati("giocatore");
-            String[] g = datiSplittati();
-
-            // Supponiamo che 'giocatore' sia il nome di un elemento della UI di tipo Grid
-            Grid giocatore = this.FindName(g[0]) as Grid;
-
-            if (giocatore != null)
-            {
-                giocatore.Children.Add(buttonCheck); // Aggiungi il pulsante alla griglia
-                giocatore.Children.Add(buttonFold); // Aggiungi il pulsante alla griglia
-                giocatore.Children.Add(buttonFold); // Aggiungi il pulsante alla griglia
-            }
-        }
-
-
-
-        //METODI UTILI DURANTE LA CONNESSIONE TRA CLIENT E SERVER
-
-        //Permette l'invio di dati
-        private void InvioDati(String messaggio)
-        {
+            string puntata = txtPuntata.Text;
             try
             {
-                byte[] message = Encoding.ASCII.GetBytes(messaggio + ";");
+                byte[] message = Encoding.ASCII.GetBytes("add;" + puntata);
                 stream.Write(message, 0, message.Length);
             }
-            catch (Exception e)
+            catch (Exception a)
             {
-                Console.WriteLine("Errore: " + e);
+                Console.WriteLine("Errore: " + a);
             }
-        }
 
-        //Permette la ricezione di dati dal server
-        private String RicezioneDati()
+            is_my_turn = false;
+
+        }
+        private void buttonFold_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                byte[] buffer = new byte[1024];
-                int bytesRead = stream.Read(buffer, 0, buffer.Length);
-                String response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
-                return response.Trim();                                                // Rimuove eventuali spazi bianchi
+                byte[] message = Encoding.ASCII.GetBytes("fold;");
+                stream.Write(message, 0, message.Length);
             }
-            catch (Exception e)
+            catch (Exception a)
             {
-                Console.WriteLine("Errore nella ricezione dei dati: " + e);
-                return "err";
+                Console.WriteLine("Errore: " + a);
             }
+            is_my_turn = false;
+
+            inizio_gioco();
         }
-
-        //Questo metodo prende i dati dal Server, gli splitta e ritorna un array di quei dati
-        private String[] datiSplittati()
-        {
-            String[] carte;
-
-            String dati = RicezioneDati().ToString(); // Ottieni i dati come stringa
-            return carte = dati.Split(';'); // Dividi la stringa utilizzando il punto e virgola come separatoreuna virgola
-        }
-        
-       
-
-
-
-        //METODI ASCINCORNI PER LA COMUNICAZIONE CON IL SERVER
-        //Creazione di un metodo asincrono per l'attesa del messaggio dal server:
-        private async Task<String> AttendiTurno()
-        {
-            String risposta = "";
-
-            while (true)
-            {
-                risposta = RicezioneDati();
-                if (risposta == "il_tuo_turno")
-                {
-
-                    break; // Esci dal ciclo quando è di nuovo il tuo turno
-                }
-
-                // Aggiungi un ritardo per evitare un ciclo troppo veloce
-                await Task.Delay(1000); // Ritardo di 1 secondo (1000 millisecondi)
-            }
-
-            return risposta;
-        }
-
-        //Rimani in ascolto
-        /*private async Task<String> SIUUMMM()
-        {
-            while (true)
-            {
-                String[] risposta = RicezioneDati().Split(';');
-
-                switch (risposta[0])
-                {
-                    case "inizio":
-                        String dati = risposta[1];
-                        parseXML(dati);
-                        CarteIniziali();
-                        break;
-
-                    case "connessione":
-                        porta = int.Parse(risposta[2]);
-                        IP = risposta[1];
-                        break;
-                }
-
-                // Aggiungi un ritardo per evitare un ciclo troppo veloce
-                await Task.Delay(1000); // Ritardo di 1 secondo (1000 millisecondi)
-            }
-        }*/
-
-        //Metodo del thread che continua ad ascoltare
-        private void RimaniInAscolto()
+        private void buttonCheck_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                while (true)
-                {
-                    byte[] data = new byte[1024];
-                    int bytesRead = stream.Read(data, 0, data.Length);
-                    String responseData = Encoding.ASCII.GetString(data, 0, bytesRead);
-                    String[] risposta = responseData.Trim().Split(';');
-
-                    // Analizza la risposta dal server
-                    // In base ai dati ricevuti, imposta exitGame a true o false
-                    //switch (risposta[0])
-                    //{
-                    //    case "inizio":
-                    //        parseXML(risposta[1]);
-                    //        disegnaCarte();
-                    //        break;
-                    //    case "finito":
-                    //        parseXML(risposta[1]);
-                    //        disegnaCarte();
-                    //        break;
-                    //    default:
-                    //        Console.WriteLine("Il valore di input non corrisponde a 1, 2 o 3");
-                    //        // Fai qualcosa se input non corrisponde a nessun caso specificato sopra
-                    //        break;
-                    //}
-                }
-                //client.Close();
+                byte[] message = Encoding.ASCII.GetBytes("see;");
+                stream.Write(message, 0, message.Length);
             }
-            catch (Exception e)
+            catch (Exception a)
             {
-                Console.WriteLine("Errore: " + e.Message);
+                Console.WriteLine("Errore: " + a);
             }
-        }
-
-        //Metodo delle prove
-        private void ConnessioneApriEChiudi()
-        {
-            try
-            {
-                // Creazione del socket client
-                TcpClient client = new TcpClient();
-
-                // IP e porta del server a cui connettersi
-                string serverIp = "127.0.0.1"; // Esempio di indirizzo IP del server
-                int serverPort = 888; // Esempio di porta del server
-
-                // Connessione al server
-                client.Connect(serverIp, serverPort);
-
-                // Ottieni il flusso di rete per inviare e ricevere dati
-                NetworkStream stream = client.GetStream();
-
-                // Esempio di invio di dati al server
-                string message = "Ciao, server!";
-                byte[] data = Encoding.ASCII.GetBytes(message);
-                stream.Write(data, 0, data.Length);
-
-                // Esempio di ricezione di dati dal server
-                data = new byte[1024];
-                int bytesRead = stream.Read(data, 0, data.Length);
-                string responseData = Encoding.ASCII.GetString(data, 0, bytesRead);
-                Console.WriteLine("Ricevuto dal server: " + responseData);
-
-                // Chiudi la connessione
-                client.Close();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("Errore: " + e.Message);
-            }
-        }
-
-
-
-        //METODI DEI BOTTONI
-
-        //Se viene schiacciato il tasto del FOLD
-        private async void buttonFold_Click(object sender, RoutedEventArgs e)
-        {
-            abbandonare();
-            turnoFinito();
-
-            // Aspetta fino a quando non è di nuovo il tuo turno
-            String messaggio = await AttendiTurno();
-
-            // Qui puoi eseguire azioni dopo aver ricevuto il messaggio "il_tuo_turno"
-            if (messaggio == "il_tuo_turno")
-            {
-                // Abilita di nuovo i bottoni
-                buttonFold.IsEnabled = true;
-                buttonCheck.IsEnabled = true;
-                buttonPuntata.IsEnabled = true;
-            }
-        }
-
-        //Se viene schiacciato il tasto check
-        private async void buttonCheck_Click(object sender, RoutedEventArgs e)
-        {
-            check();
-            turnoFinito();
-
-            // Aspetta fino a quando non è di nuovo il tuo turno
-            String messaggio = await AttendiTurno();
-
-            // Qui puoi eseguire azioni dopo aver ricevuto il messaggio "il_tuo_turno"
-            if (messaggio == "il_tuo_turno")
-            {
-                // Abilita di nuovo i bottoni
-                buttonFold.IsEnabled = true;
-                buttonCheck.IsEnabled = true;
-                buttonPuntata.IsEnabled = true;
-            }
-        }
-
-        //Se viene schiacciato il tasto puntata
-        private async void buttonPuntata_Click(object sender, RoutedEventArgs e)
-        {
-            puntata();
-            turnoFinito();
-
-            // Aspetta fino a quando non è di nuovo il tuo turno
-            String messaggio = await AttendiTurno();
-
-            // Qui puoi eseguire azioni dopo aver ricevuto il messaggio "il_tuo_turno"
-            if (messaggio == "il_tuo_turno")
-            {
-                // Abilita di nuovo i bottoni
-                buttonFold.IsEnabled = true;
-                buttonCheck.IsEnabled = true;
-                buttonPuntata.IsEnabled = true;
-            }
-
+            is_my_turn = false;
+            inizio_gioco();
         }
     }
 }

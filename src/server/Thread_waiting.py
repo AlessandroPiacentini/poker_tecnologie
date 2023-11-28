@@ -1,8 +1,9 @@
-from condivisa import game_phase, seated_players, count_player
+from condivisa import SingletonClass
 from Player import Player
 import socket
 import threading
 
+singleton = SingletonClass()
 
 # Function that handles a client connection
 def handle_client(client_socket, address, client_ip, client_port):
@@ -18,8 +19,7 @@ def handle_client(client_socket, address, client_ip, client_port):
     Returns:
         None
     """
-    global seated_players
-
+    max_messages=6
     print(f"Connection accepted from {address}")
 
     while True:
@@ -29,7 +29,7 @@ def handle_client(client_socket, address, client_ip, client_port):
             break  # If the client closes the connection, exit the loop
 
         # Check if the vector exceeds the maximum length
-        if len(seated_players) >= max_messages:
+        if len(singleton.seated_players) >= max_messages:
             response = "table full"
             client_socket.send(response.encode("utf-8"))
             print(response)
@@ -37,8 +37,9 @@ def handle_client(client_socket, address, client_ip, client_port):
         else:
             # Decode and save the message in the vector
             message = data.decode("utf-8")
-            player = Player(message.split(";")[1], 0, 0, 0, int(message.split(";")[2]), "no", "no", True, count_player, client_ip, client_port)
-            seated_players.append(player)
+            singleton.count_player+=1
+            player = Player(message.split(";")[1], 0, 0, 0, int(message.split(";")[2]), "no", "no", True, singleton.count_player, client_ip, client_port)
+            singleton.seated_players.append(player)
 
         print(f"Received message: {message}")
 
@@ -63,14 +64,12 @@ def waiting():
     server.bind(("127.0.0.1", 12345))
     server.listen(5)
     
-    global seated_players
-    global game_phase
-    global count_player
+    
 
     print("Server listening on 127.0.0.1:12345")
 
     # Accept connections from clients
-    while game_phase == "game":
+    while singleton.game_phase == "game":
         client_socket, client_address = server.accept()
         client_ip, client_port = client_address
 

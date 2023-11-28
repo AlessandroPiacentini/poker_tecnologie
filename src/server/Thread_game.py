@@ -4,9 +4,12 @@ import sqlite3
 import xml.etree.ElementTree as ET
 
 import threading
-from condivisa import game_phase, seated_players, winner_index, server_socket
+from condivisa import SingletonClass
 
 import random
+
+
+import time
 
 
 def draw_card():
@@ -93,16 +96,15 @@ def send_info(players, pot, board_cards, game_phase_count):
     for player in players:
         try:
             # Crea un socket per la connessione al giocatore
-            player_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            print(f"Connessione a {player.ip}")
-            player_socket.connect((player.ip, player.port))
+            
+            
+           
             my_variables = {"pot": pot, "board_cards": board_cards, "game_phase_count": game_phase_count,
                             "players": players, "turn": turn_count}
             print(pot)
             xml_result = dict_to_xml(my_variables)
             print("fatto xml")
-            player_socket.send(xml_result.encode('utf-8'))
-            player_socket.close()
+            player.client_socket.send(xml_result.encode('utf-8'))
         except Exception as e:
             print(f"Errore durante la connessione al giocatore: {e}")
 
@@ -141,6 +143,7 @@ def calculate_pot(players):
     pot = 0
     for player in players:
         pot += player.bet
+        player.bet = 0
     return pot
 
 def receive_move():
@@ -153,21 +156,17 @@ def receive_move():
     server_host = '127.0.0.1'
     server_port = 888
     # Crea un socket TCP/IP
-    global server_socket
+    global singleton
     print(f"In attesa di connessioni su {server_host}:{server_port}...")
-    client_socket, client_address = server_socket.accept()
-    client_ip, client_port = client_address  # Estrai l'indirizzo IP e la porta
+    
 
-    print(f"Connessione da: {client_address}")
 
     # Ricevi i dati dal client
-    data = client_socket.recv(1024)
+    time.sleep(1)
+    data = singleton.seated_players[turn_count].client_socket.recv(1024)
     data_str = data.decode('utf-8')
     print(f"Dati ricevuti dal client: {data_str}")
 
-    # Decodifica i dati da bytes a stringa
-    response = f"ok"
-    client_socket.send(response.encode('utf-8'))
     
 
     return data_str
@@ -176,21 +175,23 @@ def deal_player_cards():
     """
     Deals two cards to each player in the seated_players list.
     """
-    global seated_players
-    i = 0
-    while i < 2:
-        for player in seated_players:
+    global singleton
+    for player in singleton.seated_players:
+        i = 0
+        while i < 2:
             if i == 0:
                 player.card1 = draw_card()
             else:
                 player.card2 = draw_card()
-        i += 1
+            i += 1
 
 def deal_community_cards():
     """
     Deals three community cards by appending them to the `community_cards` list.
     """
     i = 0
+    global community_cards
+
     while i < 3:
         community_cards.append(draw_card())
         i += 1
@@ -202,10 +203,11 @@ def check_equal_bets():
     Returns:
         bool: True if all seated players have equal bets, False otherwise.
     """
+    global singleton
     sentinel = True
-    for player in seated_players:
+    for player in singleton.seated_players:
         if player.seated:
-            for player2 in seated_players:
+            for player2 in singleton.seated_players:
                 if player2.seated:
                     if player.bet != player2.bet:
                         sentinel = False
@@ -219,8 +221,9 @@ def calculate_max_bet():
     Returns:
         int: The maximum bet value.
     """
+    global singleton
     max_bet = 0
-    for player in seated_players:
+    for player in singleton.seated_players:
         if player.bet > max_bet:
             max_bet = player.bet
     return max_bet
@@ -229,7 +232,8 @@ def reset_bets():
     """
     Resets the bets of all seated players to zero.
     """
-    for player in seated_players:
+    global singleton
+    for player in singleton.seated_players:
         player.bet = 0
 
 def get_rank(card):
@@ -291,16 +295,17 @@ def find_winner():
         int: The index of the winner player.
     """
     global pot
+    global singleton
     # Trova il vincitore tra i giocatori in base alle carte in mano e le carte sul tavolo
     winner_index = 0
-    best_score = evaluate_hand((seated_players[0].card1, seated_players[0].card2), community_cards)
+    best_score = evaluate_hand((singleton.seated_players[0].card1, singleton.seated_players[0].card2), community_cards)
 
-    for i in range(1, len(seated_players)):
-        score = evaluate_hand((seated_players[i].card1, seated_players[i].card2), community_cards)
+    for i in range(1, len(singleton.seated_players)):
+        score = evaluate_hand((singleton.seated_players[i].card1, singleton.seated_players[i].card2), community_cards)
         if score > best_score:
             winner_index = i
             best_score = score
-    seated_players[winner_index + 1].chips += pot
+    singleton.seated_players[winner_index + 1].chips += pot
     return winner_index + 1
 
 def communicate_winner():
@@ -317,20 +322,22 @@ def communicate_winner():
     None
     """
     global winner_index
-    for player in seated_players:
+    global singleton
+    for player in singleton.seated_players:
         try:
             # Crea un socket per la connessione al giocatore
-            player_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            
             print(f"Connessione a {player.ip}")
-            player_socket.connect((player.ip, player.port))
-
+            
             winner_index_str = str(winner_index)
-            player_socket.send(winner_index_str.encode('utf-8'))
-            player_socket.close()
+            player.client_socket.send(winner_index_str.encode('utf-8'))
         except Exception as e:
             print(f"Errore durante la connessione al giocatore: {e}")
 
-
+singleton = SingletonClass()
+used_cards=[]
+pot=0
+community_cards=[]
 def game():
     """
     Main game loop that manages the flow of the poker game.
@@ -344,54 +351,53 @@ def game():
         None
     """
     
-    global seated_players
     global turn_count
     turn_count = 0
-    global game_phase
     global community_cards
     global pot
     game_phase_count = 0
     global used_cards
     equal_bets = True
-    global winner_index
-    global server_socket
-    game_phase = "game"
-    print(game_phase)
-    while game_phase == "game":
-        if seated_players[turn_count].seated and equal_bets:
-            if len(seated_players) > 3:
-                seated_players = set_blind(turn_count, seated_players)
-            if game_phase_count == 0:
+    global singleton
+    deal_card=True
+    print(singleton.game_phase)
+    while singleton.game_phase == "game":
+        if singleton.seated_players[turn_count].seated and equal_bets:
+            if len(singleton.seated_players) > 3:
+                singleton.seated_players = set_blind(turn_count, singleton.seated_players)
+            if game_phase_count==0:
                 deal_player_cards()
+                # deal_card=False
             elif game_phase_count == 1:
                 deal_community_cards()
             else:
                 community_cards.append(draw_card())
 
-            send_info(seated_players, pot, community_cards, game_phase_count)
+            send_info(singleton.seated_players, pot, community_cards, game_phase_count)
 
             move = receive_move()
-            if move.split(";")[0] == "knock":
-                pass
-            elif move.split(";")[0] == "add":
-                seated_players[turn_count].bet = move.split(";")[1]
+            if move.split(";")[0] == "add":
+                singleton.seated_players[turn_count].chips -= int( move.split(";")[1])
+                singleton.seated_players[turn_count].bet = int( move.split(";")[1])
             elif move.split(";")[0] == "see":
-                seated_players[turn_count].bet = calculate_max_bet()
-            elif move.split(";")[0] == "leave":
-                seated_players[turn_count].seated = False
+                singleton.seated_players[turn_count].chips -= calculate_max_bet()
+                singleton.seated_players[turn_count].bet = calculate_max_bet()
+                
+            elif move.split(";")[0] == "fold":
+                singleton.seated_players[turn_count].seated = False
 
         turn_count += 1
-        if turn_count == len(seated_players):
-            turn_count = 1
+        if turn_count == len(singleton.seated_players):
+            turn_count = 0
             if check_equal_bets():
                 equal_bets = True
                 game_phase_count += 1
-                pot = calculate_pot(seated_players)
+                pot = calculate_pot(singleton.seated_players)
                 reset_bets()
             else:
                 equal_bets = False
 
         if game_phase_count == 3:
-            game_phase = "waiting"
-    # server_socket.close()
-    winner_index = find_winner()
+            singleton.game_phase = "waiting"
+    singleton.server_socket.close()
+    singleton.winner_index = find_winner()
