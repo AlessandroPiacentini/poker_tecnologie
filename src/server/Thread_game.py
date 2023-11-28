@@ -162,8 +162,8 @@ def receive_move():
 
 
     # Ricevi i dati dal client
-    data = singleton.seated_players[turn_count].client_socket.recv(1024)
     time.sleep(1)
+    data = singleton.seated_players[turn_count].client_socket.recv(1024)
     data_str = data.decode('utf-8')
     print(f"Dati ricevuti dal client: {data_str}")
 
@@ -359,13 +359,15 @@ def game():
     global used_cards
     equal_bets = True
     global singleton
+    deal_card=True
     print(singleton.game_phase)
     while singleton.game_phase == "game":
         if singleton.seated_players[turn_count].seated and equal_bets:
             if len(singleton.seated_players) > 3:
                 singleton.seated_players = set_blind(turn_count, singleton.seated_players)
-            if game_phase_count == 0:
+            if game_phase_count==0:
                 deal_player_cards()
+                # deal_card=False
             elif game_phase_count == 1:
                 deal_community_cards()
             else:
@@ -386,7 +388,7 @@ def game():
 
         turn_count += 1
         if turn_count == len(singleton.seated_players):
-            turn_count = 1
+            turn_count = 0
             if check_equal_bets():
                 equal_bets = True
                 game_phase_count += 1
