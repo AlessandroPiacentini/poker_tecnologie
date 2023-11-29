@@ -59,7 +59,6 @@ def dict_to_xml(variables):
     xml_string = ET.tostring(root).decode("utf-8")
     
     print(xml_string)
-    write_to_file("log.txt",xml_string)
     
     return xml_string
 def write_to_file(file_path, content):
@@ -236,78 +235,142 @@ def reset_bets():
     for player in singleton.seated_players:
         player.bet = 0
 
-def get_rank(card):
-    """
-    Get the rank value of a card for ranking purposes.
 
-    Parameters:
-    card (int): The numerical value of the card.
+from collections import Counter
 
-    Returns:
-    int: The rank value of the card.
-    """
-    return (card - 1) % 13 + 1
+def valuta_mano(mano):
+    # Funzione per valutare la forza della mano
+    valori = [carta[:-1] for carta in mano]
+    count_valori = Counter(valori)
 
-def is_flush(hand):
-    """
-    Check if all cards in the hand have the same suit.
+    # Verifica se ci sono coppie, tris, ecc.
+    coppie = [valore for valore, count in count_valori.items() if count == 2]
+    tris = [valore for valore, count in count_valori.items() if count == 3]
+    poker = [valore for valore, count in count_valori.items() if count == 4]
 
-    Args:
-        hand (list): A list of integers representing the cards in the hand.
+    # Verifica se la mano contiene una scala
+    valori_ordinati = sorted([int(valore) if valore.isdigit() else 11 if valore == 'J' else 12 if valore == 'Q' else 13 if valore == 'K' else 14 for valore in valori])
+    scala = all(valori_ordinati[i] == valori_ordinati[i - 1] + 1 for i in range(1, len(valori_ordinati)))
 
-    Returns:
-        bool: True if all cards have the same suit, False otherwise.
-    """
-    return len(set(card // 13 for card in hand)) == 1
+    # Verifica se la mano contiene un colore
+    semi = set(carta[-1] for carta in mano)
+    colore = len(semi) == 1
 
-def is_straight(hand):
-    """
-    Check if the cards in the hand form a straight.
+    # Assegna un punteggio alla mano
+    if scala and colore:
+        return 9  # Scala reale
+    elif poker:
+        return 8  # Poker
+    elif tris and coppie:
+        return 7  # Full
+    elif colore:
+        return 6  # Colore
+    elif scala:
+        return 5  # Scala
+    elif tris:
+        return 4  # Tris
+    elif coppie and len(coppie) == 2:
+        return 3  # Due coppie
+    elif coppie:
+        return 2  # Coppia
+    else:
+        return 1  # Carta alta
 
-    Args:
-        hand (list): A list of cards in the hand.
 
-    Returns:
-        bool: True if the hand forms a straight, False otherwise.
-    """
-    sorted_hand = sorted(get_rank(card) for card in hand)
-    return sorted_hand[-1] - sorted_hand[0] == 4 and len(set(sorted_hand)) == 5
+def converti_mano(carta1, carta2):
+    # Funzione per convertire le carte in stringhe
+    carta1_str = str(carta1)
+    carta2_str = str(carta2)
 
-def evaluate_hand(hand, board):
-    """
-    Evaluate the strength of a poker hand by summing the values of the cards.
+    if carta1_str[-1] == '1':
+        carta1_str ='A'
+    elif carta1_str[-1] == '11':
+        carta1_str ='J'
+    elif carta1_str[-1] == '12':
+        carta1_str ='Q'
+    elif carta1_str[-1] == '13':
+        carta1_str ='K'
 
-    Parameters:
-    hand (list): A list of cards representing the player's hand.
-    board (list): A list of cards representing the community cards on the board.
+    if carta2_str[-1] == '1':
+        carta2_str = 'A'
+    elif carta2_str[-1] == '11':
+        carta2_str = 'J'
+    elif carta2_str[-1] == '12':
+        carta2_str = 'Q'
+    elif carta2_str[-1] == '13':
+        carta2_str = 'K'
 
-    Returns:
-    int: The total value of the hand.
 
-    """
-    return sum(get_rank(card) for card in hand + board)
+    if int(carta1/13)==1:
+        carta1_str += 'D'
+    elif int(carta1/13)==2:
+        carta1_str += 'C'
+    elif int(carta1/13)==3:
+        carta1_str += 'H'
+    elif int(carta1/13)==4:
+        carta1_str += 'S'
+        
+        
+    if int(carta2/13)==1:
+        carta2_str += 'D'   
+    elif int(carta2/13)==2:
+        carta2_str += 'C'
+    elif int(carta2/13)==3:
+        carta2_str += 'H'
+    elif int(carta2/13)==4:
+        carta2_str += 'S'
+        
+        
 
-def find_winner():
-    """
-    Finds the winner among the players based on their hand cards and the community cards.
+    return [carta1_str, carta2_str]
+def converti_board_card(carte):
+    carte_convertite = []
+    for carta in carte:
+        carta_str = str(carta)
+        if carta_str[-1] == '1':
+            carta_str = 'A'
+        elif carta_str[-1] == '11':
+            carta_str = 'J'
+        elif carta_str[-1] == '12':
+            carta_str = 'Q'
+        elif carta_str[-1] == '13':
+            carta_str = 'K'
 
-    Returns:
-        int: The index of the winner player.
-    """
-    global pot
-    global singleton
-    # Trova il vincitore tra i giocatori in base alle carte in mano e le carte sul tavolo
-    winner_index = 0
-    best_score = evaluate_hand((singleton.seated_players[0].card1, singleton.seated_players[0].card2), community_cards)
+        if int(carta/13) == 1:
+            carta_str += 'D'
+        elif int(carta/13) == 2:
+            carta_str += 'C'
+        elif int(carta/13) == 3:
+            carta_str += 'H'
+        elif int(carta/13) == 4:
+            carta_str += 'S'
 
-    for i in range(1, len(singleton.seated_players)):
-        if(singleton.seated_players[i].seated==True):
-            score = evaluate_hand((singleton.seated_players[i].card1, singleton.seated_players[i].card2), community_cards)
-            if score > best_score:
-                winner_index = i
-                best_score = score
-    singleton.seated_players[winner_index + 1].chips += pot
-    return winner_index + 1
+        carte_convertite.append(carta_str)
+
+    return carte_convertite
+
+
+def determina_vincitore():
+    # Funzione per determinare il vincitore tra i giocatori
+    vincitore = None
+    punteggio_vincitore = 0
+    carte_comuni = converti_board_card(community_cards)
+    for giocatore in singleton.seated_players:
+        mano_completa = converti_mano(giocatore.card1, giocatore.card2) + carte_comuni
+        punteggio_mano = valuta_mano(mano_completa)
+        mano=converti_mano(giocatore.card1, giocatore.card2)
+
+        if punteggio_mano > punteggio_vincitore or (punteggio_mano == punteggio_vincitore and valuta_carta_alta(mano) > valuta_carta_alta(converti_mano(vincitore.card1, vincitore.card2))):
+            vincitore = giocatore
+            punteggio_vincitore = punteggio_mano
+
+    return vincitore.position
+
+def valuta_carta_alta(mano):
+    # Funzione per valutare la carta più alta in una mano
+    valori = [carta[:-1] for carta in mano]
+    valori_numerici = [int(valore) if valore.isdigit() else 11 if valore == 'J' else 12 if valore == 'Q' else 13 if valore == 'K' else 14 for valore in valori]
+    return max(valori_numerici)
 
 def communicate_winner():
     """
@@ -380,18 +443,28 @@ def game():
     equal_bets = True
     global singleton
     deal_card=True
+    deal_first3=True
+    deal_card4=True
+    deal_card5=True
     print(singleton.game_phase)
     while singleton.game_phase == "game":
         if singleton.seated_players[turn_count].seated and equal_bets:
             if len(singleton.seated_players) > 3:
                 singleton.seated_players = set_blind(turn_count, singleton.seated_players)
-            if game_phase_count==0:
+            if game_phase_count==0 and deal_card:
                 deal_player_cards()
+                deal_card=False
                 # deal_card=False
-            elif game_phase_count == 1:
+            elif game_phase_count == 1 and deal_first3:
                 deal_community_cards()
-            else:
+                deal_first3=False
+            elif game_phase_count == 2 and deal_card4:
                 community_cards.append(draw_card())
+                deal_card4=False
+            elif game_phase_count == 3 and deal_card5:
+                community_cards.append(draw_card())
+                deal_card5=False
+                
 
             send_info(singleton.seated_players, pot, community_cards, game_phase_count)
 
@@ -423,7 +496,7 @@ def game():
 
         if game_phase_count == 3:
             singleton.game_phase = "waiting"
-    singleton.winner_index = find_winner()
+    singleton.winner_index = determina_vincitore()
     send_all_winner()
     singleton.server_socket.close()
     

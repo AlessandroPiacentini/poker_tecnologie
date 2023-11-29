@@ -346,6 +346,7 @@ namespace Client
             }
 
             is_my_turn = false;
+            inizio_gioco();
 
         }
         private void buttonFold_Click(object sender, RoutedEventArgs e)
