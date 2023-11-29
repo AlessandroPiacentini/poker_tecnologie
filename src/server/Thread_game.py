@@ -494,7 +494,7 @@ def game():
             else:
                 equal_bets = False
 
-        if game_phase_count == 3:
+        if game_phase_count > 3:
             singleton.game_phase = "waiting"
     singleton.winner_index = determina_vincitore()
     send_all_winner()
