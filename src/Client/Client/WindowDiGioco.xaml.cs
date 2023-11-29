@@ -326,7 +326,7 @@ namespace Client
             }
             if (BoardCards.Count > 4)
             {
-                imgTavolo4.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/" + BoardCards[4] + ".jpg"));
+                imgTavolo5.Source = new BitmapImage(new Uri(AppDomain.CurrentDomain.BaseDirectory + "//immagini/" + BoardCards[4] + ".jpg"));
             }
         }
 
