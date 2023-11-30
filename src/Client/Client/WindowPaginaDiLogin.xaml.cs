@@ -34,16 +34,14 @@ namespace Client
         public WindowPaginaDiLogin()
         {
             InitializeComponent();
-
-<<<<<<< HEAD
             txtRicerca.Visibility = Visibility.Collapsed;
 
             txtDiAttesa.Visibility = Visibility.Collapsed;
 
             
-=======
+
             txtDiAttesa.Opacity = 0;
->>>>>>> 50fa5749d2ca2b00a516c037cbb3eb3f0e9b66d6
+
 
         }
 
