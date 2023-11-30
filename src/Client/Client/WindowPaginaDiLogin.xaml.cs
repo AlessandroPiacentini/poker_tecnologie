@@ -33,7 +33,8 @@ namespace Client
         {
             InitializeComponent();
             
-            
+            txtDiAttesa.Opacity = 0;
+
         }
 
         //Invio di un messaggio al Server
@@ -82,7 +83,6 @@ namespace Client
 
             if (messaggio.Split(';')[0] == "ok")
             {
-                
                 RichiestaSuccesso();
             }
             else
@@ -115,6 +115,8 @@ namespace Client
 
             if (bytesRead != 0)
             {
+                txtDiAttesa.Opacity = 75;
+                txtDiAttesa.Text = "Giocatori entrati:";
 
                 // Decodificare il messaggio ricevuto
                 receivedMessage = Encoding.ASCII.GetString(message, 0, bytesRead);
@@ -182,10 +184,11 @@ namespace Client
 
             while (true)
             {
+
                 risposta = RicezioneDati().Split(';'); // Dividi utilizzando il punto e virgola come separatore
                 if (risposta.Length > 0 && risposta[0] == "ok")
                 {
-                    posto= int.Parse(risposta[1]);
+                    posto = int.Parse(risposta[1]);
                     break; // Esci dal ciclo quando la risposta è "ok"
                 }
 
