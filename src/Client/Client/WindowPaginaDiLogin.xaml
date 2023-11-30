@@ -6,12 +6,80 @@
         xmlns:local="clr-namespace:Client"
         mc:Ignorable="d"
         Title="WindowPaginaDiLogin" Height="450" Width="800">
+    <Window.Resources>
+        <!-- Stile per Label con bordi rotondi -->
+        <Style TargetType="Label" x:Key="RoundedLabelStyle" BasedOn="{StaticResource {x:Type Label}}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Label">
+                        <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="20">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Stile per i text box con bordi rotondi -->
+        <Style TargetType="TextBox" x:Key="RoundedTextBoxStyle" BasedOn="{StaticResource {x:Type TextBox}}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="20">
+                            <ScrollViewer x:Name="PART_ContentHost" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!-- Stile per i bottoni con bordi rotondi -->
+        <Style TargetType="Button" x:Key="RoundedButtonStyle" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="20">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Image Source="/sfondoHome.jpg" Stretch="Fill"/>
-        <Label Content="Inserisci il nome:" HorizontalAlignment="Left" Margin="55,298,0,0" VerticalAlignment="Top" Foreground="White" FontSize="30"/>
-        <TextBox x:Name="txtNome" HorizontalAlignment="Left" Margin="400,298,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" Height="37"/>
-        <Label Content="Inserisci quantità di soldi" HorizontalAlignment="Left" Margin="55,353,0,0" VerticalAlignment="Top" Foreground="White" FontSize="30"/>
-        <TextBox x:Name="txtSoldi" HorizontalAlignment="Left" Margin="410,361,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="185" RenderTransformOrigin="0.5,0.5" Height="40">
+        <Label Content="" Style="{StaticResource RoundedLabelStyle}" HorizontalAlignment="Center" Margin="0,213,0,0" VerticalAlignment="Top" Height="188" Width="694">
+            <Label.Background>
+                <SolidColorBrush Color="Silver" Opacity="0.585"/>
+            </Label.Background>
+        </Label>
+        <Label Content="Inserisci il nome:" Style="{StaticResource RoundedLabelStyle}" HorizontalAlignment="Left" Margin="117,257,0,0" VerticalAlignment="Top" Foreground="#FF080808" FontSize="27" BorderBrush="White" Width="248" FontFamily="Yu Gothic" FontWeight="Bold"/>
+        <TextBox x:Name="txtNome" Style="{StaticResource RoundedTextBoxStyle}" HorizontalAlignment="Left" Margin="422,257,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" RenderTransformOrigin="0.5,0.5" Height="40" TextAlignment="Center"/>
+        <Label Content="Inserisci quantità  di soldi" Style="{StaticResource RoundedLabelStyle}" HorizontalAlignment="Left" Margin="66,320,0,0" VerticalAlignment="Top" Foreground="Black" FontSize="27" FontFamily="Yu Gothic" FontWeight="Bold"/>
+        <Button x:Name="buttonEntra" Style="{StaticResource RoundedButtonStyle}" Content="ENTRA" HorizontalAlignment="Left" Height="38" Margin="617,288,0,0" VerticalAlignment="Top" Width="107" Click="buttonEntra_Click"/>
+        <TextBox x:Name="txtSoldi" Style="{StaticResource RoundedTextBoxStyle}" HorizontalAlignment="Left" Margin="423,322,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="185" RenderTransformOrigin="0.5,0.5" Height="40" TextAlignment="Center">
+            <TextBox.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="-0.168"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </TextBox.RenderTransform>
+        </TextBox>
+        <TextBox x:Name="txtDiAttesa" Style="{StaticResource RoundedTextBoxStyle}" HorizontalAlignment="Left" Margin="149,47,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="517" RenderTransformOrigin="0.5,0.5" Height="125" FontSize="38" TextAlignment="Center" FontWeight="Bold">
+            <TextBox.Background>
+                <SolidColorBrush Color="White" Opacity="0.75"/>
+            </TextBox.Background>
             <TextBox.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
@@ -21,7 +89,7 @@
                 </TransformGroup>
             </TextBox.RenderTransform>
         </TextBox>
-        <Button x:Name="buttonEntra" Content="ENTRA" HorizontalAlignment="Left" Height="38" Margin="624,342,0,0" VerticalAlignment="Top" Width="107" Click="buttonEntra_Click"/>
+        <Label x:Name="txtRicerca" Content="ricerca partita, attesa giocatori..." HorizontalAlignment="Center" Height="56" Margin="0,82,0,0" VerticalAlignment="Top" Width="436" FontSize="30"/>
 
     </Grid>
 </Window>

@@ -32,8 +32,8 @@ def attendi_nuove_connessioni():
     global server_port
     global server_socket
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    server_port=888
-    server_socket.bind((server_host, server_port))
+    _server_port=888
+    server_socket.bind((server_host, _server_port))
     server_socket.listen(6)
     i=0
     print (len(seated_players))

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,6 +15,7 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Client
 {
@@ -32,14 +34,21 @@ namespace Client
         public WindowPaginaDiLogin()
         {
             InitializeComponent();
+            txtRicerca.Visibility = Visibility.Collapsed;
+
+            txtDiAttesa.Visibility = Visibility.Collapsed;
+
             
-            
+
+            txtDiAttesa.Opacity = 0;
+
+
         }
 
         //Invio di un messaggio al Server
         private void InvioDati(String messaggio)
         {
-            client = new TcpClient("127.0.0.1", 12345); 
+            client = new TcpClient("127.0.0.1", 12345);
             stream = client.GetStream();
             try
             {
@@ -72,17 +81,63 @@ namespace Client
         //Richiesta di entrare nel gioco al server
         private async void buttonEntra_Click(object sender, RoutedEventArgs e)
         {
+            txtDiAttesa.Visibility = Visibility.Visible;
+            txtRicerca.Visibility = Visibility.Visible;
             String dati = "";
 
-            dati = txtNome.Text + ";" + txtSoldi.Text;    //invia: (nome e soldi)
-            InvioDati("entry;" + dati);
+            //Controllo se ce scritto qualcosa
+            if (!string.IsNullOrEmpty(txtNome.Text) && !string.IsNullOrEmpty(txtNome.Text))
+            {
+                if (!string.IsNullOrEmpty(txtNome.Text))
+                {
+                    if (!string.IsNullOrEmpty(txtSoldi.Text))
+                    {
+                        //Cotrolli se i soldi sono solo numeri
+                        if (Regex.IsMatch(txtSoldi.Text, @"^\d+$"))
+                        {
+                            // Il testo contiene solo numeri
+                            Console.WriteLine("Il testo contiene solo numeri: " + txtSoldi);
+
+                            dati = txtNome.Text + ";" + txtSoldi.Text;    // Invia: (nome e soldi)
+                            InvioDati("entry;" + dati);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Il testo contiene caratteri diversi dai numeri");
+                            MessageBox.Show("Inserisci solo numeri nel campo Soldi.");
+
+                            txtSoldi.Text = "";
+
+                            return; // Esci dal metodo se il testo non contiene solo numeri
+                        }
+                    }
+                    else
+                    {
+                        // Il TextBox è vuoto
+                        MessageBox.Show("Inserisci i soldi");
+                        return; // Esci dal metodo se il testo non contiene solo numeri
+                    }
+                }
+                else
+                {
+                    // Il TextBox è vuoto
+                    MessageBox.Show("Inserisci il nome");
+                    return; // Esci dal metodo se il testo non contiene solo numeri
+                }
+            }
+            else
+            {
+                // Il TextBox è vuoto
+                MessageBox.Show("Inserisci il nome e soldi");
+                return; // Esci dal metodo se il testo non contiene solo numeri
+            }
 
             // Aspetta fino a quando non è di nuovo il tuo turno
             String messaggio = await AttendiRisposta();
 
             if (messaggio.Split(';')[0] == "ok")
             {
-                
+
                 RichiestaSuccesso();
             }
             else
@@ -115,6 +170,8 @@ namespace Client
 
             if (bytesRead != 0)
             {
+                txtDiAttesa.Opacity = 75;
+                txtDiAttesa.Text = "Giocatori entrati:";
 
                 // Decodificare il messaggio ricevuto
                 receivedMessage = Encoding.ASCII.GetString(message, 0, bytesRead);
@@ -160,7 +217,7 @@ namespace Client
 
             set_socket_server();
 
-            WindowDiGioco WindowDiGioco = new WindowDiGioco(client, posto,stream);
+            WindowDiGioco WindowDiGioco = new WindowDiGioco(client, posto, stream);
 
             // Mostra la nuova finestra
             WindowDiGioco.Show();
@@ -182,10 +239,11 @@ namespace Client
 
             while (true)
             {
+
                 risposta = RicezioneDati().Split(';'); // Dividi utilizzando il punto e virgola come separatore
                 if (risposta.Length > 0 && risposta[0] == "ok")
                 {
-                    posto= int.Parse(risposta[1]);
+                    posto = int.Parse(risposta[1]);
                     break; // Esci dal ciclo quando la risposta è "ok"
                 }
 
