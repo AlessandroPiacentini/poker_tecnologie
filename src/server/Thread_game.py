@@ -404,7 +404,8 @@ def send_all_winner():
         try:
             # Crea un socket per la connessione al giocatore
             winner_str=str(singleton.winner_index)
-            player.client_socket.send(winner_str.encode('utf-8'))
+            message="winner;"+winner_str
+            player.client_socket.send(message.encode('utf-8'))
         except Exception as e:
             print(f"Errore durante la connessione al giocatore: {e}")
 

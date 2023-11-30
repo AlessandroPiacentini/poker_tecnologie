@@ -157,16 +157,20 @@ namespace Client
 
                 stream.Flush();
             }
-            if (GamePhaseCount > 3)
+            if (info_del_server.Split(';')[0]=="winner")
             {
-                if (info_del_server == posto.ToString())
+                if (int.Parse(info_del_server.Split(';')[1]) == posto)
                 {
                     MessageBox.Show("hai vinto");
                 }
                 else
                 {
                     MessageBox.Show("hai perso");
+
                 }
+                MainWindow window = new MainWindow();
+                window.Show();
+                this.Close();
             }
             else
             {
