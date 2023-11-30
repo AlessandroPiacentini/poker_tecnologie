@@ -161,8 +161,8 @@ def receive_move():
 
 
     # Ricevi i dati dal client
-    time.sleep(1)
     data = singleton.seated_players[turn_count].client_socket.recv(1024)
+    
     data_str = data.decode('utf-8')
     print(f"Dati ricevuti dal client: {data_str}")
 

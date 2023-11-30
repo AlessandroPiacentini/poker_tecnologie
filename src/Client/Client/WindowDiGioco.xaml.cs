@@ -157,7 +157,7 @@ namespace Client
 
                 stream.Flush();
             }
-            if (GamePhaseCount == 3)
+            if (GamePhaseCount > 3)
             {
                 if (info_del_server == posto.ToString())
                 {
