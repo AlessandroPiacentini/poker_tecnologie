@@ -77,23 +77,50 @@ namespace Client
         {
             String dati = "";
 
-            if (Regex.IsMatch(txtSoldi.Text, @"^\d+$"))
+            //Controllo se ce scritto qualcosa
+            if (!string.IsNullOrEmpty(txtNome.Text) && !string.IsNullOrEmpty(txtNome.Text))
             {
-                // Il testo contiene solo numeri
-                Console.WriteLine("Il testo contiene solo numeri: " + txtSoldi);
+                if (!string.IsNullOrEmpty(txtNome.Text))
+                {
+                    if (!string.IsNullOrEmpty(txtSoldi.Text))
+                    {
+                        //Cotrolli se i soldi sono solo numeri
+                        if (Regex.IsMatch(txtSoldi.Text, @"^\d+$"))
+                        {
+                            // Il testo contiene solo numeri
+                            Console.WriteLine("Il testo contiene solo numeri: " + txtSoldi);
 
-                dati = txtNome.Text + ";" + txtSoldi.Text;    // Invia: (nome e soldi)
-                InvioDati("entry;" + dati);
+                            dati = txtNome.Text + ";" + txtSoldi.Text;    // Invia: (nome e soldi)
+                            InvioDati("entry;" + dati);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Il testo contiene caratteri diversi dai numeri");
+                            MessageBox.Show("Inserisci solo numeri nel campo Soldi.");
 
+                            txtSoldi.Text = "";
 
+                            return; // Esci dal metodo se il testo non contiene solo numeri
+                        }
+                    }
+                    else
+                    {
+                        // Il TextBox è vuoto
+                        MessageBox.Show("Inserisci i soldi");
+                        return; // Esci dal metodo se il testo non contiene solo numeri
+                    }
+                }
+                else
+                {
+                    // Il TextBox è vuoto
+                    MessageBox.Show("Inserisci il nome");
+                    return; // Esci dal metodo se il testo non contiene solo numeri
+                }
             }
             else
             {
-                Console.WriteLine("Il testo contiene caratteri diversi dai numeri");
-                MessageBox.Show("Inserisci solo numeri nel campo Soldi.");
-
-                txtSoldi.Text = "";
-
+                // Il TextBox è vuoto
+                MessageBox.Show("Inserisci il nome e soldi");
                 return; // Esci dal metodo se il testo non contiene solo numeri
             }
 

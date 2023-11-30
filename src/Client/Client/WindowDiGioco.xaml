@@ -68,15 +68,16 @@
             <Image x:Name="imgTavolo4" HorizontalAlignment="Left" Height="51" Margin="434,216,0,0" VerticalAlignment="Top" Width="40" />
             <Image x:Name="imgTavolo5" HorizontalAlignment="Left" Height="50" Margin="479,217,0,0" VerticalAlignment="Top" Width="35" />
         </Grid>
-        <Button x:Name="buttonFold" Content="FOLD" HorizontalAlignment="Left" Margin="716,390,0,0" VerticalAlignment="Top" Click="buttonFold_Click"/>
-        <Button x:Name="buttonCheck" Content="CHECK" HorizontalAlignment="Left" Margin="714,370,0,0" VerticalAlignment="Top" Click="buttonCheck_Click"/>
-        <Button x:Name="buttonPuntata" Content="PUNTATA" HorizontalAlignment="Left" Margin="714,415,0,0" VerticalAlignment="Top" Click="buttonPuntata_Click"/>
-        <TextBox x:Name="txtPuntata" HorizontalAlignment="Left" Margin="632,417,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="77"/>
+        <Button x:Name="buttonFold" Content="FOLD" HorizontalAlignment="Left" Margin="714,395,0,0" VerticalAlignment="Top" Click="buttonFold_Click" Width="54"/>
+        <Button x:Name="buttonCheck" Content="CHECK" HorizontalAlignment="Left" Margin="714,370,0,0" VerticalAlignment="Top" Click="buttonCheck_Click" Width="54"/>
+        <Button x:Name="buttonPuntata" Content="PUNTATA" HorizontalAlignment="Left" Margin="714,424,0,0" VerticalAlignment="Top" Click="buttonPuntata_Click" Width="54"/>
+        <TextBox x:Name="txtPuntata" HorizontalAlignment="Left" Margin="604,396,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="76"/>
         <Label x:Name="soldi_giocatore" Style="{StaticResource RoundedLabelStyle}" Content="" HorizontalAlignment="Left" Margin="27,400,0,0" VerticalAlignment="Top" Height="48" Width="183" FontSize="22" FontWeight="Bold">
             <Label.Background>
                 <SolidColorBrush Color="#FFABADB3" Opacity="0.75"/>
             </Label.Background>
         </Label>
         <Label x:Name="label_pot" Style="{StaticResource RoundedLabelStyle}" Content="" HorizontalAlignment="Left" Height="14" Margin="332,342,0,0" VerticalAlignment="Top" Width="145" Background="#FFABADB3"/>
+        <Slider HorizontalAlignment="Left" Margin="582,419,0,0" VerticalAlignment="Top" Width="120"/>
     </Grid>
 </Window>
