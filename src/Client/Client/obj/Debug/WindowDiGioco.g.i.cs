@@ -9,6 +9,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using Client;
 using System;
 using System.Diagnostics;
 using System.Windows;
@@ -40,7 +41,7 @@ namespace Client {
     public partial class WindowDiGioco : System.Windows.Window, System.Windows.Markup.IComponentConnector {
         
         
-        #line 10 "..\..\WindowDiGioco.xaml"
+        #line 11 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Grid giocatore6;
         
@@ -48,7 +49,7 @@ namespace Client {
         #line hidden
         
         
-        #line 11 "..\..\WindowDiGioco.xaml"
+        #line 12 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Image img0;
         
@@ -56,7 +57,7 @@ namespace Client {
         #line hidden
         
         
-        #line 12 "..\..\WindowDiGioco.xaml"
+        #line 13 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Label soldi6;
         
@@ -64,7 +65,7 @@ namespace Client {
         #line hidden
         
         
-        #line 13 "..\..\WindowDiGioco.xaml"
+        #line 14 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Image img1;
         
@@ -72,7 +73,7 @@ namespace Client {
         #line hidden
         
         
-        #line 15 "..\..\WindowDiGioco.xaml"
+        #line 16 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Grid giocatore1;
         
@@ -80,7 +81,7 @@ namespace Client {
         #line hidden
         
         
-        #line 16 "..\..\WindowDiGioco.xaml"
+        #line 17 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Image img2;
         
@@ -88,7 +89,7 @@ namespace Client {
         #line hidden
         
         
-        #line 17 "..\..\WindowDiGioco.xaml"
+        #line 18 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Image img3;
         
@@ -96,7 +97,7 @@ namespace Client {
         #line hidden
         
         
-        #line 18 "..\..\WindowDiGioco.xaml"
+        #line 19 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Label soldi1;
         
@@ -104,7 +105,7 @@ namespace Client {
         #line hidden
         
         
-        #line 20 "..\..\WindowDiGioco.xaml"
+        #line 21 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Grid giocatore2;
         
@@ -112,7 +113,7 @@ namespace Client {
         #line hidden
         
         
-        #line 21 "..\..\WindowDiGioco.xaml"
+        #line 22 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Image img4;
         
@@ -120,7 +121,7 @@ namespace Client {
         #line hidden
         
         
-        #line 22 "..\..\WindowDiGioco.xaml"
+        #line 23 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Image img5;
         
@@ -128,7 +129,7 @@ namespace Client {
         #line hidden
         
         
-        #line 23 "..\..\WindowDiGioco.xaml"
+        #line 24 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Label soldi2;
         
@@ -136,7 +137,7 @@ namespace Client {
         #line hidden
         
         
-        #line 26 "..\..\WindowDiGioco.xaml"
+        #line 27 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Grid giocatore3;
         
@@ -144,7 +145,7 @@ namespace Client {
         #line hidden
         
         
-        #line 27 "..\..\WindowDiGioco.xaml"
+        #line 28 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Image img6;
         
@@ -152,7 +153,7 @@ namespace Client {
         #line hidden
         
         
-        #line 28 "..\..\WindowDiGioco.xaml"
+        #line 29 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Image img7;
         
@@ -160,7 +161,7 @@ namespace Client {
         #line hidden
         
         
-        #line 29 "..\..\WindowDiGioco.xaml"
+        #line 30 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Label soldi3;
         
@@ -168,7 +169,7 @@ namespace Client {
         #line hidden
         
         
-        #line 32 "..\..\WindowDiGioco.xaml"
+        #line 33 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Grid giocatore4;
         
@@ -176,7 +177,7 @@ namespace Client {
         #line hidden
         
         
-        #line 33 "..\..\WindowDiGioco.xaml"
+        #line 34 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Image img8;
         
@@ -184,7 +185,7 @@ namespace Client {
         #line hidden
         
         
-        #line 34 "..\..\WindowDiGioco.xaml"
+        #line 35 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Image img9;
         
@@ -192,7 +193,7 @@ namespace Client {
         #line hidden
         
         
-        #line 35 "..\..\WindowDiGioco.xaml"
+        #line 36 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Label soldi4;
         
@@ -200,7 +201,7 @@ namespace Client {
         #line hidden
         
         
-        #line 38 "..\..\WindowDiGioco.xaml"
+        #line 39 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Grid giocatore5;
         
@@ -208,7 +209,7 @@ namespace Client {
         #line hidden
         
         
-        #line 39 "..\..\WindowDiGioco.xaml"
+        #line 40 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Image img11;
         
@@ -216,7 +217,7 @@ namespace Client {
         #line hidden
         
         
-        #line 40 "..\..\WindowDiGioco.xaml"
+        #line 41 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Image img10;
         
@@ -224,7 +225,7 @@ namespace Client {
         #line hidden
         
         
-        #line 41 "..\..\WindowDiGioco.xaml"
+        #line 42 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Label soldi5;
         
@@ -232,7 +233,7 @@ namespace Client {
         #line hidden
         
         
-        #line 45 "..\..\WindowDiGioco.xaml"
+        #line 46 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Grid tavolo;
         
@@ -240,7 +241,7 @@ namespace Client {
         #line hidden
         
         
-        #line 46 "..\..\WindowDiGioco.xaml"
+        #line 47 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Image imgTavolo1;
         
@@ -248,7 +249,7 @@ namespace Client {
         #line hidden
         
         
-        #line 47 "..\..\WindowDiGioco.xaml"
+        #line 48 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Image imgTavolo2;
         
@@ -256,7 +257,7 @@ namespace Client {
         #line hidden
         
         
-        #line 48 "..\..\WindowDiGioco.xaml"
+        #line 49 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Image imgTavolo3;
         
@@ -264,7 +265,7 @@ namespace Client {
         #line hidden
         
         
-        #line 49 "..\..\WindowDiGioco.xaml"
+        #line 50 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Image imgTavolo4;
         
@@ -272,7 +273,7 @@ namespace Client {
         #line hidden
         
         
-        #line 50 "..\..\WindowDiGioco.xaml"
+        #line 51 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Image imgTavolo5;
         
@@ -280,7 +281,7 @@ namespace Client {
         #line hidden
         
         
-        #line 52 "..\..\WindowDiGioco.xaml"
+        #line 53 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Button buttonFold;
         
@@ -288,7 +289,7 @@ namespace Client {
         #line hidden
         
         
-        #line 53 "..\..\WindowDiGioco.xaml"
+        #line 54 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Button buttonCheck;
         
@@ -296,7 +297,7 @@ namespace Client {
         #line hidden
         
         
-        #line 54 "..\..\WindowDiGioco.xaml"
+        #line 55 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Button buttonPuntata;
         
@@ -304,7 +305,7 @@ namespace Client {
         #line hidden
         
         
-        #line 55 "..\..\WindowDiGioco.xaml"
+        #line 56 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.TextBox txtPuntata;
         
@@ -312,7 +313,7 @@ namespace Client {
         #line hidden
         
         
-        #line 56 "..\..\WindowDiGioco.xaml"
+        #line 57 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Label soldi_giocatore;
         
@@ -320,7 +321,7 @@ namespace Client {
         #line hidden
         
         
-        #line 57 "..\..\WindowDiGioco.xaml"
+        #line 58 "..\..\WindowDiGioco.xaml"
         [System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
         internal System.Windows.Controls.Label label_pot;
         
@@ -450,7 +451,7 @@ namespace Client {
             case 31:
             this.buttonFold = ((System.Windows.Controls.Button)(target));
             
-            #line 52 "..\..\WindowDiGioco.xaml"
+            #line 53 "..\..\WindowDiGioco.xaml"
             this.buttonFold.Click += new System.Windows.RoutedEventHandler(this.buttonFold_Click);
             
             #line default
@@ -459,7 +460,7 @@ namespace Client {
             case 32:
             this.buttonCheck = ((System.Windows.Controls.Button)(target));
             
-            #line 53 "..\..\WindowDiGioco.xaml"
+            #line 54 "..\..\WindowDiGioco.xaml"
             this.buttonCheck.Click += new System.Windows.RoutedEventHandler(this.buttonCheck_Click);
             
             #line default
@@ -468,7 +469,7 @@ namespace Client {
             case 33:
             this.buttonPuntata = ((System.Windows.Controls.Button)(target));
             
-            #line 54 "..\..\WindowDiGioco.xaml"
+            #line 55 "..\..\WindowDiGioco.xaml"
             this.buttonPuntata.Click += new System.Windows.RoutedEventHandler(this.buttonPuntata_Click);
             
             #line default
