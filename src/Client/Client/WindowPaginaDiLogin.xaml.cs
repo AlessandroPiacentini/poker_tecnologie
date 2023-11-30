@@ -32,8 +32,12 @@ namespace Client
         public WindowPaginaDiLogin()
         {
             InitializeComponent();
+
+            txtRicerca.Visibility = Visibility.Collapsed;
+
+            txtDiAttesa.Visibility = Visibility.Collapsed;
+
             
-            txtDiAttesa.Opacity = 0;
 
         }
 
@@ -73,6 +77,8 @@ namespace Client
         //Richiesta di entrare nel gioco al server
         private async void buttonEntra_Click(object sender, RoutedEventArgs e)
         {
+            txtDiAttesa.Visibility = Visibility.Visible;
+            txtRicerca.Visibility = Visibility.Visible;
             String dati = "";
 
             dati = txtNome.Text + ";" + txtSoldi.Text;    //invia: (nome e soldi)
@@ -83,6 +89,7 @@ namespace Client
 
             if (messaggio.Split(';')[0] == "ok")
             {
+
                 RichiestaSuccesso();
             }
             else
