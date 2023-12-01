@@ -5,11 +5,13 @@ from Thread_game import game
 from Thread_waiting import waiting
 
 import threading
-import time
-import sqlite3
 
-    
-
+def set_ip_server():
+    with open("../config.csv", "r") as f:
+        ip_server = f.readline().split(":")[1]
+        
+        
+    return ip_server
 # Define common variable
 game_phase = "waiting"
 seated_players = []
@@ -131,7 +133,7 @@ def main():
                     seated_players.append(player)
                     print(count_player)
                     if(count_player>=2):
-                        server_socket.settimeout(1)
+                        server_socket.settimeout(10)
                 else:
                     response = "err"
 

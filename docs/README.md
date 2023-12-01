@@ -4,7 +4,7 @@ La documentazione comprende diversi tipi di informazioni utili per comprendere e
 ## Tipi di documentazione
 
 ## 1. HTML/SERVER
-    ???
+    html per la documentazione dei file del server
 
 ## 2. OUT
     Contiene le immagini dei vari diagrammi
@@ -14,7 +14,7 @@ La documentazione comprende diversi tipi di informazioni utili per comprendere e
 
 ## 4. UML
     Questa sezione contiene codice relativo alla creazione di diversi tipi di diagrammi:
-     Classi Diagram
+     Class Diagram
      Sequenze diagram
      Use case
 

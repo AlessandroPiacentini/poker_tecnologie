@@ -4,7 +4,7 @@ In questo progetto, abbiamo sviluppato un gioco di Poker Texas Hold'em che si av
 ## Client (C# FORM)
 Il lato client è stato sviluppato utilizzando C# e presenta un'interfaccia grafica che offre all'utente un'esperienza coinvolgente durante il gioco. Questo form grafico consente agli utenti di interagire con il gioco, visualizzare le carte, effettuare le proprie mosse e comunicare con il server tramite la connessione TCP.
 
-## Server (C# FORM)
+## Server 
 Il server, implementato in Python, si occupa di gestire tutte le operazioni dietro le quinte del gioco. Questo comprende la logica di gioco, la gestione delle partite, il controllo delle regole e la comunicazione con i vari client tramite la connessione TCP. Il server agisce da centro nevralgico, coordinando le azioni tra i vari giocatori e mantenendo lo stato attuale del gioco.
 
 

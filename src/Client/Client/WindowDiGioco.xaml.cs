@@ -354,14 +354,14 @@ namespace Client
             {
                 byte[] message = Encoding.ASCII.GetBytes("add;" + puntata);
                 stream.Write(message, 0, message.Length);
+                is_my_turn = false;
+                inizio_gioco();
             }
             catch (Exception a)
             {
                 Console.WriteLine("Errore: " + a);
             }
 
-            is_my_turn = false;
-            inizio_gioco();
 
         }
         //Metodi Click bottone Fold
@@ -371,14 +371,14 @@ namespace Client
             {
                 byte[] message = Encoding.ASCII.GetBytes("fold;");
                 stream.Write(message, 0, message.Length);
+                is_my_turn = false;
+
+                inizio_gioco();
             }
             catch (Exception a)
             {
                 Console.WriteLine("Errore: " + a);
             }
-            is_my_turn = false;
-
-            inizio_gioco();
         }
         //Metodi Click bottone Check
         private void buttonCheck_Click(object sender, RoutedEventArgs e)
@@ -387,13 +387,13 @@ namespace Client
             {
                 byte[] message = Encoding.ASCII.GetBytes("see;");
                 stream.Write(message, 0, message.Length);
+                is_my_turn = false;
+                inizio_gioco();
             }
             catch (Exception a)
             {
                 Console.WriteLine("Errore: " + a);
             }
-            is_my_turn = false;
-            inizio_gioco();
         }
 
         //Metodo di cambiamento del valore dello slider

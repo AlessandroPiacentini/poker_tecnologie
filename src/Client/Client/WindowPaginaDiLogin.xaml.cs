@@ -49,11 +49,20 @@ namespace Client
 
 
         }
+        string ip_server;
+        int port_server;
+        private void get_ip_server(){
+            using (StreamReader sr = new StreamReader("../config.csv"))
+            {
+                ip_server = sr.ReadLine().Split(':')[1];
+                port_server = int.Parse(sr.ReadLine().Split(':')[2]);
+            }
+        }
 
         //Metodo Invio di un messaggio al Server
         private void InvioDati(String messaggio)
         {
-            client = new TcpClient("127.0.0.1", 12345);
+            client = new TcpClient(ip_server, port_server);
             stream = client.GetStream();
             try
             {
