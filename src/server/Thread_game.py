@@ -512,7 +512,7 @@ def game():
     deal_card5=True
     print(singleton.game_phase)
     while singleton.game_phase == "game":
-        if singleton.seated_players[turn_count].seated and equal_bets:
+        if singleton.seated_players[turn_count].seated:
             if len(singleton.seated_players) > 3:
                 singleton.seated_players = set_blind(turn_count, singleton.seated_players)
             if game_phase_count==0 and deal_card:
@@ -551,12 +551,10 @@ def game():
         if turn_count == len(singleton.seated_players):
             turn_count = 0
             if check_equal_bets():
-                equal_bets = True
                 game_phase_count += 1
                 pot = calculate_pot(singleton.seated_players)
                 reset_bets()
-            else:
-                equal_bets = False
+            
 
         if game_phase_count > 3:
             singleton.game_phase = "waiting"
