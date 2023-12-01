@@ -8,22 +8,6 @@ import threading
 import time
 import sqlite3
 
-def get_ip_server():
-    """
-    Get the IP address of the server from a configuration file.
-
-    This function reads the IP address of the server from a configuration file
-    named ".config.csv" and returns it.
-
-    Args:
-        None
-
-    Returns:
-        str: The IP address of the server.
-    """
-    with open("../.config.csv", "r") as f:
-        ip = f.read().split(":")[1]
-    return ip
     
 
 # Define common variable
@@ -33,7 +17,7 @@ winner_index = 0
 
 # Create a Lock object
 lock = threading.Lock()
-server_host = get_ip_server()
+server_host = "172.0.0.1"
 server_port = 12345
 timeout = False
 clients = []
