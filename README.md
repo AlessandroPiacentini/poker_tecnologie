@@ -21,6 +21,7 @@ Questo progetto implementa un'applicazione di Poker Texas Hold'em che consente a
     ```bash
     git clone https://github.com/AlessandroPiacentini/poker_tecnologie.git
     ```
+    modificare il file .config.csv com l'indirizzo giusto del server
 
 2. Avviare il server di gioco:
 

@@ -8,6 +8,12 @@ import threading
 import time
 import sqlite3
 
+def get_ip_server():
+    with open("../.config.csv", "r") as f:
+        ip = f.read().split(":")[1]
+    return ip
+    
+
 # Define common variable
 game_phase = "waiting"
 seated_players = []
@@ -15,7 +21,7 @@ winner_index = 0
 
 # Create a Lock object
 lock = threading.Lock()
-server_host = '127.0.0.1'
+server_host = get_ip_server()
 server_port = 12345
 timeout = False
 clients = []

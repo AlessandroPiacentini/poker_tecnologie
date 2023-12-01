@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.VisualBasic.FileIO;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using static System.Net.Mime.MediaTypeNames;
+
 
 namespace Client
 {
@@ -48,7 +50,7 @@ namespace Client
         //Invio di un messaggio al Server
         private void InvioDati(String messaggio)
         {
-            client = new TcpClient("127.0.0.1", 12345);
+            client = new TcpClient(leggi_ip(), 12345);
             stream = client.GetStream();
             try
             {
@@ -59,6 +61,37 @@ namespace Client
             {
                 Console.WriteLine("Errore: " + e);
             }
+        }
+
+        private string leggi_ip()
+        {
+            string ip="";
+            try
+            {
+                // Leggi tutte le righe del file
+                string[] righe = File.ReadAllLines("../.config.csv");
+
+                if (righe.Length > 0)
+                {
+                    // Prendi la prima riga
+                    string primaRiga = righe[0];
+
+                    // Suddividi la prima riga utilizzando il punto e virgola come delimitatore
+                    ip = primaRiga.Split(';')[1];
+
+                   
+                }
+                else
+                {
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Errore durante la lettura del file: {ex.Message}");
+            }
+            return ip;
+
         }
 
         //ricezione di messaggio
