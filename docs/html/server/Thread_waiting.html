@@ -1,32 +1,30 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html><head><title>Python: module Thread_waiting</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-</head><body bgcolor="#f0f0f8">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module Thread_waiting</title>
+</head><body>
 
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
-<tr bgcolor="#7799ee">
-<td valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>Thread_waiting</strong></big></big></font></td
-><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cpiace%5Conedrive%5Cdesktop%5Cvscode%5Cpoker_tecnologie%5Csrc%5Cserver%5Cthread_waiting.py">c:\users\piace\onedrive\desktop\vscode\poker_tecnologie\src\server\thread_waiting.py</a></font></td></tr></table>
-    <p><tt>#&nbsp;from&nbsp;main&nbsp;import&nbsp;game_phase,&nbsp;lock,&nbsp;seated_players,&nbsp;count</tt></p>
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title">Thread_waiting</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cpiace%5Conedrive%5Cdesktop%5Cvscode%5Cpoker_tecnologie%5Csrc%5Cserver%5Cthread_waiting.py">c:\users\piace\onedrive\desktop\vscode\poker_tecnologie\src\server\thread_waiting.py</a></td></tr></table>
+    <p></p>
 <p>
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#aa55cc">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+<table class="section">
+<tr class="decor pkg-content-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Modules</strong></td></tr>
     
-<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="socket.html">socket</a><br>
-</td><td width="25%" valign=top><a href="threading.html">threading</a><br>
-</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#eeaa77">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+<tr><td class="decor pkg-content-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="socket.html">socket</a><br>
+</td><td class="multicolumn"><a href="threading.html">threading</a><br>
+</td><td class="multicolumn"></td><td class="multicolumn"></td></tr></table></td></tr></table><p>
+<table class="section">
+<tr class="decor functions-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Functions</strong></td></tr>
     
-<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl><dt><a name="-handle_client"><strong>handle_client</strong></a>(client_socket, address, client_ip, client_port)</dt><dd><tt>Handle&nbsp;the&nbsp;client&nbsp;connection.<br>
+<tr><td class="decor functions-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt><a name="-handle_client"><strong>handle_client</strong></a>(client_socket, address, client_ip, client_port)</dt><dd><span class="code">Handle&nbsp;the&nbsp;client&nbsp;connection.<br>
 &nbsp;<br>
 Args:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;client_socket&nbsp;(socket):&nbsp;The&nbsp;socket&nbsp;object&nbsp;representing&nbsp;the&nbsp;client&nbsp;connection.<br>
@@ -35,25 +33,19 @@ Args:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;client_port&nbsp;(int):&nbsp;The&nbsp;port&nbsp;number&nbsp;of&nbsp;the&nbsp;client.<br>
 &nbsp;<br>
 Returns:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
- <dl><dt><a name="-waiting"><strong>waiting</strong></a>(game_phase_s, seated_players_s, count_s)</dt><dd><tt>Function&nbsp;that&nbsp;configures&nbsp;the&nbsp;server&nbsp;and&nbsp;waits&nbsp;for&nbsp;connections&nbsp;from&nbsp;clients.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None</span></dd></dl>
+ <dl><dt><a name="-waiting"><strong>waiting</strong></a>()</dt><dd><span class="code">Function&nbsp;that&nbsp;configures&nbsp;the&nbsp;server&nbsp;and&nbsp;waits&nbsp;for&nbsp;connections&nbsp;from&nbsp;clients.<br>
 &nbsp;<br>
 Args:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;game_phase_s&nbsp;(str):&nbsp;The&nbsp;current&nbsp;game&nbsp;phase.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;seated_players_s&nbsp;(int):&nbsp;The&nbsp;number&nbsp;of&nbsp;seated&nbsp;players.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;count_s&nbsp;(int):&nbsp;The&nbsp;count&nbsp;value.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None<br>
 &nbsp;<br>
 Returns:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+&nbsp;&nbsp;&nbsp;&nbsp;None</span></dd></dl>
 </td></tr></table><p>
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#55aa55">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+<table class="section">
+<tr class="decor data-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Data</strong></td></tr>
     
-<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><strong>count</strong> = 0<br>
-<strong>game_phase</strong> = ''<br>
-<strong>max_messages</strong> = 6<br>
-<strong>seated_players</strong> = []</td></tr></table>
+<tr><td class="decor data-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><strong>singleton</strong> = &lt;condivisa.SingletonClass object&gt;</td></tr></table>
 </body></html>

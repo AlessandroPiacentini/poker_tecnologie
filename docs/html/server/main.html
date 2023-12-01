@@ -1,34 +1,53 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html><head><title>Python: module main</title>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-</head><body bgcolor="#f0f0f8">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Python: module main</title>
+</head><body>
 
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
-<tr bgcolor="#7799ee">
-<td valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>main</strong></big></big></font></td
-><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cpiace%5Conedrive%5Cdesktop%5Cvscode%5Cpoker_tecnologie%5Csrc%5Cserver%5Cmain.py">c:\users\piace\onedrive\desktop\vscode\poker_tecnologie\src\server\main.py</a></font></td></tr></table>
+<table class="heading">
+<tr class="heading-text decor">
+<td class="title">&nbsp;<br><strong class="title">main</strong></td>
+<td class="extra"><a href=".">index</a><br><a href="file:c%3A%5Cusers%5Cpiace%5Conedrive%5Cdesktop%5Cvscode%5Cpoker_tecnologie%5Csrc%5Cserver%5Cmain.py">c:\users\piace\onedrive\desktop\vscode\poker_tecnologie\src\server\main.py</a></td></tr></table>
     <p></p>
 <p>
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#aa55cc">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+<table class="section">
+<tr class="decor pkg-content-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Modules</strong></td></tr>
     
-<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="socket.html">socket</a><br>
-</td><td width="25%" valign=top><a href="sqlite3.html">sqlite3</a><br>
-</td><td width="25%" valign=top><a href="threading.html">threading</a><br>
-</td><td width="25%" valign=top><a href="time.html">time</a><br>
+<tr><td class="decor pkg-content-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><table><tr><td class="multicolumn"><a href="socket.html">socket</a><br>
+</td><td class="multicolumn"><a href="sqlite3.html">sqlite3</a><br>
+</td><td class="multicolumn"><a href="threading.html">threading</a><br>
+</td><td class="multicolumn"><a href="time.html">time</a><br>
 </td></tr></table></td></tr></table><p>
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#eeaa77">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+<table class="section">
+<tr class="decor functions-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Functions</strong></td></tr>
     
-<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl><dt><a name="-main"><strong>main</strong></a>()</dt><dd><tt>The&nbsp;main&nbsp;function&nbsp;that&nbsp;runs&nbsp;the&nbsp;server&nbsp;and&nbsp;handles&nbsp;client&nbsp;connections.<br>
+<tr><td class="decor functions-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><dl><dt><a name="-attendi_nuove_connessioni"><strong>attendi_nuove_connessioni</strong></a>()</dt><dd><span class="code">Wait&nbsp;for&nbsp;new&nbsp;client&nbsp;connections.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;listens&nbsp;for&nbsp;new&nbsp;client&nbsp;connections&nbsp;on&nbsp;the&nbsp;server&nbsp;socket&nbsp;and<br>
+accepts&nbsp;them.&nbsp;It&nbsp;assigns&nbsp;the&nbsp;client&nbsp;socket&nbsp;to&nbsp;the&nbsp;corresponding&nbsp;player&nbsp;object<br>
+in&nbsp;the&nbsp;seated_players&nbsp;list.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None</span></dd></dl>
+ <dl><dt><a name="-get_ip_server"><strong>get_ip_server</strong></a>()</dt><dd><span class="code">Get&nbsp;the&nbsp;IP&nbsp;address&nbsp;of&nbsp;the&nbsp;server&nbsp;from&nbsp;a&nbsp;configuration&nbsp;file.<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;reads&nbsp;the&nbsp;IP&nbsp;address&nbsp;of&nbsp;the&nbsp;server&nbsp;from&nbsp;a&nbsp;configuration&nbsp;file<br>
+named&nbsp;".config.csv"&nbsp;and&nbsp;returns&nbsp;it.<br>
+&nbsp;<br>
+Args:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None<br>
+&nbsp;<br>
+Returns:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;str:&nbsp;The&nbsp;IP&nbsp;address&nbsp;of&nbsp;the&nbsp;server.</span></dd></dl>
+ <dl><dt><a name="-main"><strong>main</strong></a>()</dt><dd><span class="code">The&nbsp;main&nbsp;function&nbsp;that&nbsp;runs&nbsp;the&nbsp;server&nbsp;and&nbsp;handles&nbsp;client&nbsp;connections.<br>
 &nbsp;<br>
 This&nbsp;function&nbsp;creates&nbsp;a&nbsp;TCP/IP&nbsp;socket,&nbsp;binds&nbsp;it&nbsp;to&nbsp;a&nbsp;specific&nbsp;host&nbsp;and&nbsp;port,<br>
 and&nbsp;listens&nbsp;for&nbsp;incoming&nbsp;client&nbsp;connections.&nbsp;It&nbsp;receives&nbsp;data&nbsp;from&nbsp;the&nbsp;client,<br>
@@ -42,21 +61,21 @@ Args:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;None<br>
 &nbsp;<br>
 Returns:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;None</tt></dd></dl>
+&nbsp;&nbsp;&nbsp;&nbsp;None</span></dd></dl>
 </td></tr></table><p>
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#55aa55">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+<table class="section">
+<tr class="decor data-decor heading-text">
+<td class="section-title" colspan=3>&nbsp;<br><strong class="bigsection">Data</strong></td></tr>
     
-<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><strong>clients</strong> = []<br>
-<strong>count</strong> = 0<br>
+<tr><td class="decor data-decor"><span class="code">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></td><td>&nbsp;</td>
+<td class="singlecolumn"><strong>clients</strong> = []<br>
+<strong>count_player</strong> = 0<br>
 <strong>game_phase</strong> = 'waiting'<br>
 <strong>lock</strong> = &lt;unlocked _thread.lock object&gt;<br>
 <strong>seated_players</strong> = []<br>
-<strong>server_host</strong> = '127.0.0.1'<br>
+<strong>server_host</strong> = '172.0.0.1'<br>
 <strong>server_port</strong> = 12345<br>
+<strong>server_socket</strong> = None<br>
 <strong>timeout</strong> = False<br>
 <strong>winner_index</strong> = 0</td></tr></table>
 </body></html>

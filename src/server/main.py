@@ -1,6 +1,6 @@
 import socket
 from Player import Player
-from condivisa import set_info,SingletonClass
+from condivisa import set_info, SingletonClass
 from Thread_game import game
 from Thread_waiting import waiting
 
@@ -9,6 +9,18 @@ import time
 import sqlite3
 
 def get_ip_server():
+    """
+    Get the IP address of the server from a configuration file.
+
+    This function reads the IP address of the server from a configuration file
+    named ".config.csv" and returns it.
+
+    Args:
+        None
+
+    Returns:
+        str: The IP address of the server.
+    """
     with open("../.config.csv", "r") as f:
         ip = f.read().split(":")[1]
     return ip
@@ -34,6 +46,19 @@ count_player = 0
 
           
 def attendi_nuove_connessioni():
+    """
+    Wait for new client connections.
+
+    This function listens for new client connections on the server socket and
+    accepts them. It assigns the client socket to the corresponding player object
+    in the seated_players list.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     global server_host
     global server_port
     global server_socket
@@ -164,11 +189,11 @@ def main():
 
             # Start the thread
             thread_partita.start()
-            # thread_waiting.start()
+            thread_waiting.start()
 
             # Wait for the thread to finish before exiting
             thread_partita.join()
-            # thread_waiting.join()
+            thread_waiting.join()
             print("Fake")
             clients=[]
             timeout = False

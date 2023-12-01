@@ -12,6 +12,8 @@ import random
 import time
 
 
+import random
+
 def draw_card():
     """
     Function to draw a card from a deck of cards.
@@ -239,24 +241,28 @@ def reset_bets():
 from collections import Counter
 
 def valuta_mano(mano):
-    # Funzione per valutare la forza della mano
+    """
+    Valuta la forza della mano di carte.
+
+    Parameters:
+    mano (list): Una lista di carte rappresentate come stringhe.
+
+    Returns:
+    int: Il punteggio della mano, da 1 a 9, dove 9 rappresenta la scala reale e 1 rappresenta la carta alta.
+    """
     valori = [carta[:-1] for carta in mano]
     count_valori = Counter(valori)
 
-    # Verifica se ci sono coppie, tris, ecc.
     coppie = [valore for valore, count in count_valori.items() if count == 2]
     tris = [valore for valore, count in count_valori.items() if count == 3]
     poker = [valore for valore, count in count_valori.items() if count == 4]
 
-    # Verifica se la mano contiene una scala
     valori_ordinati = sorted([int(valore) if valore.isdigit() else 11 if valore == 'J' else 12 if valore == 'Q' else 13 if valore == 'K' else 14 for valore in valori])
     scala = all(valori_ordinati[i] == valori_ordinati[i - 1] + 1 for i in range(1, len(valori_ordinati)))
 
-    # Verifica se la mano contiene un colore
     semi = set(carta[-1] for carta in mano)
     colore = len(semi) == 1
 
-    # Assegna un punteggio alla mano
     if scala and colore:
         return 9  # Scala reale
     elif poker:
@@ -278,6 +284,16 @@ def valuta_mano(mano):
 
 
 def converti_mano(carta1, carta2):
+    """
+    Converti le carte in stringhe.
+
+    Args:
+        carta1 (int): Il valore della prima carta.
+        carta2 (int): Il valore della seconda carta.
+
+    Returns:
+        list: Una lista contenente le stringhe convertite delle due carte.
+    """
     # Funzione per convertire le carte in stringhe
     carta1_str = str(carta1)
     carta2_str = str(carta2)
@@ -323,7 +339,23 @@ def converti_mano(carta1, carta2):
         
 
     return [carta1_str, carta2_str]
+
+
+
 def converti_board_card(carte):
+    """
+    Convert the given list of card numbers to their corresponding string representation.
+
+    Args:
+        carte (list): A list of card numbers.
+
+    Returns:
+        list: A list of strings representing the cards.
+
+    Example:
+        >>> converti_board_card([1, 14, 27, 40, 52])
+        ['AD', '2D', '3D', '4D', 'KS']
+    """
     carte_convertite = []
     for carta in carte:
         carta_str = str(carta)
@@ -351,7 +383,12 @@ def converti_board_card(carte):
 
 
 def determina_vincitore():
-    # Funzione per determinare il vincitore tra i giocatori
+    """
+    Funzione per determinare il vincitore tra i giocatori.
+
+    Returns:
+        int: La posizione del vincitore.
+    """
     vincitore = None
     punteggio_vincitore = 0
     carte_comuni = converti_board_card(community_cards)
@@ -367,7 +404,16 @@ def determina_vincitore():
     return vincitore.position
 
 def valuta_carta_alta(mano):
-    # Funzione per valutare la carta più alta in una mano
+    """
+    Valuta la carta più alta in una mano di carte.
+
+    Args:
+        mano (list): Una lista di carte rappresentate come stringhe.
+
+    Returns:
+        int: Il valore numerico della carta più alta.
+
+    """
     valori = [carta[:-1] for carta in mano]
     valori_numerici = [int(valore) if valore.isdigit() else 11 if valore == 'J' else 12 if valore == 'Q' else 13 if valore == 'K' else 14 for valore in valori]
     return max(valori_numerici)
@@ -399,24 +445,41 @@ def communicate_winner():
             print(f"Errore durante la connessione al giocatore: {e}")
             
 def send_all_winner():
+    """
+    Sends the winner information to all seated players.
+
+    This function iterates over the list of seated players and sends the winner information
+    to each player using their client socket. The winner information is encoded as a string
+    and sent over the network.
+
+    Raises:
+        Exception: If there is an error while connecting to a player.
+
+    """
     global singleton
     for player in singleton.seated_players:
         try:
             # Crea un socket per la connessione al giocatore
-            winner_str=str(singleton.winner_index)
-            message="winner;"+winner_str
+            winner_str = str(singleton.winner_index)
+            message = "winner;" + winner_str
             player.client_socket.send(message.encode('utf-8'))
         except Exception as e:
             print(f"Errore durante la connessione al giocatore: {e}")
 
 
 def cout_player_alive():
+    """
+    Counts the number of alive players.
+
+    Returns:
+        int: The count of alive players.
+    """
     global singleton
     count=0
     for player in singleton.seated_players:
         if player.seated:
             count+=1
-    return count       
+    return count
 
 singleton = SingletonClass()
 used_cards=[]
@@ -426,10 +489,10 @@ def game():
     """
     Main game loop that manages the flow of the poker game.
 
+    This function is responsible for controlling the flow of the poker game. It handles the turn-based gameplay, dealing cards, managing bets, and determining the winner. The game loop continues until the game phase changes to "waiting".
+
     Args:
-        game_phase_s (str): The current game phase.
-        seated_players_s (list): List of seated players.
-        winner_index_s (int): Index of the winner.
+        None
 
     Returns:
         None

@@ -26,10 +26,19 @@ namespace Client
     /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Represents the main window of the application.
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
         }
+        /// <summary>
+        /// Event handler for the button click event.
+        /// Creates an instance of the second window and shows it while closing the current window.
+        /// </summary>
+        /// <param name="sender">The object that raised the event.</param>
+        /// <param name="e">The event arguments.</param>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             // Creazione di un'istanza della seconda finestra

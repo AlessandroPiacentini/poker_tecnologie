@@ -52,9 +52,7 @@ def waiting():
     Function that configures the server and waits for connections from clients.
 
     Args:
-        game_phase_s (str): The current game phase.
-        seated_players_s (int): The number of seated players.
-        count_player_s (int): The count_player value.
+        None
 
     Returns:
         None
