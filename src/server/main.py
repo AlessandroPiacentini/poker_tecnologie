@@ -3,15 +3,11 @@ from Player import Player
 from condivisa import set_info, SingletonClass
 from Thread_game import game
 from Thread_waiting import waiting
-
+import os
 import threading
 
-def set_ip_server():
-    with open("../config.csv", "r") as f:
-        ip_server = f.readline().split(":")[1]
+
         
-        
-    return ip_server
 # Define common variable
 game_phase = "waiting"
 seated_players = []
@@ -19,8 +15,8 @@ winner_index = 0
 
 # Create a Lock object
 lock = threading.Lock()
-server_host = "127.0.0.1"
-server_port = 12345
+server_host = ""
+server_port = 0
 timeout = False
 clients = []
 
@@ -30,6 +26,29 @@ server_socket=None
 count_player = 0
 
 
+
+def set_ip_server():
+    global server_host
+    global server_port
+    
+    try:
+        f= open("config.csv", "r") 
+        line = f.readline().split(":")
+        if len(line) >= 3:
+            server_host = line[0].strip()  # Rimuovi spazi bianchi extra
+            server_port = int(line[1].strip())
+        else:
+            print("Il file di configurazione non ha abbastanza elementi.")
+    except FileNotFoundError:
+        print("Il file di configurazione non è stato trovato.")
+        server_host = "127.0.0.1"  # Rimuovi spazi bianchi extra
+        server_port = 1234
+    except ValueError:
+        print("Errore nella conversione del numero di porta in un intero.")
+    except Exception as e:
+        print(f"Si è verificato un errore imprevisto: {e}")
+
+        
           
 def attendi_nuove_connessioni():
     """
@@ -100,7 +119,7 @@ def main():
     global server_host
     global server_port
     
-
+    set_ip_server()
     while True:
         
         global server_socket

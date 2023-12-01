@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Net.Sockets;
@@ -46,16 +47,18 @@ namespace Client
             
 
             txtDiAttesa.Opacity = 0;
-
+            get_ip_server();
 
         }
         string ip_server;
         int port_server;
         private void get_ip_server(){
-            using (StreamReader sr = new StreamReader("../config.csv"))
+            using (StreamReader sr = new StreamReader("config.csv"))
             {
-                ip_server = sr.ReadLine().Split(':')[1];
-                port_server = int.Parse(sr.ReadLine().Split(':')[2]);
+
+                string []riga = sr.ReadLine().Split(':');
+                ip_server = riga[1];
+                port_server = int.Parse(riga[2]);
             }
         }
 
@@ -206,10 +209,18 @@ namespace Client
         //Metodo che connette il client alla nuova socket del server
         public void connessione_a_nuova_socket_server(string receivedMessage)
         {
-
-
-            string ip = receivedMessage.Split(';')[0];
-            int port = int.Parse(receivedMessage.Split(';')[1]);
+            string ip;
+            int port;
+            try
+            {
+                ip = receivedMessage.Split(';')[0];
+                port = int.Parse(receivedMessage.Split(';')[1]);
+            }
+            catch
+            {
+                ip = "127.0.0.1";
+                port = 1234;
+            }
             client = new TcpClient(ip, port); // Connessione al server Java sulla porta 8080
             stream = client.GetStream();
             try
