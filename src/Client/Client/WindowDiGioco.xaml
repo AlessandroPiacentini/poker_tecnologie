@@ -79,5 +79,10 @@
         </Label>
         <Label x:Name="label_pot" Style="{StaticResource RoundedLabelStyle}" Content="" HorizontalAlignment="Left" Height="14" Margin="332,342,0,0" VerticalAlignment="Top" Width="145" Background="#FFABADB3"/>
         <Slider x:Name="SliderSoldi" HorizontalAlignment="Left" Margin="582,419,0,0" VerticalAlignment="Top" Width="120" ValueChanged="Slider_ValueChanged"/>
+        <Label x:Name="NomeGiocatore" Style="{StaticResource RoundedLabelStyle}" Content="" HorizontalAlignment="Left" Margin="27,24,0,0" VerticalAlignment="Top" Height="32" Width="164" FontSize="22" FontWeight="Bold">
+            <Label.Background>
+                <SolidColorBrush Color="#FFABADB3" Opacity="0.75"/>
+            </Label.Background>
+        </Label>
     </Grid>
 </Window>

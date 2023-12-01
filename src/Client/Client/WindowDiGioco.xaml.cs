@@ -101,6 +101,9 @@ namespace Client
 
                         //Definito il valore massimo della puntata
                         SliderSoldi.Maximum = p.soldi;
+
+                        //Nome del giocatore
+                        NomeGiocatore.Content = p.name;
                     }
 
                     //Dato che se questo client è il giocatore 2 non uscirà mai dal ciclo e quindi non si vedra niente in finestra
@@ -108,7 +111,6 @@ namespace Client
                     if (posto == turn + 1)
                     {
                         is_my_turn = true;
-
                     }
 
                 }
