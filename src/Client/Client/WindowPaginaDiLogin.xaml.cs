@@ -44,7 +44,7 @@ namespace Client
 
             txtDiAttesa.Visibility = Visibility.Collapsed;
 
-            
+
 
             txtDiAttesa.Opacity = 0;
             get_ip_server();
@@ -52,11 +52,12 @@ namespace Client
         }
         string ip_server;
         int port_server;
-        private void get_ip_server(){
+        private void get_ip_server()
+        {
             using (StreamReader sr = new StreamReader("config.csv"))
             {
 
-                string []riga = sr.ReadLine().Split(':');
+                string[] riga = sr.ReadLine().Split(':');
                 ip_server = riga[1];
                 port_server = int.Parse(riga[2]);
             }
@@ -65,6 +66,7 @@ namespace Client
         //Metodo Invio di un messaggio al Server
         private void InvioDati(String messaggio)
         {
+
             client = new TcpClient(ip_server, port_server);
             stream = client.GetStream();
             try
@@ -76,6 +78,7 @@ namespace Client
             {
                 Console.WriteLine("Errore: " + e);
             }
+
         }
 
 
@@ -118,7 +121,28 @@ namespace Client
                             Console.WriteLine("Il testo contiene solo numeri: " + txtSoldi);
 
                             dati = txtNome.Text + ";" + txtSoldi.Text;    // Invia: (nome e soldi)
-                            InvioDati("entry;" + dati);
+                            try
+                            {
+
+                                InvioDati("entry;" + dati);
+                                // Aspetta fino a quando non è di nuovo il tuo turno
+                                String messaggio = await AttendiRisposta();
+
+                                if (messaggio.Split(';')[0] == "ok")
+                                {
+
+                                    RichiestaSuccesso();
+                                }
+                                else
+                                {
+                                    RichiestaFallita();
+                                }
+                            }
+                            catch
+                            {
+                                MessageBox.Show("nessun server trovato");
+
+                            }
                         }
                         else
                         {
@@ -151,18 +175,7 @@ namespace Client
                 return; // Esci dal metodo se il testo non contiene solo numeri
             }
 
-            // Aspetta fino a quando non è di nuovo il tuo turno
-            String messaggio = await AttendiRisposta();
 
-            if (messaggio.Split(';')[0] == "ok")
-            {
-
-                RichiestaSuccesso();
-            }
-            else
-            {
-                RichiestaFallita();
-            }
         }
         private async void set_socket_server()
         {
@@ -241,12 +254,12 @@ namespace Client
         {
             // Creazione di un'istanza della terza finestra (finestra di gioco)
 
-            set_socket_server();
+            //set_socket_server();
 
-            WindowDiGioco WindowDiGioco = new WindowDiGioco(client, posto, stream);
+            WindowAttesa winAtt = new WindowAttesa(client, stream, posto);
 
             // Mostra la nuova finestra
-            WindowDiGioco.Show();
+            winAtt.Show();
             this.Close();
         }
 
@@ -258,7 +271,7 @@ namespace Client
             //OPZIONE 1 - rimane in coda e appena e disponibile una partita entra
             //OPZIONE 2 - alla fine del counter devi schiacciare entra
         }
-        
+
         //Variabile posto
         int posto;
 
