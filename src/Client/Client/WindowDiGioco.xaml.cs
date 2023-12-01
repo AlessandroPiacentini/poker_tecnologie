@@ -56,10 +56,7 @@ namespace Client
         {
             InitializeComponent();
 
-
             posto = _posto;
-
-
             client = tcpClient;
             stream = _stream;
 
@@ -101,6 +98,9 @@ namespace Client
                         Console.Write(carta1 + " " + carta2);
                         carta1 = p.carta1;
                         carta2 = p.carta2;
+
+                        //Definito il valore massimo della puntata
+                        SliderSoldi.Maximum = p.soldi;
                     }
 
                     //Dato che se questo client è il giocatore 2 non uscirà mai dal ciclo e quindi non si vedra niente in finestra
@@ -392,6 +392,16 @@ namespace Client
             }
             is_my_turn = false;
             inizio_gioco();
+        }
+
+        //Metodo di cambiamento del valore dello slider
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            //txtPuntata.Text = e.NewValue.ToString();
+
+            double newValue = Math.Round(e.NewValue / 5) * 5; // Arrotonda il valore al multiplo di 5 più vicino
+            txtPuntata.Text = newValue.ToString();
+            SliderSoldi.Value = newValue; // Imposta il valore dello Slider al multiplo di 5 più vicino
         }
     }
 }
