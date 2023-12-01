@@ -35,8 +35,8 @@ def set_ip_server():
         f= open("config.csv", "r") 
         line = f.readline().split(":")
         if len(line) >= 3:
-            server_host = line[0].strip()  # Rimuovi spazi bianchi extra
-            server_port = int(line[1].strip())
+            server_host = line[1].strip()  # Rimuovi spazi bianchi extra
+            server_port = int(line[2].strip())
         else:
             print("Il file di configurazione non ha abbastanza elementi.")
     except FileNotFoundError:
