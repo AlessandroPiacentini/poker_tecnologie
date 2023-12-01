@@ -32,8 +32,9 @@ Questo progetto implementa un'applicazione di Poker Texas Hold'em che consente a
 3. Avviare l'applicazione client su ogni computer dei giocatori:
     
     ```bash
-    call run_client.bat
+    call client.exe
     ```
+    il file .exe si trova nella cartella debug del progetto del clint
 
 4. Seguire le istruzioni visualizzate sull'applicazione client per partecipare alla partita.
 
