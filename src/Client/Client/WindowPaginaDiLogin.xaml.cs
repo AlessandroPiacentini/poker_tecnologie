@@ -27,12 +27,15 @@ namespace Client
     /// </summary>
     public partial class WindowPaginaDiLogin : Window
     {
+
+        //Variabili
         public TcpClient client;
         public NetworkStream stream;
 
         public string ipclient;
         public int portclient;
 
+        //Costruttore
         public WindowPaginaDiLogin()
         {
             InitializeComponent();
@@ -47,7 +50,7 @@ namespace Client
 
         }
 
-        //Invio di un messaggio al Server
+        //Metodo Invio di un messaggio al Server
         private void InvioDati(String messaggio)
         {
             client = new TcpClient("127.0.0.1", 12345);
@@ -63,9 +66,9 @@ namespace Client
             }
         }
 
-       
 
-        //ricezione di messaggio
+
+        //Metodo ricezione di messaggio
         private String RicezioneDati()
         {
             try
@@ -82,7 +85,7 @@ namespace Client
             }
         }
 
-        //Richiesta di entrare nel gioco al server
+        //Metodo Richiesta di entrare nel gioco al server
         private async void buttonEntra_Click(object sender, RoutedEventArgs e)
         {
             txtDiAttesa.Visibility = Visibility.Visible;
@@ -191,8 +194,7 @@ namespace Client
 
 
 
-
-
+        //Metodo che connette il client alla nuova socket del server
         public void connessione_a_nuova_socket_server(string receivedMessage)
         {
 
@@ -214,7 +216,7 @@ namespace Client
 
 
 
-        //Se la richiesta viene accettata
+        //Metodo se la richiesta viene accettata
         private void RichiestaSuccesso()
         {
             // Creazione di un'istanza della terza finestra (finestra di gioco)
@@ -228,7 +230,7 @@ namespace Client
             this.Close();
         }
 
-        //Se la richiesta non viene accettata
+        //Metodo Se la richiesta non viene accettata
         private void RichiestaFallita()
         {
             //esce un messaggio di attesa dove comparira un counter
@@ -236,7 +238,11 @@ namespace Client
             //OPZIONE 1 - rimane in coda e appena e disponibile una partita entra
             //OPZIONE 2 - alla fine del counter devi schiacciare entra
         }
+        
+        //Variabile posto
         int posto;
+
+        //Metodo che attenda una risposta dal server
         private async Task<String> AttendiRisposta()
         {
             String[] risposta;

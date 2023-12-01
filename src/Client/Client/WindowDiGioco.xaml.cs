@@ -38,6 +38,8 @@ namespace Client
     /// </summary>
     public partial class WindowDiGioco : Window
     {
+        //Variabili
+
         List<Player> Players;
         int GamePhaseCount;
         List<int> BoardCards;
@@ -49,6 +51,7 @@ namespace Client
         private TcpClient client;
         public NetworkStream stream;
 
+        //Costruttore
         public WindowDiGioco(TcpClient tcpClient, int _posto, NetworkStream _stream)
         {
             InitializeComponent();
@@ -65,23 +68,26 @@ namespace Client
             ContentRendered += WindowDiGioco_ContentRendered;
 
         }
+        
+        //Metodi in fase di caricamento della finestra
         private void WindowDiGioco_ContentRendered(object sender, EventArgs e)
         {
             // Questo evento viene chiamato quando il contenuto della finestra è stato reso e tutti i componenti sono pronti
             inizio_gioco();
         }
-
         private void WindowDiGioco_Loaded(object sender, RoutedEventArgs e)
         {
             // La funzione che vuoi chiamare quando la finestra è caricata
         }
 
-
+        //Altre variabili
         int pot;
         int carta1;
         int carta2;
         bool is_my_turn = false;
 
+
+        //Metodo inizia gioco
         public  void inizio_gioco()
         {
             while (is_my_turn == false)
@@ -116,10 +122,7 @@ namespace Client
 
         }
 
-
-
         //Metodo Attendi Info
-
         private void Attendi_info_server()
         {
             //Console.WriteLine($"Il server è in ascolto su {ipAddress}:{port}");
@@ -202,7 +205,9 @@ namespace Client
         }
         
 
-        //Metodi Disegno
+        //Metodi disegna
+
+        //Metodo Disegna puntate
         private void disegna_puntate()
         {
             foreach (Player p in Players)
@@ -228,6 +233,7 @@ namespace Client
 
         }
 
+        //Metodo disegna carte giocatori
         private void disegnaCarteGiocatori(int posto, int carta1, int carta2)
         {
 
@@ -301,6 +307,7 @@ namespace Client
 
         }
 
+        //Metodi discegna carte sul tavolo
         private void CarteSulTavolo()
         {
 
@@ -335,7 +342,9 @@ namespace Client
         }
 
 
-        //Metodi bottone
+        //Metodi bottoni
+
+        //Metodi Click bottone puntata
         private void buttonPuntata_Click(object sender, RoutedEventArgs e)
         {
             string puntata = txtPuntata.Text;
@@ -353,6 +362,7 @@ namespace Client
             inizio_gioco();
 
         }
+        //Metodi Click bottone Fold
         private void buttonFold_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -368,6 +378,7 @@ namespace Client
 
             inizio_gioco();
         }
+        //Metodi Click bottone Check
         private void buttonCheck_Click(object sender, RoutedEventArgs e)
         {
             try

@@ -14,8 +14,8 @@ La documentazione comprende diversi tipi di informazioni utili per comprendere e
 
 ## 4. UML
     Questa sezione contiene codice relativo alla creazione di diversi tipi di diagrammi:
-    ### Classi Diagram
-    ### Sequenze diagram
-    ### Use case
+     Classi Diagram
+     Sequenze diagram
+     Use case
 
 La documentazione fornisce una panoramica completa del progetto, aiutando a comprendere l'architettura e il funzionamento del software.
