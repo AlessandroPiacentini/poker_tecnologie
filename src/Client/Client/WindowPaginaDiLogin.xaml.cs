@@ -50,7 +50,7 @@ namespace Client
         //Invio di un messaggio al Server
         private void InvioDati(String messaggio)
         {
-            client = new TcpClient("172.0.0.1", 12345);
+            client = new TcpClient("127.0.0.1", 12345);
             stream = client.GetStream();
             try
             {

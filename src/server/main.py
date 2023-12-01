@@ -17,7 +17,7 @@ winner_index = 0
 
 # Create a Lock object
 lock = threading.Lock()
-server_host = "172.0.0.1"
+server_host = "127.0.0.1"
 server_port = 12345
 timeout = False
 clients = []
