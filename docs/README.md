@@ -3,16 +3,16 @@ La documentazione comprende diversi tipi di informazioni utili per comprendere e
 
 ## Tipi di documentazione
 
-1. HTML/SERVER
+## 1. HTML/SERVER
     ???
 
-2. OUT
+## 2. OUT
     Contiene le immagini dei vari diagrammi
 
-3. Slide
+## 3. Slide
     Include un file PowerPoint che fornisce una spiegazione dettagliata sul funzionamento del programma.
 
-4. UML
+## 4. UML
     Questa sezione contiene codice relativo alla creazione di diversi tipi di diagrammi:
     ### Classi Diagram
     ### Sequenze diagram
