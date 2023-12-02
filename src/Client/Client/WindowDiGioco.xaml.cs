@@ -89,7 +89,8 @@ namespace Client
         {
             while (is_my_turn == false)
             {
-
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Background,
+                                          new Action(delegate { }));
                 Attendi_info_server();
                 foreach (Player p in Players)
                 {
